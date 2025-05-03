@@ -1,0 +1,837 @@
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.16.4 by Michael Rose
+  Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+<html lang="en" class="no-js">
+  <head>
+    <meta charset="utf-8">
+
+<!-- begin _includes/seo.html --><title>Amplicon analysis with QIIME2 - ARUA Microbiome Workshop 2025</title>
+<meta name="description" content="An example workflow using QIIME2 version 2017.7">
+
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="ARUA Microbiome Workshop 2025">
+<meta property="og:title" content="Amplicon analysis with QIIME2">
+<meta property="og:url" content="http://localhost:4000/https://arua-microbiome.github.io/tutorials/qiime2/">
+
+
+  <meta property="og:description" content="An example workflow using QIIME2 version 2017.7">
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2025-05-03T09:44:37-04:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="http://localhost:4000/https://arua-microbiome.github.io/tutorials/qiime2/">
+
+
+
+
+
+
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "George Kalogiannis",
+      "url": "http://localhost:4000https://arua-microbiome.github.io",
+      "sameAs": null
+    }
+  </script>
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+<link href="/https://arua-microbiome.github.io/feed.xml" type="application/atom+xml" rel="alternate" title="ARUA Microbiome Workshop 2025 Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/https://arua-microbiome.github.io/assets/css/main.css">
+
+<!--[if IE ]>
+  <style>
+    /* old IE unsupported flexbox fixes */
+    .greedy-nav .site-title {
+      padding-right: 3em;
+    }
+    .greedy-nav button {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+    }
+  </style>
+<![endif]-->
+
+
+
+    <!-- start custom head snippets -->
+
+<!-- insert favicons. use https://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        
+        <a class="site-title" href="/https://arua-microbiome.github.io/">ARUA Microbiome Workshop 2025</a>
+        <ul class="visible-links"><li class="masthead__menu-item">
+              <a href="/https://arua-microbiome.github.io/about/" >About</a>
+            </li><li class="masthead__menu-item">
+              <a href="/https://arua-microbiome.github.io/travel/" >Travel information</a>
+            </li><li class="masthead__menu-item">
+              <a href="/https://arua-microbiome.github.io/agenda/" >Agenda</a>
+            </li><li class="masthead__menu-item">
+              <a href="/https://arua-microbiome.github.io/people/" >People</a>
+            </li></ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+<div id="main" role="main">
+  
+
+  <article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Amplicon analysis with QIIME2">
+    <meta itemprop="description" content="An example workflow using QIIME2 version 2017.7">
+    
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title" itemprop="headline">Amplicon analysis with QIIME2
+</h1>
+          
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        
+        <p>By Adam Rivers, Designed from the official <a href="https://docs.qiime2.org/2017.7/tutorials/">QIIME2 tutorials</a></p>
+<aside class="sidebar__right">
+<nav class="toc">
+    <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> On this page</h4></header>
+<ul class="toc__menu" id="markdown-toc">
+  <li><a href="#data-sets" id="markdown-toc-data-sets">Data sets</a></li>
+  <li><a href="#connecting-to-ceres" id="markdown-toc-connecting-to-ceres">Connecting to Ceres</a></li>
+  <li><a href="#set-up-your-working-directory" id="markdown-toc-set-up-your-working-directory">Set up your working directory</a></li>
+  <li><a href="#understanding-qiime2-files" id="markdown-toc-understanding-qiime2-files">Understanding QIIME2 files</a></li>
+  <li><a href="#import-your-paired-end-sequences" id="markdown-toc-import-your-paired-end-sequences">Import your paired-end sequences</a></li>
+  <li><a href="#examine-the-quality-of-the-data" id="markdown-toc-examine-the-quality-of-the-data">Examine the quality of the data</a></li>
+  <li><a href="#selecting-sequence-variants" id="markdown-toc-selecting-sequence-variants">Selecting Sequence Variants</a>    <ul>
+      <li><a href="#option-1-dada2-slower" id="markdown-toc-option-1-dada2-slower">Option 1: Dada2 (Slower)</a></li>
+      <li><a href="#option-2-deblur-faster" id="markdown-toc-option-2-deblur-faster">Option 2: Deblur (Faster)</a></li>
+    </ul>
+  </li>
+  <li><a href="#adding-metadata-and-examining-count-tables" id="markdown-toc-adding-metadata-and-examining-count-tables">Adding metadata and examining count tables</a></li>
+  <li><a href="#phylogenetics" id="markdown-toc-phylogenetics">Phylogenetics</a>    <ul>
+      <li><a href="#multiple-sequence-alignment" id="markdown-toc-multiple-sequence-alignment">Multiple sequence alignment</a></li>
+      <li><a href="#masking-sites" id="markdown-toc-masking-sites">Masking sites</a></li>
+      <li><a href="#creating-a-tree" id="markdown-toc-creating-a-tree">Creating a tree</a></li>
+      <li><a href="#midpoint-rooting" id="markdown-toc-midpoint-rooting">Midpoint rooting</a></li>
+    </ul>
+  </li>
+  <li><a href="#taxonomic-analysis" id="markdown-toc-taxonomic-analysis">Taxonomic analysis</a>    <ul>
+      <li><a href="#filtering-contaminants" id="markdown-toc-filtering-contaminants">Filtering contaminants</a></li>
+    </ul>
+  </li>
+  <li><a href="#alpha-and-beta-diversity-analysis" id="markdown-toc-alpha-and-beta-diversity-analysis">Alpha and Beta diversity analysis</a></li>
+  <li><a href="#ordination" id="markdown-toc-ordination">Ordination</a></li>
+  <li><a href="#differential-abundance-of-sequence-variants" id="markdown-toc-differential-abundance-of-sequence-variants">Differential abundance of sequence variants</a>    <ul>
+      <li><a href="#gneiss-analysis" id="markdown-toc-gneiss-analysis">Gneiss analysis</a></li>
+    </ul>
+  </li>
+  <li><a href="#other-analyses" id="markdown-toc-other-analyses">Other analyses</a></li>
+</ul>
+
+  </nav>
+</aside>
+
+<p class="notice--info"><strong>Why QIIME 2?</strong> There are a number of great software packages for general amplicon analysis.
+Some examples include <a href="https://www.mothur.org/">Mothur</a>, <a href="https://joey711.github.io/phyloseq/">Phyloseq</a>, <a href="https://benjjneb.github.io/dada2/">Dada2</a>, <a href="http://www.drive5.com/uparse/">UPARSE</a> and <a href="http://qiime.org/">QIIME 1</a>.
+The most widely used software may be QIIME 1. QIIME 1 is a collection of
+custom tools and wrappers around other software that makes it easy to customize amplicon
+analysis, but that flexibility sometimes makes it hard to track the provenance
+of data or be sure you are doing the right thing. QIIME 2 has a very
+different model for data analysis that wraps data and information about that data
+into one object, which addresses some of the prior shortcomings. QIIME 2 also
+incorporates a major advance that has happened in the last year: the use of
+exact “Sequence Variants” (SV) rather than “Operational Taxonomic Units” (OTU).
+Finally QIIME 2 still has a great development team behind it and is poised to
+become one of the primary amplicon analysis methods.  For that reason we are
+teaching QIIME 2 while it is still in its pre-release stage (Don’t you feel hi-tech?).</p>
+
+<h1 id="data-sets">Data sets</h1>
+<p>For this tutorial We will be looking at data from this paper:</p>
+<blockquote>
+  <p>Castrillo, G., Teixeira, P.J.P.L., Paredes, S.H., Law, T.F., de Lorenzo, L., Feltcher, M.E., Finkel, O.M., Breakfield, N.W., Mieczkowski, P., Jones, C.D., Paz-Ares, J., Dangl, J.L., 2017. Root microbiota drive direct integration of phosphate stress and immunity. Nature 543, 513–518. <a href="https://dx.doi.org/10.1038/nature21417">doi:10.1038/nature21417</a></p>
+</blockquote>
+
+<p>The authors knocked out the function of different genes involved in the phosphate stress response of <em>Arabidopsis thaliana</em>. In two experiments they grew the mutants in natural soil, sequenced the 16S V4 region and found that the disruption of phosphate regulation genes altered the microbial community of the plants.  We will be analyzing this data in several different ways and comparing our results.</p>
+
+<p>If you are running this tutorial on the Ceres computer cluster the the data is available at:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="c"># Fastq files</span>
+ /project/microbiome_workshop/amplicon/data/dangldatasubsampled
+
+ <span class="c"># Metadata mapping file</span>
+  /project/microbiome_workshop/amplicon/data/mapping.txt
+
+ <span class="c"># A Manifest file containing the names, locations and</span>
+ <span class="c"># orientation of the read files for import to QIIME2</span>
+   /project/microbiome_workshop/amplicon/data/manifest.csv
+</code></pre></div></div>
+
+<p>The data has been modified from the archived data files by combining technical replicates, removing samples not used in the first experiment in the paper and subsampling each sample down to 10,000 reads to speed up analysis during this tutorial. A total of 146 samples will be analyzed.</p>
+
+<p>The the whole unprocessed dataset can be downloaded from the <a href="https://www.ebi.ac.uk/ena/data/view/PRJEB15671">European Nucleotide Archive</a>. Be sure to download the “submitted files” not the “processed files” or the filename will not match with the metadata file.</p>
+
+<h1 id="connecting-to-ceres">Connecting to Ceres</h1>
+
+<p>Ceres is the computer cluster for the USDA Agricultural Research Service’s SCInet computing environment. From Terminal or Putty (for Windows users) create a secure shell connection to Ceres</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh <span class="nt">-o</span> <span class="nv">TCPkeepAlive</span><span class="o">=</span><span class="nb">yes</span> <span class="nt">-o</span> <span class="nv">ServeraliveInterval</span><span class="o">=</span>20 <span class="nt">-o</span> <span class="nv">ServerAliveCountMAx</span><span class="o">=</span>100 &lt;user.name&gt;@login.scinet.science
+</code></pre></div></div>
+<p>Once you are logged into Ceres you can request access to an interactive node.
+In a real analysis you would create a script that runs all the commands in sequence and submit the script through a program called Sbatch, part of the computer’s job scheduling software named Slurm.</p>
+
+<p>To request access to an interactive node:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Request access to one node of the cluster</span>
+<span class="c"># using the queue "short"</span>
+<span class="c"># to see available queues use the command "sinfo"</span>
+salloc <span class="nt">-p</span> short <span class="nt">-N</span> 1 <span class="nt">-n</span> 40 <span class="nt">-t</span> 06:00:00
+
+<span class="c"># Set up Xvfb graphics software so that QIIME2 can generate figures.</span>
+<span class="c"># Xvfb creates a virtual X session. This needs to be run in the background.</span>
+<span class="c"># If you encounter an error saying the session already exists, then use a</span>
+<span class="c"># different session number, e.g. "Xvfb :2"</span>
+Xvfb :1 <span class="nt">-screen</span> 0 800x600x16 &amp;
+
+<span class="c"># Add a Display variable to the local environment variables</span>
+<span class="nb">export </span><span class="nv">DISPLAY</span><span class="o">=</span>:1.0
+
+<span class="c"># Load the QIIME2 module</span>
+module load qiime2/gcc/64/2.2017.7
+</code></pre></div></div>
+<p>When you are done at the end of the tutorial end your session like this.</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># to log off shut down the graphics window</span>
+killall Xvfb
+<span class="c"># sign out of the allocated node</span>
+<span class="nb">exit</span>
+<span class="c"># sign out of Ceres head node</span>
+<span class="nb">exit</span>
+</code></pre></div></div>
+
+<h1 id="set-up-your-working-directory">Set up your working directory</h1>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># In your homespace or other desired location, make a</span>
+<span class="c"># directory and move into it</span>
+<span class="nb">mkdir </span>qiime2-phosphate-tutorial
+<span class="nb">cd </span>qiime2-phosphate-tutorial
+</code></pre></div></div>
+
+<h1 id="understanding-qiime2-files">Understanding QIIME2 files</h1>
+<p>QIIME2 uses two different file types that contain the data and metadata from an analysis: <code class="language-plaintext highlighter-rouge">.qza</code> files are data files while <code class="language-plaintext highlighter-rouge">.qzv</code> files are visualizations. The authors of QIIME2 call these data files “data artifacts” to indicate that they are objects containing data and metadata about an experiment. It is really just a zip file containing a specially formatted directory with data and metadata. You can see what type of data is contained in a data file with the command <code class="language-plaintext highlighter-rouge">qiime tools peek filename.qza</code>. All of QIIME2 files can be viewed using an online browser that is available at <a href="https://view.qiime2.org">https://view.qiime2.org</a>. <code class="language-plaintext highlighter-rouge">.qza</code> files will contain basic info (name, universally unique identifier, data type and data format) as well ad a graph of data provenance.<code class="language-plaintext highlighter-rouge">.qzv</code> files will contain all of that and graphic visualizations.  The raw data in these files can be accessed using the command <code class="language-plaintext highlighter-rouge">qiime tools export</code>.</p>
+
+<h1 id="import-your-paired-end-sequences">Import your paired-end sequences</h1>
+<p>For this project the reads were sequences using Illumina paired-end, 250 base pair reads with forward and reverse reads in separate files. The fastq is imported in to a QIIME2 data artifact ending in <code class="language-plaintext highlighter-rouge">.qza</code></p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">time </span>qiime tools import <span class="se">\</span>
+  <span class="nt">--type</span> <span class="s1">'SampleData[PairedEndSequencesWithQuality]'</span> <span class="se">\</span>
+  <span class="nt">--input-path</span> /project/microbiome_workshop/amplicon/data/manifest.csv <span class="se">\</span>
+  <span class="nt">--output-path</span> demux.qza <span class="se">\</span>
+  <span class="nt">--source-format</span> PairedEndFastqManifestPhred33
+</code></pre></div></div>
+<p>Time to run: 2 minutes</p>
+
+<p class="notice--info">What’s this <code class="language-plaintext highlighter-rouge">time</code> thing? You can add the <code class="language-plaintext highlighter-rouge">time</code> command to any command line task
+ to see how long it took to run.</p>
+
+<p>Output:</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">demux.qza</code></li>
+</ul>
+
+<h1 id="examine-the-quality-of-the-data">Examine the quality of the data</h1>
+<p>We can view the characteristics of the dataset and the quality scores of the data by creating a QIIME2 visualization artifact.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">time </span>qiime demux summarize <span class="se">\</span>
+  <span class="nt">--i-data</span> demux.qza <span class="se">\</span>
+  <span class="nt">--o-visualization</span> demux.qzv
+</code></pre></div></div>
+<p>Time to run: 1 minute</p>
+
+<p>Output:</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">demux.qzv</code> <a href="https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Fdemux.qzv">View</a> | <a href="https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/demux.qzv">Download</a></li>
+</ul>
+
+<p>This will create a visualization file. You can download the file to your local computer. From a new terminal window on your local computer copy the file:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>scp &lt;user.name&gt;@login.scinet.science:/path/to/data <span class="nb">.</span>
+</code></pre></div></div>
+
+<p>Now you can view the file on your local computer using the <a href="https://view.qiime2.org">QIIME2 visualization server</a>.  Alternatively you can view the precomputed file on that server using the button above.</p>
+
+<p>When viewing the data look for the point in the forward and reverse reads where quality scores decline below 25-30. We will need to trim reads to this point to create high quality sequence variants.</p>
+
+<h1 id="selecting-sequence-variants">Selecting Sequence Variants</h1>
+
+<p>The process of selecting sequence variants is the core processing step in amplicon analysis. This takes the place of “OTU picking” a method of clustering similar data together that was the common method for dealing with sequencing errors until last year.  Three different methods have been published to select sequence variants, <a href="https://dx.doi.org/10.1038/nmeth.3869">Dada2</a> uses and statistical error correction model, <a href="https://dx.doi.org/10.1128/mSystems.00191-16">Deblur</a> takes an information theoretic approach and <a href="https://doi.org/10.1101/081257">UNOISE2</a> applies a heuristic. Each of these methods attempt to remove or correct reads with sequencing errors and then remove chimeric sequences originating from different DNA templates.
+For the next step you can select either the Dada2 method or the Deblur method.</p>
+
+<p class="notice--info"><strong>A note on parallel processing</strong>. Both Dada2 and Deblur can independently process each sample. This becomes very important as experiments grow to thousands of samples. In this tutorial we are taking advantage of “ course grained parallelism” provided by the multiple cores in our processor. However, Deblur and Dada2 (after the error model learning step) can select sequence variants in a sample totally independently, making the problem “embarrassingly parallel.” This means that samples can be split into many different files and processed on arbitrarily many machines simultaneously.</p>
+
+<p>Sequence variant selection is the slowest step in the tutorial. For that reason it is best to submit this step using the SLURM Sbatch scheduler.</p>
+
+<h2 id="option-1-dada2-slower">Option 1: Dada2 (Slower)</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">time </span>qiime dada2 denoise-paired <span class="se">\</span>
+  <span class="nt">--i-demultiplexed-seqs</span> demux.qza <span class="se">\</span>
+  <span class="nt">--o-table</span> table-dada2 <span class="se">\</span>
+  <span class="nt">--o-representative-sequences</span> rep-seqs-dada2 <span class="se">\</span>
+  <span class="nt">--p-trim-left-f</span> 9 <span class="se">\</span>
+  <span class="nt">--p-trim-left-r</span> 9 <span class="se">\</span>
+  <span class="nt">--p-trunc-len-f</span> 220 <span class="se">\</span>
+  <span class="nt">--p-trunc-len-r</span> 200 <span class="se">\</span>
+  <span class="nt">--p-n-threads</span> 40 <span class="se">\</span>
+  <span class="nt">--p-n-reads-learn</span> 200000
+</code></pre></div></div>
+<p>To submit this command using Sbatch:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sbatch /project/microbiome_workshop/amplicon/example/qiime2-phosphate-tutorial/dada2.sh
+</code></pre></div></div>
+<p>Time to run: 35 minutes</p>
+
+<p>Output:</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">rep-seqs-dada2.qza</code> <a href="https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Frep-seqs-dada2.qza">View</a> | <a href="https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/rep-seqs-dada2.qza">Download</a></li>
+  <li><code class="language-plaintext highlighter-rouge">table-dada2.qzv</code> <a href="https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Ftable-dada2.qzv">View</a> | <a href="https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/table-dada2.qzv">Download</a></li>
+</ul>
+
+<h2 id="option-2-deblur-faster">Option 2: Deblur (Faster)</h2>
+<p>Deblur only uses forward reads at this time. You could get around this by merging your data with an outside tool like <a href="http://jgi.doe.gov/data-and-tools/bbtools/bb-tools-user-guide/bbmerge-guide/">BBmerge</a> then importing your data as single ended. For simplicity, in this tutorial we will just use the forward reads.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="nb">time </span>qiime deblur denoise-16S <span class="se">\</span>
+   <span class="nt">--i-demultiplexed-seqs</span> demux.qza <span class="se">\</span>
+   <span class="nt">--p-trim-length</span> 220 <span class="se">\</span>
+   <span class="nt">--output-dir</span> deblurresults <span class="se">\</span>
+   <span class="nt">--p-jobs-to-start</span> 36
+</code></pre></div></div>
+
+<p>To submit this command using Sbatch:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sbatch /project/microbiome_workshop/amplicon/example/qiime2-phosphate-tutorial/deblur.sh
+</code></pre></div></div>
+<p>Time to run: 4 minutes</p>
+
+<p>Output:</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">deblurresults/representative_sequences.qza</code> <a href="https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Fdeblurresults%2Frepresentative_sequences.qza">View</a> | <a href="https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/deblurresults/representative_sequences.qza">Download</a></li>
+  <li><code class="language-plaintext highlighter-rouge">deblurresults/stats.qza</code>
+<a href="https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Fdeblurresults%2Fstats.qza">View</a> | <a href="https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/deblurresults/stats.qza">Download</a></li>
+  <li><code class="language-plaintext highlighter-rouge">deblurresults/table.qza</code>
+<a href="https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Fdeblurresults%2Ftable.qza">View</a> | <a href="https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/deblurresults/table.qza">Download</a></li>
+</ul>
+
+<p>Okay, we have just done the hard part of amplicon sequence analysis.  At this point we have our BIOM count table, the representative sequence variants and a stats file for Deblur.</p>
+
+<p>We have just called sequence variants two different ways. In a real workflow you would only use one method.  From here on out we will use the output of dada2 only: <code class="language-plaintext highlighter-rouge">table-dada2.qza</code>.</p>
+
+<h1 id="adding-metadata-and-examining-count-tables">Adding metadata and examining count tables</h1>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">time </span>qiime feature-table summarize <span class="se">\</span>
+  <span class="nt">--i-table</span> table-dada2.qza <span class="se">\</span>
+  <span class="nt">--o-visualization</span> table-dada2.qzv <span class="se">\</span>
+  <span class="nt">--m-sample-metadata-file</span> /project/microbiome_workshop/amplicon/data/mapping.txt
+</code></pre></div></div>
+<p>Time to run: 30 seconds</p>
+
+<p>Output:</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">table-dada2.qzv</code> <a href="https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Ftable-dada2.qzv">View</a> | <a href="https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/table-dada2.qzv">Download</a></li>
+</ul>
+
+<h1 id="phylogenetics">Phylogenetics</h1>
+<p>There are a number of diversity metrics like unifrac distance that require the construction of a phylogenetic tree.</p>
+
+<h2 id="multiple-sequence-alignment">Multiple sequence alignment</h2>
+<p>First Mafft is used to align the sequences</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">time </span>qiime alignment mafft <span class="se">\</span>
+  <span class="nt">--i-sequences</span> rep-seqs-dada2.qza <span class="se">\</span>
+  <span class="nt">--o-alignment</span> aligned-rep-seqs.qza
+</code></pre></div></div>
+<p>Time to run: 1 minute</p>
+
+<p>Output:</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">aligned-rep-seqs.qza</code> <a href="https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Faligned-rep-seqs.qza">View</a> | <a href="https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/aligned-rep-seqs.qza">Download</a></li>
+</ul>
+
+<h2 id="masking-sites">Masking sites</h2>
+<p>Some sites in the alignment are not phylogenetically informative. These sites are masked.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">time </span>qiime alignment mask <span class="se">\</span>
+  <span class="nt">--i-alignment</span> aligned-rep-seqs.qza <span class="se">\</span>
+  <span class="nt">--o-masked-alignment</span> masked-aligned-rep-seqs.qza
+</code></pre></div></div>
+<p>Time to run: 1 minute</p>
+
+<p>Output:</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">masked-aligned-rep-seqs.qza</code> <a href="https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Fmasked-aligned-rep-seqs.qza">View</a> | <a href="https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/masked-aligned-rep-seqs.qza">Download</a></li>
+</ul>
+
+<h2 id="creating-a-tree">Creating a tree</h2>
+<p>Fastree is used to generate a phylogenetic tree from the masked alignment.</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">time </span>qiime phylogeny fasttree <span class="se">\</span>
+  <span class="nt">--i-alignment</span> masked-aligned-rep-seqs.qza <span class="se">\</span>
+  <span class="nt">--o-tree</span> unrooted-tree.qza
+</code></pre></div></div>
+<p>Time to run: 1 minute</p>
+
+<p>Output:</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">unrooted-tree.qza</code> <a href="https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Funrooted-tree.qza">View</a> | <a href="https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/unrooted-tree.qza">Download</a></li>
+</ul>
+
+<h2 id="midpoint-rooting">Midpoint rooting</h2>
+<p>Fastree creates an unrooted tree. We can root the tree at it’s midpoint with this command:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">time </span>qiime phylogeny midpoint-root <span class="se">\</span>
+  <span class="nt">--i-tree</span> unrooted-tree.qza <span class="se">\</span>
+  <span class="nt">--o-rooted-tree</span> rooted-tree.qza
+</code></pre></div></div>
+<p>Time to run: 5 seconds</p>
+
+<p>Output:</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">rooted-tree.qza</code> <a href="https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Frooted-tree.qza">View</a> | <a href="https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/rooted-tree.qza">Download</a></li>
+</ul>
+
+<h1 id="taxonomic-analysis">Taxonomic analysis</h1>
+<p>Sequence variants are of limited usefulness by themselves. Often we are interested in what kinds of organisms are present in our sample, not just the diversity of the sample.  To identify these sequence variants two things are needed:  a reference database and an algorithm for identifying the sequence using the database.</p>
+
+<p>The primary databases are:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Database</th>
+      <th>Description</th>
+      <th>License</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="http://greengenes.secondgenome.com/">Greengenes</a></td>
+      <td>A curated database of archaea and bacteria - static since 2013</td>
+      <td><a href="https://creativecommons.org/licenses/by-sa/3.0/deed.en_US">CC BY-SA 3.0</a></td>
+    </tr>
+    <tr>
+      <td><a href="https://www.arb-silva.de/">Silva</a></td>
+      <td>The most up-to-date and extensive  database of prokaryotes and eukaryotes, several versions</td>
+      <td><a href="https://www.arb-silva.de/silva-license-information">Free academic</a> / <a href="http://www.ribocon.com/silva_licenses">Paid commercial license</a></td>
+    </tr>
+    <tr>
+      <td><a href="https://rdp.cme.msu.edu/">The RDP database</a></td>
+      <td>A large collection of archaeal bacterial and fungal sequences</td>
+      <td><a href="https://creativecommons.org/licenses/by-sa/3.0/deed.en_US">CC BY-SA 3.0</a></td>
+    </tr>
+    <tr>
+      <td><a href="https://unite.ut.ee/">UNITE</a></td>
+      <td>The primary database for fungal ITS and 28S data</td>
+      <td>Not stated</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>There are several methods of taxonomic classification available. The most commonly used classifier is the <a href="https://rdp.cme.msu.edu/classifier/classifier.jsp">RDP classifier</a>. Other software includes <a href="http://www.drive5.com/usearch/manual/cmd_sintax.html">SINTAX</a> and <a href="http://metabiosys.iiserb.ac.in/16Sclassifier/">16S classifier</a>. We will be using the QIIME2’s built-in naive Bayesian classifier (which is built on Scikit-learn but similar to RDP), noting that the method, while fast and powerful, has a tendency  <a href="http://www.drive5.com/usearch/manual/tax_err.html">over-classify</a> reads.</p>
+
+<p>There are two steps to taxonomic classification: <a href="https://docs.qiime2.org/2017.7/tutorials/feature-classifier/">training the classifier</a> (or using a <a href="https://docs.qiime2.org/2017.7/data-resources/">pre-trained</a> dataset) and classifying the sequence variants.  Generally it is best to train the classifier on the exact region of the 16S, 18S or ITS you sequenced.
+For this tutorial we will be using a classifier model trained on the Silva 99% database trimmed to the V4 region.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">time </span>qiime feature-classifier classify-sklearn <span class="se">\</span>
+  <span class="nt">--i-classifier</span>  /project/microbiome_workshop/amplicon/data/taxonomy/gg-13-8-99-515-806-nb-classifier.qza <span class="se">\</span>
+  <span class="nt">--i-reads</span> rep-seqs-dada2.qza <span class="se">\</span>
+  <span class="nt">--o-classification</span> taxonomy.qza
+</code></pre></div></div>
+<p>Time to run: 4 minutes</p>
+
+<p>Output:</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">taxonomy.qza</code> <a href="https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Ftaxonomy.qza">View</a> | <a href="https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/taxonomy.qza">Download</a></li>
+</ul>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>qiime metadata tabulate <span class="se">\</span>
+  <span class="nt">--m-input-file</span> taxonomy.qza <span class="se">\</span>
+  <span class="nt">--o-visualization</span> taxonomy.qzv
+</code></pre></div></div>
+<p>Time to run: 1 second</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">taxonomy.qzv</code> <a href="https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Ftaxonomy.qzv">View</a> | <a href="https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/taxonomy.qzv">Download</a></li>
+</ul>
+
+<p>Create a bar plot visualization of the taxonomy data:</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>qiime taxa barplot <span class="se">\</span>
+  <span class="nt">--i-table</span> table-dada2.qza <span class="se">\</span>
+  <span class="nt">--i-taxonomy</span> taxonomy.qza <span class="se">\</span>
+  <span class="nt">--m-metadata-file</span> /project/microbiome_workshop/amplicon/data/mapping.txt <span class="se">\</span>
+  <span class="nt">--o-visualization</span> taxa-bar-plots.qzv
+</code></pre></div></div>
+<p>Time to run: 1 minute</p>
+
+<p>Output:</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">taxa-bar-plots.qzv</code> <a href="https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Ftaxa-bar-plots.qzv">View</a> | <a href="https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/taxa-bar-plots.qzv">Download</a></li>
+</ul>
+
+<p>Looking at the the <code class="language-plaintext highlighter-rouge">taxonomy.qzv</code> file using https://view/qiime2.org We can see the data presented at different taxonomic levels and grouped by different experimental factors. If we drill down to taxonomic level 5 something looks a bit odd. There’s lots of “Rickettsiales;f__mitochondria”.  This is really  plant mitochondrial contamination. Some of these samples also have chloroplast contamination.  This kind of Taxonomic filtering isn’t available in QIIME2 yet but it can be be done manually.</p>
+
+<h2 id="filtering-contaminants">Filtering contaminants</h2>
+<p>By viewing the <code class="language-plaintext highlighter-rouge">taxonomy.qzv</code> file in the browser we can easily search for the sequence ID’s that do or do not match “mitochondria or chloroplast”. We can also do this via the command line:</p>
+
+<p>First create a list of all sequence variant ids that are not mitochondria or chloroplasts.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Export taxonomy data to tabular format</span>
+qiime tools <span class="nb">export</span> <span class="nt">--output-dir</span> taxonomy-export taxonomy.qza
+
+<span class="c"># search for matching lines with grep then select the id column</span>
+<span class="nb">grep</span> <span class="nt">-v</span> <span class="nt">-i</span> <span class="s2">"mitochondia|chloroplast|Feature"</span> taxonomy-export/taxonomy.tsv | <span class="nb">cut</span>  <span class="nt">-f</span> 1 <span class="o">&gt;</span> no-chloro-mito-ids.txt
+</code></pre></div></div>
+
+<p>Convert our Qiime data artifact to the underlying <a href="http://biom-format.org/">biom</a> file</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># Export data to biom format</span>
+qiime tools <span class="nb">export</span> <span class="nt">--output-dir</span> dada2-table-export table-dada2.qza
+<span class="c"># Move into the directory</span>
+<span class="nb">cd </span>dada2-table-export
+
+<span class="c"># Convert the HDF5 biom file to a tsv biom file</span>
+biom subset-table <span class="se">\</span>
+  <span class="nt">--input-hdf5-fp</span> feature-table.biom <span class="se">\</span>
+  <span class="nt">--axis</span> observation <span class="se">\</span>
+  <span class="nt">--ids</span> ../no-chloro-mito-ids.txt <span class="se">\</span>
+  <span class="nt">--output-fp</span> feature-table-subset.biom
+
+<span class="c"># Create a new QIIME2 data artifact with the filtered Biom file</span>
+qiime tools import <span class="se">\</span>
+  <span class="nt">--input-path</span> feature-table-filtered.biom <span class="se">\</span>
+  <span class="nt">--output-path</span> ../table-dada2-filtered.qza <span class="se">\</span>
+  <span class="nt">--type</span> FeatureTable[Frequency]
+
+<span class="nb">cd</span> ..
+</code></pre></div></div>
+<p>Time to run: 2 minutes</p>
+
+<p>Output:</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">table-dada2-filtered.qza</code> <a href="https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Ftable-dada2-filtered.qza">View</a> | <a href="https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/table-dada2-filtered.qza">Download</a></li>
+</ul>
+
+<p>Since we have altered the qza file we can create a new bar plots:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>qiime taxa barplot <span class="se">\</span>
+  <span class="nt">--i-table</span> table-dada2-filtered.qza <span class="se">\</span>
+  <span class="nt">--i-taxonomy</span> taxonomy.qza <span class="se">\</span>
+  <span class="nt">--m-metadata-file</span> /project/microbiome_workshop/amplicon/data/mapping.txt <span class="se">\</span>
+  <span class="nt">--o-visualization</span> taxa-bar-plots-filtered.qzv
+
+</code></pre></div></div>
+<p>Time to run: 1 minute</p>
+
+<p>Output:</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">taxa-bar-plots-filtered.qzv</code> <a href="https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Ftaxa-bar-plots-filtered.qzv">View</a> | <a href="https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/taxa-bar-plots-filtered.qzv">Download</a></li>
+</ul>
+
+<h1 id="alpha-and-beta-diversity-analysis">Alpha and Beta diversity analysis</h1>
+<p>For mostly historical reasons one of the first questions that amplicon sequencing was used for was to look at within sample and between sample ecological diversity alpha and beta diversity. Diversity metrics and collector’s curves were generated for for samples to understand how environmental factors affected diversity.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">time </span>qiime diversity core-metrics <span class="se">\</span>
+  <span class="nt">--i-table</span> table-dada2-filtered.qza <span class="se">\</span>
+  <span class="nt">--i-phylogeny</span> rooted-tree.qza <span class="se">\</span>
+  <span class="nt">--p-sampling-depth</span> 4000 <span class="se">\</span>
+  <span class="nt">--output-dir</span> core-diversity
+</code></pre></div></div>
+
+<p>Output (all files are in the directory <code class="language-plaintext highlighter-rouge">core-diversity</code>):</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">bray_curtis_distance_matrix.qza</code> <a href="https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Fcore-diversity%2Fbray_curtis_distance_matrix.qza">View</a> | <a href="https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/core-diversity/bray_curtis_distance_matrix.qza">Download</a></li>
+  <li><code class="language-plaintext highlighter-rouge">bray_curtis_pcoa_results.qza</code> <a href="https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Fcore-diversity%2Fbray_curtis_pcoa_results.qza">View</a> | <a href="https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/core-diversity/bray_curtis_pcoa_results.qza">Download</a></li>
+  <li><code class="language-plaintext highlighter-rouge">evenness_vector.qza</code> <a href="https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Fcore-diversity%2Fevenness_vector.qza">View</a> | <a href="https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/core-diversity/evenness_vector.qza">Download</a></li>
+  <li><code class="language-plaintext highlighter-rouge">faith_pd_vector.qza</code> <a href="https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Fcore-diversity%2Ffaith_pd_vector.qza">View</a> | <a href="https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/core-diversity/faith_pd_vector.qza">Download</a></li>
+  <li><code class="language-plaintext highlighter-rouge">jaccard_distance_matrix.qza</code> <a href="https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Fcore-diversity%2Fjaccard_distance_matrix.qza">View</a> | <a href="https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/core-diversity/jaccard_distance_matrix.qza">Download</a></li>
+  <li><code class="language-plaintext highlighter-rouge">jaccard_pcoa_results.qza</code> <a href="https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Fcore-diversity%2Fjaccard_pcoa_results.qza">View</a> | <a href="https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/core-diversity/jaccard_pcoa_results.qza">Download</a></li>
+  <li><code class="language-plaintext highlighter-rouge">observed_otus_vector.qza</code> <a href="https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Fcore-diversity%2Fobserved_otus_vector.qza">View</a> | <a href="https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/core-diversity/observed_otus_vector.qza">Download</a></li>
+  <li><code class="language-plaintext highlighter-rouge">shannon_vector.qza</code> <a href="https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Fcore-diversity%2Fshannon_vector.qza">View</a> | <a href="https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/core-diversity/shannon_vector.qza">Download</a></li>
+  <li><code class="language-plaintext highlighter-rouge">unweighted_unifrac_distance_matrix.qza</code> <a href="https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Fcore-diversity%2Funweighted_unifrac_distance_matrix.qza">View</a> | <a href="https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/core-diversity/unweighted_unifrac_distance_matrix.qza">Download</a></li>
+  <li><code class="language-plaintext highlighter-rouge">unweighted_unifrac_pcoa_results.qza</code> <a href="https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Fcore-diversity%2Funweighted_unifrac_pcoa_results.qza">View</a>  <a href="https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/core-diversity/unweighted_unifrac_pcoa_results.qza">Download</a></li>
+  <li><code class="language-plaintext highlighter-rouge">weighted_unifrac_distance_matrix.qza</code> <a href="https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Fcore-diversity%2Fweighted_unifrac_distance_matrix.qza">View</a> | <a href="https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/core-diversity/weighted_unifrac_distance_matrix.qza">Download</a></li>
+  <li><code class="language-plaintext highlighter-rouge">weighted_unifrac_pcoa_results.qza</code> <a href="https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Fcore-diversity%2Fweighted_unifrac_pcoa_results.qza">View</a> | <a href="https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/core-diversity/weighted_unifrac_pcoa_results.qza">Download</a></li>
+</ul>
+
+<p>Each of these output files can be examined using other <code class="language-plaintext highlighter-rouge">qiime diversity</code> subcommands.</p>
+
+<h1 id="ordination">Ordination</h1>
+<p>Ordination is a dimensionality reduction technique that enables the visualization of sample differences. QIIME has a plugin called emperor that calculates a Bray-Curtis dissimilarity matrix and uses principal coordinates analysis (PCoA). you could also export the pcoa data and plot it yourself in the package of your choice.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code> qiime emperor plot <span class="nt">--i-pcoa</span> core-diversity/bray_curtis_pcoa_results.qza <span class="nt">--m-metadata-file</span> /project/microbiome_workshop/amplicon/data/mapping.txt <span class="nt">--o-visualization</span> pcoa-visualization.qzv
+</code></pre></div></div>
+<p>Time to run: 15 seconds</p>
+
+<p>Output:</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">pcoa-visualization.qzv</code> <a href="https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Fpcoa-visualization.qzv">View</a> | <a href="https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/pcoa-visualization.qzv">Download</a></li>
+</ul>
+
+<h1 id="differential-abundance-of-sequence-variants">Differential abundance of sequence variants</h1>
+<p>If you are doing an experimental manipulation rather than just observing an environment you will likely have an experimental design with treatments and want to know which bacteria respond to these treatments. The best way to go this is an active area of applied statistics research.</p>
+
+<p>The problem is challenging for several reasons:</p>
+<ul>
+  <li>The data is compositional so the abundance of each taxa affects every other taxa.</li>
+  <li>The data is over-dispersed count data, fitting (arguably) a negative binomial model.</li>
+  <li>The data is sparse and some 0’s mean a taxa is not present while other zeros mean an organism is present at a level below the limit of detection for the sequences sampled.</li>
+  <li>Each library is sampled to a different depth so the issue of how to standardize the data comes up (simply dividing by the sum does not work).</li>
+</ul>
+
+<p class="notice--warning"><strong>To rarefy or not to rarefy?</strong> It is a common but controversial practice to downsample count data to the lowest count in your dataset to get around the issue of differential sequencing depth. In their paper titled “Waste not want not, why rarifying microbiome data is inadmissible” <a href="https://doi.org/10.1371/journal.pcbi.1003531">McMurdie et al. (2014)</a> point out that this is a large waste of data and statistical power, and advocate for using differential expression software like DESeq2 that uses special normalizations and a negative binomial distribution to model data. The software uses a generalized linear model so it has a very flexible experimental design interface.  <a href="https://doi.org/10.1186/s40168-017-0237-y">Weiss et al. (2017)</a> argue that the assumptions underling both the normalization and the distribution used by DEseq2 and other normalization methods are inappropriate for microbiome data. <a href="https://dx.doi.org/10.3402%2Fmehd.v26.27663">Ancom</a> uses a zero inflated Gaussian model but only allows for simple two-way comparisons not richer statistical models. Gneiss <a href="http://doi.org/10.1128/mSystems.00162-16">(paper)</a>, <a href="https://forum.qiime2.org/t/gneiss-tutorial/932">(tutorial)</a> is currently the only compositional method available in QIIME2 (support for ANCOM was dropped).  The only thing everyone agrees on is that agrees you can’t just do a T-test.</p>
+
+<h2 id="gneiss-analysis">Gneiss analysis</h2>
+<p>Gneiss applies a method for compositional data borrowed from geology to “sidestep” the question of the absolute changes of sequences and “instead look at the balance between particular subsets of the microbial community,” <a href="https://doi.org/10.1128/mSystems.00162-16">(Morton et al. 2017)</a>. For more on the concept of balances see this <a href="https://github.com/biocore/gneiss/blob/master/ipynb/balance_trees.ipynb">post</a>. Sequence variants are hierarchically clustered based on environmental gradients or co-occurrence. Then the isometric log ratios are calculated and compared for subsets of taxa. While individual taxa cannot be compared, groups of taxa responding to environmental effects can be compared. Statistical tests of for differences can also be applied.</p>
+
+<p>Since we don’t have a particular environmental gradient that is structuring lets start by doing a hierarchical clustering based on co-occurrence patterns.</p>
+
+<p>First add pseudocounts to each cell in the matrix. This is done so that log transformations can be taken across the table.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">time </span>qiime gneiss add-pseudocount <span class="se">\</span>
+    <span class="nt">--i-table</span> table-dada2-filtered.qza <span class="se">\</span>
+    <span class="nt">--p-pseudocount</span> 1 <span class="se">\</span>
+    <span class="nt">--o-composition-table</span> composition.qza
+</code></pre></div></div>
+<p>Time to run: 6 seconds</p>
+
+<p>Output:</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">composition.qza</code> <a href="https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Fcomposition.qza">View</a> | <a href="https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/composition.qza">Download</a></li>
+</ul>
+
+<p>Perform <a href="https://arxiv.org/abs/1111.6285">Ward’s agglomerative clustering</a></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">time </span>qiime gneiss correlation-clustering <span class="se">\</span>
+    <span class="nt">--i-table</span> composition.qza<span class="se">\</span>
+    <span class="nt">--o-clustering</span> hierarchy.qza
+</code></pre></div></div>
+<p>Time to run: 5 minutes</p>
+
+<p>Output:</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">hierarchy.qza</code> <a href="https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Fhierarchy.qza">View</a> | <a href="https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/hierarchy.qza">Download</a></li>
+</ul>
+
+<p>A tree has now been generated that can be used for making comparisons of sample groups.</p>
+
+<p>Calculate the isometric log transforms on each internal node of the tree</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">time </span>qiime gneiss ilr-transform <span class="se">\</span>
+    <span class="nt">--i-table</span> composition.qza <span class="se">\</span>
+    <span class="nt">--i-tree</span> hierarchy.qza <span class="se">\</span>
+    <span class="nt">--o-balances</span> balances.qza
+</code></pre></div></div>
+<p>Time to run: 15 seconds</p>
+
+<p>Output:</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">balances.qza</code> <a href="https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Fbalances.qza">View</a> | <a href="https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/balances.qza">Download</a></li>
+</ul>
+
+<p>The balances are normally distributed an can now be analyzed using mixed linear
+models  We can perform a regression on the three categorical data types, Genotype, Fraction (soil or endophytic compartment) or Soil).  Themodel explains about 10% of the total variation at all nodes of the trees. This is typical for these complex experiments.  The amount that can be explained increases as we move up the covariance tree. Overall the most predictive factor is Genotype which is encouraging.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">time </span>qiime gneiss ols-regression <span class="se">\</span>
+    <span class="nt">--p-formula</span> <span class="s2">"Genotype+Soil+Fraction"</span> <span class="se">\</span>
+    <span class="nt">--i-table</span> balances.qza <span class="se">\</span>
+    <span class="nt">--i-tree</span> hierarchy.qza <span class="se">\</span>
+    <span class="nt">--m-metadata-file</span> /project/microbiome_workshop/amplicon/data/mapping3.txt <span class="se">\</span>
+    <span class="nt">--o-visualization</span> regression_summary.qzv
+</code></pre></div></div>
+
+<p>Output:</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">regression_summary.qzv</code> <a href="https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Fregression_summary.qzv">View</a> | <a href="https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/regression_summary.qzv">Download</a></li>
+</ul>
+
+<p>One of the assumptions if the ordinary least squares model is that the fixed factors are random, in other words the authors randomly arrived at the genotypes they knocked out. Of course that’s not true, the genotypes were selected because they had an impact on the phosphorus stress response.  They are Fixed factors. A mixed linear model can account for fixed and random factors and effects. Gneiss offerers a linear mixed model regression too but the interface seems to be in development  so there is not much I can say about it but we can try it now. Statistical modeling is done by the <a href="http://www.statsmodels.org/stable/mixed_linear.html">statsmodels</a> python package.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>qiime gneiss lme-regression <span class="se">\</span>
+  <span class="nt">--p-formula</span> <span class="s2">"Genotype"</span> <span class="se">\</span>
+  <span class="nt">--i-table</span> balances.qza <span class="se">\</span>
+  <span class="nt">--i-tree</span> hierarchy.qza <span class="se">\</span>
+  <span class="nt">--m-metadata-file</span> /project/microbiome_workshop/amplicon/data/mapping3.txt <span class="se">\</span>
+  <span class="nt">--p-groups</span> Soil <span class="se">\</span>
+  <span class="nt">--o-visualization</span> linear_mixed_effects_model.qzv <span class="se">\</span>
+</code></pre></div></div>
+
+<p>Output:</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">linear_mixed_effects_model.qzv</code> <a href="https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Flinear_mixed_effects_model.qzv">View</a> | <a href="https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/linear_mixed_effects_model.qzv">Download</a></li>
+</ul>
+
+<p>We can look at the most statistically significant balances and examine what taxa make up those partitions.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>qiime gneiss balance-taxonomy <span class="se">\</span>
+    <span class="nt">--i-balances</span> balances.qza <span class="se">\</span>
+    <span class="nt">--i-tree</span> hierarchy.qza <span class="se">\</span>
+    <span class="nt">--i-taxonomy</span> taxonomy.qza <span class="se">\</span>
+    <span class="nt">--p-taxa-level</span> 2 <span class="se">\</span>
+    <span class="nt">--p-balance-name</span> <span class="s1">'y0'</span> <span class="se">\</span>
+    <span class="nt">--m-metadata-file</span> /project/microbiome_workshop/amplicon/data/mapping3.txt  <span class="se">\</span>
+    <span class="nt">--m-metadata-category</span> Genotype <span class="se">\</span>
+    <span class="nt">--o-visualization</span> y0_taxa_summary.qzv
+</code></pre></div></div>
+
+<p>Output:</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">y0_taxa_summary.qzv</code> <a href="https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Fy0_taxa_summary.qzv">View</a> | <a href="https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/y0_taxa_summary.qzv">Download</a></li>
+</ul>
+
+<p>In this case the y0 balance is a split between samples that have plants in them and raw soil. It makes sense that this is the largest effect.  What happens if you run balance y2 or decrease the taxonomic level?</p>
+
+<h1 id="other-analyses">Other analyses</h1>
+
+<p>This tutorial covered a range of analyses that can be done with microbiome data but there are other types on analyses that can be done too.</p>
+
+<ul>
+  <li>Functional analysis - Several packages attempt to impute function from taxonomy including <a href="https://picrust.github.io/picrust/">PiCrust</a>, <a href="http://tax4fun.gobics.de/">Tax4fun</a>, <a href="http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0166104">Piphillin</a></li>
+  <li>Inferring ecological interaction networks -<a href="http://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1004226">SPIEC-EASI</a>. Co-Variance is an issue, but SPIEC-EASI attempts to model conditional independence.</li>
+  <li>Data management tools - <a href="https://qiita.ucsd.edu/">Qiita</a>, and from ARS scientist Dan Manter <a href="http://www.myphylodb.org/">myPhyloDB</a></li>
+  <li>Set analysis - From ARS Scientist Devin Coleman-Derr <a href="https://probes.pw.usda.gov/MetaCoMET/">MetaComet</a></li>
+  <li>Other general analysis tools - <a href="https://www.mothur.org/">Mothur</a> and the R-based <a href="https://joey711.github.io/phyloseq/">Phyloseq</a></li>
+</ul>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+        
+      </footer>
+
+      
+
+      
+  <nav class="pagination">
+    
+      <a href="#" class="pagination--pager disabled">Previous</a>
+    
+    
+      <a href="/https://arua-microbiome.github.io/tutorials/software/" class="pagination--pager" title="Software to install before the microbiome workshop
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+</div>
+
+    </div>
+
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+Stellenbosch University | Imperial College London | ARUA
+<!-- end custom footer snippets -->
+
+        
+
+<div class="page__footer-copyright">&copy; 2025 George Kalogiannis</div>
+
+      </footer>
+    </div>
+
+    
+  <script src="/https://arua-microbiome.github.io/assets/js/main.min.js"></script>
+  <script defer src="https://use.fontawesome.com/releases/v5.8.2/js/all.js" integrity="sha384-DJ25uNYET2XCl5ZF++U8eNxPWqcKohUUBUpKGlNLMchM7q4Wjg2CUpjHLaL8yYPH" crossorigin="anonymous"></script>
+
+
+
+
+
+
+
+
+
+
+  </body>
+</html>
