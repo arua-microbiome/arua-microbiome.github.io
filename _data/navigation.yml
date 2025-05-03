@@ -1,0 +1,18 @@
+# main links
+main:
+  - title: "About"
+    url: /about/
+  - title: "Travel information"
+    url: /travel/
+  - title: "Agenda"
+    url: /agenda/
+  - title: "People"
+    url: /people/
+  # - title: "About"
+  #   url: https://mmistakes.github.io/minimal-mistakes/about/
+  # - title: "Sample Posts"
+  #   url: /year-archive/
+  # - title: "Sample Collections"
+  #   url: /collection-archive/
+  # - title: "Sitemap"
+  #   url: /sitemap/
