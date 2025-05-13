@@ -27,6 +27,66 @@ Alongside the raw FASTQ files you’ll find a manifest (listing file paths and r
 > Castrillo, G., Teixeira, P.J.P.L., Paredes, S.H., Law, T.F., de Lorenzo, L., Feltcher, M.E., Finkel, O.M., Breakfield, N.W., Mieczkowski, P., Jones, C.D., Paz-Ares, J., Dangl, J.L., 2017. Root microbiota drive direct integration of phosphate stress and immunity. Nature 543, 513–518. [doi:10.1038/nature21417](https://dx.doi.org/10.1038/nature21417)
 
 
+# Genetics Primer
+
+## 1 · What actually comes off a sequencer?
+
+Modern DNA sequencers, Illumina (short, very accurate reads), PacBio HiFi and Oxford Nanopore (long, increasingly accurate reads), do not give you a “genome” or a list of species. They give you a bag of millions of little DNA fragments called reads. These reads are written to disk as plain-text files, almost always compressed and ending in .fastq.gz.
+
+- FASTA files ( .fasta, .fa ) hold only the nucleotide strings; they are mainly used once reads have been cleaned and merged.
+- FASTQ files ( .fastq, .fq ) hold both the sequence and its Phred quality scores, telling you how confident the instrument was at each base.
+
+Once you have the downloads in place, peek inside one of the real files, say GC1GC1_R1.fastq.gz (forward reads from replicate GC1, experiment GC1), to convince yourself what a FASTQ record looks like and to check that the quality scores are sensible before you hand the data to QIIME 2. You can do this in bash like this:
+
+```bash
+# ── Bash one-liner: show the first two reads (8 lines) ───────────
+zcat GC1GC1_R1.fastq.gz | head -n 8
+```
+Breaking that command down, ```zcat``` prints the unzipped file, ```head -n 8``` takes the top 8 lines of the file.
+
+
+## 2 · “How many reads did I get?”
+
+A core sanity-check is to confirm that every sample reached the rarefaction target of 10 000 reads. If one library is badly under-sequenced it can skew diversity estimates or even drop out of analyses entirely. Because one read occupies four lines in a FASTQ file, total-lines ÷ 4 gives the read count.
+
+```bash
+# count reads in one compressed file
+zcat GC1GC1_R1.fastq.gz | wc -l | awk '{print $1/4 " reads"}'
+
+# loop across every forward read file and list counts
+for f in *_R1.fastq.gz; do
+  echo -n "$f  "
+  zcat "$f" | wc -l | awk '{printf "%d reads\n",$1/4}'
+done
+```
+
+## 3 · “Are the quality scores decent across the run?”
+
+Why we do this: Low-quality tails inflate sequencing errors, which in turn inflate spurious ASVs/OTUs. By scanning per-cycle Q20 and Q30 fractions we can decide where to truncate reads, so that only high-confidence bases are passed to the pipelines.
+
+The conda package ```seqtk``` provides useful commands for inspecting fastq files. This command summarises the quality scores of each base:
+```bash
+seqtk fqchk GC1GC1_R1.fastq.gz
+```
+
+You will see output like this:
+```
+POS  #bases  %A  %C  %G  %T  %N  avgQ  errQ  %low  %high
+ALL  956250  26.7 19.3 35.1 18.9 0.0 35.2 19.3 5.5 94.5
+1    3825    ...   ...  ...  ... 0.0 31.3 ...  10.3 89.7
+⋮
+250  3825    ...   ...  ...  ... 0.0 28.4 ...  22.0 74.0
+```
+
+In Illumina-style sequencing, the machine builds each read one base at a time. Each round of chemical incorporation is called a cycle, so when ```seqtk fqchk``` reports quality and base-composition “for every cycle,” it’s showing you position-by-position statistics across the entire read. Looking at these per-cycle numbers lets you spot where quality begins to drop off toward the end of the reads, and lets you set the number you wish to truncate the reads at.
+
+
+
+
+
+
+
+
 # Understanding QIIME2 files
 
 > QIIME 2 uses two types of files: `.qza` files for storing data (called artifacts) and `.qzv` files for storing visualizations. These file formats are designed to bundle not just the raw or processed data, but also metadata about how the data was generated. This ensures that the full history (or 'provenance') of a dataset is preserved. As a result, any researcher examining your work can see exactly what steps you took and what settings you used. and trace. This helps track every step of your analysis, ensuring transparency and reproducibility, which are essential in science.
