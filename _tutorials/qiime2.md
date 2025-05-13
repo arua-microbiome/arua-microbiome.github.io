@@ -2,6 +2,7 @@
 title: "Amplicon analysis with QIIME2"
 excerpt: "An example workflow using QIIME2 version 2024.2"
 layout: single
+classe: full
 author: "George Kalogiannis"
 
 ---
