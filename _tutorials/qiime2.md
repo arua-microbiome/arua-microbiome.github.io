@@ -60,11 +60,19 @@ for f in *_R1.fastq.gz; do
 done
 ```
 
-## 3 · “Are the quality scores decent across the run?”
+## 3 · Checking read quality with Q-scores
+Sequencers give every base a Phred quality score (Q) that converts machine‐signal strength into an error estimate. In Illumina-style sequencing, the machine builds each read one base at a time and each round of chemical incorporation is called a cycle. Looking at per-cycle numbers lets you spot where quality begins to drop off toward the end of the reads, and lets you set the number you wish to truncate the reads at:
 
-Why we do this: Low-quality tails inflate sequencing errors, which in turn inflate spurious ASVs/OTUs. By scanning per-cycle Q20 and Q30 fractions we can decide where to truncate reads, so that only high-confidence bases are passed to the pipelines.
+$Q = -10 \log_{10} P(\text{error})$
 
-The conda package ```seqtk``` provides useful commands for inspecting fastq files. This command summarises the quality scores of each base:
+| Score |	Error rate | Meaning |
+| --- | --- | --- |
+| Q20	| 1 error in 100 bases (99% accurate) |	Acceptable but starting to get noisy |
+| Q30	| 1 error in 1000 bases (99.9% accurate)	| Clean data - the Illumina gold standard |
+
+When a base falls below Q20 it can introduce false sequence variants, so we normally trim reads where Q20/Q30 statistics start to degrade.
+
+The conda package ```seqtk``` provides useful commands for inspecting fastq base quality scores. This command summarises the quality scores of each base:
 ```bash
 seqtk fqchk GC1GC1_R1.fastq.gz
 ```
@@ -78,8 +86,7 @@ ALL  956250  26.7 19.3 35.1 18.9 0.0 35.2 19.3 5.5 94.5
 250  3825    ...   ...  ...  ... 0.0 28.4 ...  22.0 74.0
 ```
 
-In Illumina-style sequencing, the machine builds each read one base at a time. Each round of chemical incorporation is called a cycle, so when ```seqtk fqchk``` reports quality and base-composition “for every cycle,” it’s showing you position-by-position statistics across the entire read. Looking at these per-cycle numbers lets you spot where quality begins to drop off toward the end of the reads, and lets you set the number you wish to truncate the reads at.
-
+For the posiion in ```POS```, ```%low``` indicates the fraction of bases under Q20, while ```%high``` indicates the fraction of bases over Q30. Although somewhat arbitrary, we want to pick a position to truncate at where we maximise accuracy - this could be 235 across all files, for example.
 
 
 
