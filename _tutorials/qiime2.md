@@ -2,7 +2,7 @@
 title: "Amplicon analysis with QIIME2"
 excerpt: "An example workflow using QIIME2 version 2024.2"
 layout: single
-classe: full
+mathjax: true
 author: "George Kalogiannis"
 
 ---
@@ -64,7 +64,7 @@ done
 ## 3 · Checking read quality with Q-scores
 Sequencers give every base a Phred quality score (Q) that converts machine‐signal strength into an error estimate. In Illumina-style sequencing, the machine builds each read one base at a time and each round of chemical incorporation is called a cycle. Looking at per-cycle numbers lets you spot where quality begins to drop off toward the end of the reads, and lets you set the number you wish to truncate the reads at:
 
-$Q = -10 \log_{10} P(\text{error})$
+$$Q = -10 \log_{10} P(\text{error})$$
 
 | Score |	Error rate | Meaning |
 | --- | --- | --- |
