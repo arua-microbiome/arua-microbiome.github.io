@@ -32,7 +32,13 @@ Alongside the raw FASTQ files you’ll find a manifest (listing file paths and r
 
 ## 1 · What actually comes off a sequencer?
 
-Modern DNA sequencers, Illumina (short, very accurate reads), PacBio HiFi and Oxford Nanopore (long, increasingly accurate reads), do not give you a “genome” or a list of species. They give you a bag of millions of little DNA fragments called reads. These reads are written to disk as plain-text files, almost always compressed and ending in .fastq.gz.
+Modern DNA sequencers, Illumina (short, very accurate reads), PacBio HiFi and Oxford Nanopore (long, increasingly accurate reads), do not give you a “genome” or a list of species. They give you a bag of millions of little DNA fragments called reads. 
+
+Reads can be created in two ways: single or paired. In single-end sequencing, the machine reads each DNA fragment from one end only, starting at the 5′ end and working its way across the fragment until the read is complete. In paired-end sequencing, the machine reads from both ends of the same fragment: one read starts at the 5′ end and moves toward the middle (the forward read), and the other starts at the opposite 3′ end and also moves toward the middle (the reverse read). This gives you two reads per fragment that come from opposite directions, which helps improve accuracy and recover more of the original sequence.
+
+![alt text](.png "Single vs Paired-End Sequencing")
+
+These reads are written to disk as plain-text files, almost always compressed and ending in .fastq.gz.
 
 - FASTA files ( .fasta, .fa ) hold only the nucleotide strings; they are mainly used once reads have been cleaned and merged.
 - FASTQ files ( .fastq, .fq ) hold both the sequence and its Phred quality scores, telling you how confident the instrument was at each base.
