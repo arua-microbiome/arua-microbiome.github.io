@@ -8,37 +8,24 @@ author: "George Kalogiannis"
 By George Kalogiannis, Designed from the official [QIIME2 tutorials](https://docs.qiime2.org/2024.2/tutorials/)
 {% include toc %}
 
-
-**Why QIIME 2?** There are a number of great software packages for general amplicon analysis.
-Some examples include [Mothur](https://www.mothur.org/), [Phyloseq](https://joey711.github.io/phyloseq/), [Dada2](https://benjjneb.github.io/dada2/), [UPARSE](http://www.drive5.com/uparse/) and [QIIME 1](http://qiime.org/).
-The most widely used software may be QIIME 1. QIIME 1 is a collection of
-custom tools and wrappers around other software that makes it easy to customize amplicon
-analysis, but that flexibility sometimes makes it hard to track the provenance
-of data or be sure you are doing the right thing. QIIME 2 is a modern framework for microbiome analysis that ensures every step of your data processing is traceable and reproducible. Unlike QIIME 1, which was a collection of scripts and tools, QIIME 2 uses a plugin system and wraps data and its metadata into special objects. This means that each analysis step keeps track of where the data came from, how it was processed, and what parameters were used. This system not only improves reproducibility, but also makes it easier to share and review your work..
-{: .notice--info}
-
-
 # Data sets
 
-> Microbiome research focuses on understanding the communities of microorganisms—such as bacteria, archaea, and fungi—that inhabit different environments. These microbial communities can have profound effects on their surroundings. In agriculture, for instance, microbes in the soil and around plant roots play essential roles in nutrient cycling, disease resistance, and overall plant health. By studying the microbiome, scientists can learn how to promote beneficial microbes and suppress harmful ones, leading to more sustainable agricultural practices. (like bacteria) found in different environments such as soil, plants, or human guts. These communities are often characterized using DNA sequencing. In this tutorial, we'll analyze such data from a study on how plant genes influence the microbes living around their roots.
+In this workshop, we will study microbial genes collected from the soil surrounding the roots of Arabidopsis thaliana plants. These plants were genetically modified to alter how they respond to phosphate stress. Phosphate (P) is a cornerstone nutrient for plants, driving ATP-based energy transfer, nucleic-acid synthesis, membrane formation, and phosphorylation-driven signalling. Because phosphate binds tightly to soil particles, it is frequently scarce, so plants switch on an integrated phosphate-starvation response (PSR): reshaping their roots, releasing phosphatases, and recruiting helpful microbes in the rhizosphere. These changes ripple outward, altering the surrounding microbial community and, in turn, feeding back on plant health.
 
-In this tutorial, we'll analyze a real-world microbiome dataset from an influential plant biology study. The researchers were investigating how plant genes involved in phosphate stress influence the composition of root-associated microbial communities. To do this, they grew genetically modified Arabidopsis plants in soil and sequenced the microbial DNA around their roots. We’ll walk through the process of importing, cleaning, analyzing, and interpreting these sequences using QIIME 2.
+Our workshop dataset comes from _Arabidopsis thaliana_ mutants studied by Castrillo et al. (2017). Each mutant disables a gene that links phosphate sensing to immunity, creating a “natural experiment” for microbiome shifts. To determine the role of phosphate starvation response in controlling microbiome composition, we will analyse five mutants related to the Pi-transport system (pht1;1, pht1;1;pht1;4, phf1, nla and pho2) and two mutants directly involved in the transcriptional regulation of the P-starvation response (phr1 and spx1;spx2).
+
+The microbiome dataset itself comprises 146 paired-end Illumina MiSeq libraries (2 × 250 bp) that target the hyper-variable V4 region of the bacterial 16S rRNA gene, covering root-zone, bulk-soil and endophytic compartments for each plant line. Technical replicates have been merged, low-quality reads removed, and every sample has been rarefied to 10 000 high-quality reads so that comparisons across genotypes are on an equal footing. 
+
+Alongside the raw FASTQ files you’ll find a manifest (listing file paths and read orientation) and a metadata table that records genotype, compartment, replicate and block information. Together these resources provide a tidy, balanced starting point for generating amplicon-sequence variants (ASVs), profiling community diversity, and pinpointing the microbial taxa that respond to each phosphate-stress mutation.
+
+Download the data here:
+
+| ------------- |
+| Raw Sequences |
+| Manifest File | 
+| ------------- |
+
 > Castrillo, G., Teixeira, P.J.P.L., Paredes, S.H., Law, T.F., de Lorenzo, L., Feltcher, M.E., Finkel, O.M., Breakfield, N.W., Mieczkowski, P., Jones, C.D., Paz-Ares, J., Dangl, J.L., 2017. Root microbiota drive direct integration of phosphate stress and immunity. Nature 543, 513–518. [doi:10.1038/nature21417](https://dx.doi.org/10.1038/nature21417)
-
-The authors knocked out the function of different genes involved in the phosphate stress response of *Arabidopsis thaliana*. In two experiments they grew the mutants in natural soil, sequenced the 16S V4 region and found that the disruption of phosphate regulation genes altered the microbial community of the plants.  We will be analyzing this data in several different ways and comparing our results.
-
-If you are running this tutorial on the Ceres computer cluster the the data is available at:
- ```bash
- # Fastq files
- /project/microbiome_workshop/amplicon/data/dangldatasubsampled
-
- # Metadata mapping file
-  /project/microbiome_workshop/amplicon/data/mapping.txt
-
- # A Manifest file containing the names, locations and
- # orientation of the read files for import to QIIME2
-   /project/microbiome_workshop/amplicon/data/manifest.csv
- ```
 
  The data has been modified from the archived data files by combining technical replicates, removing samples not used in the first experiment in the paper and subsampling each sample down to 10,000 reads to speed up analysis during this tutorial. A total of 146 samples will be analyzed.
 
