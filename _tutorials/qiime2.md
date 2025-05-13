@@ -18,66 +18,14 @@ The microbiome dataset itself comprises 146 paired-end Illumina MiSeq libraries 
 
 Alongside the raw FASTQ files you’ll find a manifest (listing file paths and read orientation) and a metadata table that records genotype, compartment, replicate and block information. Together these resources provide a tidy, balanced starting point for generating amplicon-sequence variants (ASVs), profiling community diversity, and pinpointing the microbial taxa that respond to each phosphate-stress mutation.
 
-Download the data here:
+|Download the data here:|
+| ------------- |
+| [Raw Sequences]() |
+| [Manifest File]() | 
 
-| ------------- |
-| Raw Sequences |
-| Manifest File | 
-| ------------- |
 
 > Castrillo, G., Teixeira, P.J.P.L., Paredes, S.H., Law, T.F., de Lorenzo, L., Feltcher, M.E., Finkel, O.M., Breakfield, N.W., Mieczkowski, P., Jones, C.D., Paz-Ares, J., Dangl, J.L., 2017. Root microbiota drive direct integration of phosphate stress and immunity. Nature 543, 513–518. [doi:10.1038/nature21417](https://dx.doi.org/10.1038/nature21417)
 
- The data has been modified from the archived data files by combining technical replicates, removing samples not used in the first experiment in the paper and subsampling each sample down to 10,000 reads to speed up analysis during this tutorial. A total of 146 samples will be analyzed.
-
- The the whole unprocessed dataset can be downloaded from the [European Nucleotide Archive](https://www.ebi.ac.uk/ena/data/view/PRJEB15671). Be sure to download the "submitted files" not the "processed files" or the filename will not match with the metadata file.
-
-
-# Connecting to Ceres
-
-Ceres is the computer cluster for the USDA Agricultural Research Service's SCInet computing environment. From Terminal or Putty (for Windows users) create a secure shell connection to Ceres
-```bash
-ssh -o TCPkeepAlive=yes -o ServeraliveInterval=20 -o ServerAliveCountMAx=100 <user.name>@login.scinet.science
-```
-Once you are logged into Ceres you can request access to an interactive node.
-In a real analysis you would create a script that runs all the commands in sequence and submit the script through a program called Sbatch, part of the computer's job scheduling software named Slurm.
-
-To request access to an interactive node:
-```bash
-# Request access to one node of the cluster
-# using the queue "short"
-# to see available queues use the command "sinfo"
-salloc -p short -N 1 -n 40 -t 06:00:00
-
-# Set up Xvfb graphics software so that QIIME2 can generate figures.
-# Xvfb creates a virtual X session. This needs to be run in the background.
-# If you encounter an error saying the session already exists, then use a
-# different session number, e.g. "Xvfb :2"
-Xvfb :1 -screen 0 800x600x16 &
-
-# Add a Display variable to the local environment variables
-export DISPLAY=:1.0
-
-# Load the QIIME2 module
-module load qiime2/2024.2
-```
-When you are done at the end of the tutorial end your session like this.
-```bash
-# to log off shut down the graphics window
-killall Xvfb
-# sign out of the allocated node
-exit
-# sign out of Ceres head node
-exit
-```
-
-# Set up your working directory
-
-```bash
-# In your homespace or other desired location, make a
-# directory and move into it
-mkdir qiime2-phosphate-tutorial
-cd qiime2-phosphate-tutorial
-```
 
 # Understanding QIIME2 files
 
