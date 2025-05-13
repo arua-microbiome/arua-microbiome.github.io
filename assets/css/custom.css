@@ -1,0 +1,12 @@
+---
+# empty front-matter so Jekyll processes this file
+---
+
+// 1.  Change the overall site width if you want
+$max-width: 1440px;         // defaults to 1280px
+
+// 2.  Change the reading column only
+$content-width: 1000px;     // defaults to 760px
+
+// 3.  Pull in the rest of the theme so it recompiles
+@import "minimal-mistakes";
