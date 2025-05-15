@@ -116,6 +116,22 @@ paste \
   <(zcat GC1GC1_R2.fastq.gz | sed -n '1~4p' | cut -d' ' -f1 | head -5)
 ```
 
+## 5 · BLAST searches
+
+If you’ve ever used BLAST (Basic Local Alignment Search Tool), you know the basic idea: you give it a DNA or protein sequence, and it compares that sequence to a reference database to find the best matches. It reports which known sequences are most similar, how long the matching region is, and how confident the match is. This is the foundation of how we assign names or functions to unknown sequences.
+
+In amplicon analysis, tools like QIIME 2 do something very similar. After denoising your reads into amplicon sequence variants (ASVs)—which are essentially cleaned-up, exact sequences—it matches each ASV to a reference database such as SILVA, Greengenes, or GTDB. Each ASV is compared to known 16S rRNA gene sequences in the database to find its closest match, which is then used to assign it a taxonomic label (e.g. Bacillus subtilis, Pseudomonas, etc.).
+
+So while QIIME doesn’t run BLAST directly by default, it’s doing the same type of work: comparing your sequences to a trusted reference and reporting the best biological match. It’s just automated, scaled up, and optimised for microbial marker genes like 16S.
+
+Lets run a blast search for the first sequence in our file. Print the first sequence and its information:
+
+```bash
+zcat GC1GC1_R1.fastq.gz | head -n 4
+```
+
+Then navigate to the BLAST Nucleotide website and paste in your sequence: [blast.ncbi.nlm.nih.gov/](blast.ncbi.nlm.nih.gov/). **What do you see?**
+
 
 # Understanding QIIME2 files
 
