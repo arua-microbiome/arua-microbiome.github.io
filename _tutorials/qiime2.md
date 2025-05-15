@@ -98,9 +98,23 @@ ALL  956250  26.7 19.3 35.1 18.9 0.0 35.2 19.3 5.5 94.5
 For the posiion in ```POS```, ```%low``` indicates the fraction of bases under Q20, while ```%high``` indicates the fraction of bases over Q30. Although somewhat arbitrary, we want to pick a position to truncate at where we maximise accuracy - this could be 235 across all files, for example.
 
 
+## 4 · “Do my paired files really match?”
 
+This section checks that your paired-end FASTQ files truly match, which is essential before you run any microbiome pipeline like QIIME 2 or DADA2. Each pair of files—one forward read file (*_R1.fastq.gz) and one reverse read file (*_R2.fastq.gz) should contain the same number of reads, and those reads should be from the same DNA fragments. If the files get out of sync (due to download errors, interruptions, or corrupted files), your pipeline will fail or produce misleading results.
 
+This compares the number of reads in each file. ```zcat``` unzips the .fastq.gz file directly in memory. ```wc -l``` counts the total number of lines. FASTQ files use 4 lines per read, so dividing by 4 gives you the read count.
 
+```bash
+echo "R1: $(($(zcat GC1GC1_R1.fastq.gz | wc -l)/4))   R2: $(($(zcat GC1GC1_R2.fastq.gz | wc -l)/4))"
+```
+
+Checks that the read IDs match between files. ```sed -n '1~4p'``` pulls out every 4th line starting from line 1 (the read headers). ```cut -d' ' -f1``` trims each header to just the read ID, ignoring barcode info. ```paste``` prints them side by side so you can compare them easily.
+
+```bash
+paste \
+  <(zcat GC1GC1_R1.fastq.gz | sed -n '1~4p' | cut -d' ' -f1 | head -5) \
+  <(zcat GC1GC1_R2.fastq.gz | sed -n '1~4p' | cut -d' ' -f1 | head -5)
+```
 
 
 # Understanding QIIME2 files
