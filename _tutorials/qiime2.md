@@ -132,8 +132,8 @@ For this project the reads were sequences using Illumina paired-end, 250 base pa
 ```bash
 time qiime tools import \
   --type 'SampleData[PairedEndSequencesWithQuality]' \
-  --input-path /project/microbiome_workshop/amplicon/data/manifest.csv \
-  --output-path demux.qza \
+  --input-path wednesday_manifest.tsv \
+  --output-path wednesday_outputs/demux.qza \
   --input-format PairedEndFastqManifestPhred33V2
 ```
 Time to run: 2 minutes
@@ -153,8 +153,8 @@ We can view the characteristics of the dataset and the quality scores of the dat
 
 ```bash
 time qiime demux summarize \
-  --i-data demux.qza \
-  --o-visualization demux.qzv
+  --i-data wednesday_outputs/demux.qza \
+  --o-visualization wednesday_outputs/demux.qzv
  ```
  Time to run: 1 minute
 
