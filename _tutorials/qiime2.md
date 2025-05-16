@@ -44,26 +44,26 @@ These reads are written to disk as plain-text files, almost always compressed an
 - FASTQ files ( .fastq, .fq ) hold both the sequence and its Phred quality scores, telling you how confident the instrument was at each base.
 
 >Once you have the downloads in place, peek inside one of the real files, say GC1GC1_R1.fastq.gz (forward reads from replicate GC1, experiment GC1), to convince yourself what a FASTQ record looks like and to check that the quality scores are sensible before you hand the data to QIIME 2. You can do this in bash like this:
-```bash
-# ── Bash one-liner: show the first two reads (8 lines) ───────────
-zcat GC1GC1_R1.fastq.gz | head -n 8
-```
-Breaking that command down, ```zcat``` prints the unzipped file, ```head -n 8``` takes the top 8 lines of the file.
+>```bash
+># ── Bash one-liner: show the first two reads (8 lines) ───────────
+>zcat GC1GC1_R1.fastq.gz | head -n 8
+>```
+>Breaking that command down, ```zcat``` prints the unzipped file, ```head -n 8``` takes the top 8 lines of the file.
 
 
 ## 2 · “How many reads did I get?”
 
 >A core sanity-check is to confirm that every sample reached the rarefaction target of 10 000 reads. If one library is badly under-sequenced it can skew diversity estimates or even drop out of analyses entirely. Because one read occupies four lines in a FASTQ file, total-lines ÷ 4 gives the read count.
-```bash
-# count reads in one compressed file
-zcat GC1GC1_R1.fastq.gz | wc -l | awk '{print $1/4 " reads"}'
+>```bash
+>## count reads in one compressed file
+>zcat GC1GC1_R1.fastq.gz | wc -l | awk '{print $1/4 " reads"}'
 
-# loop across every forward read file and list counts
-for f in *_R1.fastq.gz; do
-  echo -n "$f  "
-  zcat "$f" | wc -l | awk '{printf "%d reads\n",$1/4}'
-done
-```
+># loop across every forward read file and list counts
+>for f in *_R1.fastq.gz; do
+>  echo -n "$f  "
+>  zcat "$f" | wc -l | awk '{printf "%d reads\n",$1/4}'
+>done
+>```
 
 ## 3 · Checking read quality with Q-scores
 Sequencers give every base a Phred quality score (Q) that converts machine‐signal strength into an error estimate. In Illumina-style sequencing, the machine builds each read one base at a time and each round of chemical incorporation is called a cycle. Looking at per-cycle numbers lets you spot where quality begins to drop off toward the end of the reads, and lets you set the number you wish to truncate the reads at:
