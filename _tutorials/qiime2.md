@@ -206,6 +206,7 @@ Before analyzing the sequences, it's important to assess their quality like we d
 > ```
 >
 > Time to run: 1 minute
+>
 >Output: * ```demux.qzv``` [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Fdemux.qzv) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/demux.qzv)
 
 >This will create a visualization file. You can download the file to your local computer. From a new terminal window on your local computer copy the file:
