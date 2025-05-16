@@ -142,6 +142,9 @@ A frequent misunderstanding is that executing code on a cluster will automatical
 
 HPC's typically have thousands of cores, made up by separate computers (nodes) that are linked and can transfer data to each other. The Lengau CHPC we will be using today has a total of 33,436 cores available to its users.
 
+![Sequencial vs Parallel Computing](../../assets/images/parallel.png)
+
+
 ## Qiime2 on HPC
 - CPU Power: Many QIIME2 plugins, such as dada2, vsearch, and feature-classifier, can utilize multithreading to significantly reduce processing time. On an HPC, users can request dozens of CPU cores per job, greatly accelerating large analyses involving hundreds or thousands of samples.
 
