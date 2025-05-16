@@ -196,38 +196,32 @@ sample-2      $PWD/some/filepath/sample2_R1.fastq
 >Time to run: 2 minutes
 >
 >Output: ```demux.qza```
->
->What's this `time` thing? You can add the `time` command to any command line task
- to see how long it took to run.
- {: .notice--info}
 
-
+What's this `time` thing? You can add the `time` command to any command line task to see how long it took to run.
+{: .notice--info}
 
 # Examine the quality of the data
+Before analyzing the sequences, it's important to assess their quality like we did before in the [Genetics Primer](#3--checking-read-quality-with-q-scores). A quality check using QIIME2 allows us to visualize how reliable each base position is across all reads. If certain positions show low quality, we can trim them off. 
 
-Before analyzing the sequences, it's important to assess their quality. Sequencing machines aren't flawless—they may misread certain bases, especially toward the ends of reads. A quality check allows us to visualize how reliable each base position is across all reads. If certain positions show low quality, we can trim them off. This ensures that we only use high-confidence sequences in downstream analyses, which leads to more accurate and meaningful results.
+>We can view the characteristics of the dataset and the quality scores of the data by creating a QIIME2 visualization artifact.
+>
+>```bash
+>time qiime demux summarize \
+>  --i-data wednesday_outputs/demux.qza \
+>  --o-visualization wednesday_outputs/demux.qzv
+> ```
+>
+> Time to run: 1 minute
+>Output: * ```demux.qzv``` [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Fdemux.qzv) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/demux.qzv)
 
-We can view the characteristics of the dataset and the quality scores of the data by creating a QIIME2 visualization artifact.
-
-```bash
-time qiime demux summarize \
-  --i-data wednesday_outputs/demux.qza \
-  --o-visualization wednesday_outputs/demux.qzv
- ```
- Time to run: 1 minute
-
- Output:
- * ```demux.qzv``` [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Fdemux.qzv) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/demux.qzv)
-
-This will create a visualization file. You can download the file to your local computer. From a new terminal window on your local computer copy the file:
-
-```bash
-scp <user.name>@login.scinet.science:/path/to/data .
-```
-
-Now you can view the file on your local computer using the [QIIME2 visualization server](https://view.qiime2.org).  Alternatively you can view the precomputed file on that server using the button above.
-
-When viewing the data look for the point in the forward and reverse reads where quality scores decline below 25-30. We will need to trim reads to this point to create high quality sequence variants.
+>This will create a visualization file. You can download the file to your local computer. From a new terminal window on your local computer copy the file:
+>
+>```bash
+>scp <user.name>@lengau.chpc.ac.za:/path/to/data .
+>```
+>Now you can view the file on your local computer using the [QIIME2 visualization server](https://view.qiime2.org). Alternatively you can view the precomputed file on that server using the button above.
+>
+>When viewing the data look for the point in the forward and reverse reads where quality scores decline below 25-30. We will need to trim reads to this point to create high quality sequence variants.
 
 # Selecting Sequence Variants
 
