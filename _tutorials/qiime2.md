@@ -181,10 +181,7 @@ sample-1      $PWD/some/filepath/sample1_R1.fastq
 sample-2      $PWD/some/filepath/sample2_R1.fastq
 ```
 
-
-
-
->Importing means telling QIIME where your raw data is and converting it into its internal format:
+>Importing means telling QIIME where your raw data is and converting it into its internal format (when we run a command with time in front of it, it shows us how long it took to run):
 >```bash
 >time qiime tools import \
 >  --type 'SampleData[PairedEndSequencesWithQuality]' \
@@ -197,10 +194,7 @@ sample-2      $PWD/some/filepath/sample2_R1.fastq
 >
 >Output: ```demux.qza```
 
-What's this `time` thing? You can add the `time` command to any command line task to see how long it took to run.
-{: .notice--info}
-
-# Examine the quality of the data
+## Examine the quality of the data
 Before analyzing the sequences, it's important to assess their quality like we did before in the [Genetics Primer](#3--checking-read-quality-with-q-scores). A quality check using QIIME2 allows us to visualize how reliable each base position is across all reads. If certain positions show low quality, we can trim them off. 
 
 >We can view the characteristics of the dataset and the quality scores of the data by creating a QIIME2 visualization artifact.
@@ -223,20 +217,15 @@ Before analyzing the sequences, it's important to assess their quality like we d
 >
 >When viewing the data look for the point in the forward and reverse reads where quality scores decline below 25-30. We will need to trim reads to this point to create high quality sequence variants.
 
-# Selecting Sequence Variants
+## Selecting Sequence Variants
 
-> A sequence variant is a unique DNA sequence found in your dataset. Unlike older methods that grouped similar sequences into Operational Taxonomic Units (OTUs) based on a similarity threshold, modern methods like DADA2 or Deblur aim to resolve individual, error-corrected sequences—called Amplicon Sequence Variants (ASVs). ASVs allow for higher-resolution analysis and more reproducible results. They represent actual biological sequences from the sample, not clusters influenced by arbitrary thresholds. Identifying ASVs is a core step in modern microbiome research. Rather than grouping similar sequences (as older methods did), newer tools try to identify exact sequences to better reflect the real microbes present.
+Sequencing isn’t perfect and errors, noise, and artefacts are common. To make sense of the data, the first core step is to group similar reads together and identify the true biological sequences that were present in the sample. This process is called **sequence variant picking**.
 
+Modern tools like [Dada2](https://dx.doi.org/10.1038/nmeth.3869), [Deblur](https://dx.doi.org/10.1128/mSystems.00191-16), and [UNOISE2](https://doi.org/10.1101/081257) aim to identify these exact sequences by using statistical error correction models, taking an information theoretic approach and applying a heuristic. This is a major improvement over older methods like OTU picking, where sequences were grouped based on a similarity threshold. ASVs (Amplicon Sequence Variants) provide higher resolution, greater reproducibility, and better biological accuracy.
 
-The process of selecting sequence variants is the core processing step in amplicon analysis. This takes the place of "OTU picking" a method of clustering similar data together that was the common method for dealing with sequencing errors until last year.  Three different methods have been published to select sequence variants, [Dada2](https://dx.doi.org/10.1038/nmeth.3869) uses and statistical error correction model, [Deblur](https://dx.doi.org/10.1128/mSystems.00191-16) takes an information theoretic approach and [UNOISE2](https://doi.org/10.1101/081257) applies a heuristic. Each of these methods attempt to remove or correct reads with sequencing errors and then remove chimeric sequences originating from different DNA templates.
-For the next step you can select either the Dada2 method or the Deblur method.
+For the next step you can select either the Dada2 method or the Deblur method. Sequence variant selection is the slowest step in the tutorial.
 
-**A note on parallel processing**. Both Dada2 and Deblur can independently process each sample. This becomes very important as experiments grow to thousands of samples. In this tutorial we are taking advantage of " course grained parallelism" provided by the multiple cores in our processor. However, Deblur and Dada2 (after the error model learning step) can select sequence variants in a sample totally independently, making the problem "embarrassingly parallel." This means that samples can be split into many different files and processed on arbitrarily many machines simultaneously.
-{: .notice--info}
-
-Sequence variant selection is the slowest step in the tutorial. For that reason it is best to submit this step using the SLURM Sbatch scheduler.
-
-## Option 1: Dada2 (Slower)
+### Option 1: Dada2 (Slower)
 
 ```bash
 time qiime dada2 denoise-paired \
@@ -260,7 +249,7 @@ Output:
 * ```rep-seqs-dada2.qza``` [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Frep-seqs-dada2.qza) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/rep-seqs-dada2.qza)
 * ```table-dada2.qzv``` [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Ftable-dada2.qzv) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/table-dada2.qzv)
 
-## Option 2: Deblur (Faster)
+### Option 2: Deblur (Faster)
 Deblur only uses forward reads at this time. You could get around this by merging your data with an outside tool like [BBmerge](http://jgi.doe.gov/data-and-tools/bbtools/bb-tools-user-guide/bbmerge-guide/) then importing your data as single ended. For simplicity, in this tutorial we will just use the forward reads.
 
 ```bash
