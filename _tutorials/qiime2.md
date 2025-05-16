@@ -186,14 +186,13 @@ sample-2      $PWD/some/filepath/sample2_R1.fastq
 >  --output-path wednesday_outputs/demux.qza \
 >  --input-format PairedEndFastqManifestPhred33V2
 >```
-Time to run: 2 minutes
-
-What's this `time` thing? You can add the `time` command to any command line task
+>Time to run: 2 minutes
+>Output: ```demux.qza```
+>What's this `time` thing? You can add the `time` command to any command line task
  to see how long it took to run.
  {: .notice--info}
 
-Output:
-* ```demux.qza```
+
 
 # Examine the quality of the data
 
