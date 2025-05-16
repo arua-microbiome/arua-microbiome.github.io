@@ -53,7 +53,7 @@ Breaking that command down, ```zcat``` prints the unzipped file, ```head -n 8```
 
 ## 2 · “How many reads did I get?”
 
-> A core sanity-check is to confirm that every sample reached the rarefaction target of 10 000 reads. If one library is badly under-sequenced it can skew diversity estimates or even drop out of analyses entirely. Because one read occupies four lines in a FASTQ file, total-lines ÷ 4 gives the read count.
+>A core sanity-check is to confirm that every sample reached the rarefaction target of 10 000 reads. If one library is badly under-sequenced it can skew diversity estimates or even drop out of analyses entirely. Because one read occupies four lines in a FASTQ file, total-lines ÷ 4 gives the read count.
 ```bash
 # count reads in one compressed file
 zcat GC1GC1_R1.fastq.gz | wc -l | awk '{print $1/4 " reads"}'
