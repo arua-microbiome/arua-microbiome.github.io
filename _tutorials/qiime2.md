@@ -120,17 +120,39 @@ paste \
 
 If you’ve ever used BLAST (Basic Local Alignment Search Tool), you know the basic idea: you give it a DNA or protein sequence, and it compares that sequence to a reference database to find the best matches. It reports which known sequences are most similar, how long the matching region is, and how confident the match is. This is the foundation of how we assign names or functions to unknown sequences.
 
-In amplicon analysis, tools like QIIME 2 do something very similar. After denoising your reads into amplicon sequence variants (ASVs)—which are essentially cleaned-up, exact sequences—it matches each ASV to a reference database such as SILVA, Greengenes, or GTDB. Each ASV is compared to known 16S rRNA gene sequences in the database to find its closest match, which is then used to assign it a taxonomic label (e.g. Bacillus subtilis, Pseudomonas, etc.).
+In amplicon analysis, tools like QIIME 2 do something very similar. After denoising your reads into amplicon sequence variants (ASVs), which are essentially cleaned-up, exact sequences, it matches each ASV to a reference database such as SILVA, Greengenes, or GTDB. Each ASV is compared to known 16S rRNA gene sequences in the database to find its closest match, which is then used to assign it a taxonomic label (e.g. Bacillus subtilis, Pseudomonas, etc.).
 
 So while QIIME doesn’t run BLAST directly by default, it’s doing the same type of work: comparing your sequences to a trusted reference and reporting the best biological match. It’s just automated, scaled up, and optimised for microbial marker genes like 16S.
 
-Lets run a blast search for the first sequence in our file. Print the first sequence and its information:
+Lets run a blast search for the first sequence in our file. Print the first sequence and its information and paste it into the BLAST Nucleotide website: [blast.ncbi.nlm.nih.gov/](blast.ncbi.nlm.nih.gov/).
 
 ```bash
 zcat GC1GC1_R1.fastq.gz | head -n 4
 ```
 
-Then navigate to the BLAST Nucleotide website and paste in your sequence: [blast.ncbi.nlm.nih.gov/](blast.ncbi.nlm.nih.gov/). **What do you see?**
+ **What do you see?** Is it a bacterium that you have identified?
+
+# Intro to HPC
+
+High-Performance Computing (HPC) refers to the use of supercomputers or parallel computing techniques to perform complex computations quickly. HPC systems aggregate computing resources to solve problems that would be unfeasible or time-consuming using conventional methods. These systems play a critical role in research fields like bioinformatics, physics, climate modeling, and engineering.
+
+But how do HPCs achieve better results in less time? This is because of parallel computing, which is the ability to divide large tasks into smaller pieces that can be completed simultaneously. You can think of this like a group of people working together to build a house - each person has a specific task which they work on at the same time, finishing the job faster.
+
+A frequent misunderstanding is that executing code on a cluster will automatically result in improved performance. Clusters do not inherently accelerate code execution; for enhanced performance, the code must be explicitly adapted for parallel processing, a task that falls under your responsibility as a programmer.
+
+HPC's typically have thousands of cores, made up by separate computers (nodes) that are linked and can transfer data to each other. The Lengau CHPC we will be using today has a total of 33,436 cores available to its users.
+
+## Qiime2 on HPC
+- CPU Power: Many QIIME2 plugins, such as dada2, vsearch, and feature-classifier, can utilize multithreading to significantly reduce processing time. On an HPC, users can request dozens of CPU cores per job, greatly accelerating large analyses involving hundreds or thousands of samples.
+
+- RAM Availability: Some QIIME2 steps, especially taxonomy classification and large distance matrix calculations, can consume large amounts of memory (10–100+ GB). HPC systems often provide nodes with hundreds of gigabytes of RAM, preventing crashes and memory overflows that might occur on a personal computer.
+
+- Storage Capacity: Intermediate QIIME2 artifacts and results (e.g., .qza, .qzv files) accumulate quickly and may exceed local storage limits. HPC environments usually offer shared high-capacity storage systems (terabytes to petabytes) optimized for fast read/write speeds, which helps manage these large datasets efficiently.
+
+- Job Scheduling: HPCs use job scheduling systems (e.g., SLURM, PBS) to manage and queue computational tasks. This enables long or resource-heavy QIIME2 workflows to run in the background without tying up your local machine.
+
+## Connecting to the CHPC
+
 
 
 # Understanding QIIME2 files
