@@ -57,7 +57,7 @@ These reads are written to disk as plain-text files, almost always compressed an
 >```bash
 >## count reads in one compressed file
 >zcat GC1GC1_R1.fastq.gz | wc -l | awk '{print $1/4 " reads"}'
-
+>
 ># loop across every forward read file and list counts
 >for f in *_R1.fastq.gz; do
 >  echo -n "$f  "
