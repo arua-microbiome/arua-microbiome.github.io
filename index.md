@@ -16,13 +16,13 @@ feature_row:
     alt: "amplicon"
     title: "Amplicon Sequencing"
     excerpt: "Analysis of sequencing amplified 16S rRNA communities"
-    url: "/"
+    url: "/tutorials/qiime2/"
     btn_label: "Learn More"
   - image_path: /assets/images/ecology.svg
     alt: "ecology"
     title: "Ecological Analysis"
     excerpt: "Decyphering the ecological patterns of microbial communities"
-    url: "/"
+    url: "/tutorials/ecological_analysis/"
     btn_label: "Learn More"
 
 ---
