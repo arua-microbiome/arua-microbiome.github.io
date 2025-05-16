@@ -43,8 +43,7 @@ These reads are written to disk as plain-text files, almost always compressed an
 - FASTA files ( .fasta, .fa ) hold only the nucleotide strings; they are mainly used once reads have been cleaned and merged.
 - FASTQ files ( .fastq, .fq ) hold both the sequence and its Phred quality scores, telling you how confident the instrument was at each base.
 
-Once you have the downloads in place, peek inside one of the real files, say GC1GC1_R1.fastq.gz (forward reads from replicate GC1, experiment GC1), to convince yourself what a FASTQ record looks like and to check that the quality scores are sensible before you hand the data to QIIME 2. You can do this in bash like this:
-
+>Once you have the downloads in place, peek inside one of the real files, say GC1GC1_R1.fastq.gz (forward reads from replicate GC1, experiment GC1), to convince yourself what a FASTQ record looks like and to check that the quality scores are sensible before you hand the data to QIIME 2. You can do this in bash like this:
 ```bash
 # ── Bash one-liner: show the first two reads (8 lines) ───────────
 zcat GC1GC1_R1.fastq.gz | head -n 8
@@ -55,7 +54,6 @@ Breaking that command down, ```zcat``` prints the unzipped file, ```head -n 8```
 ## 2 · “How many reads did I get?”
 
 > A core sanity-check is to confirm that every sample reached the rarefaction target of 10 000 reads. If one library is badly under-sequenced it can skew diversity estimates or even drop out of analyses entirely. Because one read occupies four lines in a FASTQ file, total-lines ÷ 4 gives the read count.
-
 ```bash
 # count reads in one compressed file
 zcat GC1GC1_R1.fastq.gz | wc -l | awk '{print $1/4 " reads"}'
@@ -86,7 +84,7 @@ When a base falls below Q20 it can introduce false sequence variants, so we norm
 seqtk fqchk GC1GC1_R1.fastq.gz
 ```
 
-You will see output like this:
+>You will see output like this:
 ```
 POS  #bases  %A  %C  %G  %T  %N  avgQ  errQ  %low  %high
 ALL  956250  26.7 19.3 35.1 18.9 0.0 35.2 19.3 5.5 94.5
@@ -94,8 +92,7 @@ ALL  956250  26.7 19.3 35.1 18.9 0.0 35.2 19.3 5.5 94.5
 ⋮
 250  3825    ...   ...  ...  ... 0.0 28.4 ...  22.0 74.0
 ```
-
-> For the posiion in ```POS```, ```%low``` indicates the fraction of bases under Q20, while ```%high``` indicates the fraction of bases over Q30. Although somewhat arbitrary, we want to pick a position to truncate at where we maximise accuracy - this could be 235 across all files, for example.
+For the posiion in ```POS```, ```%low``` indicates the fraction of bases under Q20, while ```%high``` indicates the fraction of bases over Q30. Although somewhat arbitrary, we want to pick a position to truncate at where we maximise accuracy - this could be 235 across all files, for example.
 
 
 ## 4 · “Do my paired files really match?”
