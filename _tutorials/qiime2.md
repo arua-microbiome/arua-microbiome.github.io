@@ -81,7 +81,7 @@ When a base falls below Q20 it can introduce false sequence variants, so we norm
 >```bash
 >seqtk fqchk GC1GC1_R1.fastq.gz
 >```
-
+>
 >You will see output like this:
 >```
 >POS  #bases  %A  %C  %G  %T  %N  avgQ  errQ  %low  %high
@@ -102,7 +102,7 @@ This section checks that your paired-end FASTQ files truly match, which is essen
 >echo "R1: $(($(zcat GC1GC1_R1.fastq.gz | wc -l)/4))   R2: $(($(zcat GC1GC1_R2.fastq.gz | wc -l)/4))"
 >```
 
-> Checks that the read IDs match between files. ```sed -n '1~4p'``` pulls out every 4th line starting from line 1 (the read headers). ```cut -d' ' -f1``` trims each header to just the read ID, ignoring barcode info. ```paste``` prints them side by side so you can compare them easily.
+> This checks that the read IDs match between files. ```sed -n '1~4p'``` pulls out every 4th line starting from line 1 (the read headers). ```cut -d' ' -f1``` trims each header to just the read ID, ignoring barcode info. ```paste``` prints them side by side so you can compare them easily.
 >```bash
 >paste \
 >  <(zcat GC1GC1_R1.fastq.gz | sed -n '1~4p' | cut -d' ' -f1 | head -5) \
@@ -146,7 +146,7 @@ HPC's typically have thousands of cores, made up by separate computers (nodes) t
 - Job Scheduling: HPCs use job scheduling systems (e.g., SLURM, PBS) to manage and queue computational tasks. This enables long or resource-heavy QIIME2 workflows to run in the background without tying up your local machine.
 
 ## Connecting to the CHPC
-
+*insert text here*
 
 
 # QIIME2
@@ -154,17 +154,38 @@ HPC's typically have thousands of cores, made up by separate computers (nodes) t
 ## Understanding QIIME2 Files
 QIIME 2 organises your analysis using two main file types: .qza files for data (called QIIME Zipped Artifacts) and .qzv files for visualisations (QIIME Zipped Visualisations). These files are more than simple containers, as they include detailed information about how each was generated, such as the input files, commands, and parameters used. This is known as provenance tracking, and it allows others to trace every step of your workflow. You can open .qzv files in your browser at [https://view.qiime2.org](https://view.qiime2.org) to explore interactive summaries like quality plots, taxonomic profiles, and diversity results. This approach helps make your microbiome analysis more transparent, easier to share, and reproducible from start to finish.
 
-# Import your paired-end sequences
+## Import your paired-end sequences
+DNA sequencing generates data in the form of FASTQ files. Importing these files into QIIME 2 allows the software to begin processing them in a standardized format.
 
-> DNA sequencing generates data in the form of FASTQ files. Importing these files into QIIME 2 allows the software to begin processing them in a standardized format. Importing means telling QIIME where your raw data is and converting it into its internal format.
+QIIME2 expects file locations to be written in a manifest file (here ```wednesday_manifest.tsv```), whose internal format is specified in the ```--input-format```. There is the option of ```PairedEndFastqManifestPhred33V2``` or ```SingleEndFastqManifestPhred33V2```, depending on if we supply only forward reads or paired forward-reverse reads. We would format our manifest file accordingly:
 
-```bash
-time qiime tools import \
-  --type 'SampleData[PairedEndSequencesWithQuality]' \
-  --input-path wednesday_manifest.tsv \
-  --output-path wednesday_outputs/demux.qza \
-  --input-format PairedEndFastqManifestPhred33V2
+The fastq.gz absolute filepaths may contain environment variables (e.g., $HOME or $PWD). The following example illustrates a simple fastq manifest file for paired-end read data for four samples.
 ```
+sample-id     forward-absolute-filepath       reverse-absolute-filepath
+sample-1      $PWD/some/filepath/sample0_R1.fastq.gz  $PWD/some/filepath/sample1_R2.fastq.gz
+sample-2      $PWD/some/filepath/sample2_R1.fastq.gz  $PWD/some/filepath/sample2_R2.fastq.gz
+sample-3      $PWD/some/filepath/sample3_R1.fastq.gz  $PWD/some/filepath/sample3_R2.fastq.gz
+sample-4      $PWD/some/filepath/sample4_R1.fastq.gz  $PWD/some/filepath/sample4_R2.fastq.gz
+```
+
+The following example illustrates a simple fastq manifest file for fastq single-end read data for two samples.
+```
+sample-id     absolute-filepath
+sample-1      $PWD/some/filepath/sample1_R1.fastq
+sample-2      $PWD/some/filepath/sample2_R1.fastq
+```
+
+
+
+
+>Importing means telling QIIME where your raw data is and converting it into its internal format:
+>```bash
+>time qiime tools import \
+>  --type 'SampleData[PairedEndSequencesWithQuality]' \
+>  --input-path wednesday_manifest.tsv \
+>  --output-path wednesday_outputs/demux.qza \
+>  --input-format PairedEndFastqManifestPhred33V2
+>```
 Time to run: 2 minutes
 
 What's this `time` thing? You can add the `time` command to any command line task
