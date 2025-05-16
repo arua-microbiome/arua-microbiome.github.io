@@ -148,6 +148,12 @@ HPC's typically have thousands of cores, made up by separate computers (nodes) t
 ## Connecting to the CHPC
 *insert text here*
 
+## Interacting with the CHPC
+*sftp/scp/ssh*
+
+*conda envs*
+
+*directories*
 
 # QIIME2
 
@@ -186,8 +192,11 @@ sample-2      $PWD/some/filepath/sample2_R1.fastq
 >  --output-path wednesday_outputs/demux.qza \
 >  --input-format PairedEndFastqManifestPhred33V2
 >```
+>
 >Time to run: 2 minutes
+>
 >Output: ```demux.qza```
+>
 >What's this `time` thing? You can add the `time` command to any command line task
  to see how long it took to run.
  {: .notice--info}
@@ -196,7 +205,7 @@ sample-2      $PWD/some/filepath/sample2_R1.fastq
 
 # Examine the quality of the data
 
-> Before analyzing the sequences, it's important to assess their quality. Sequencing machines aren't flawless—they may misread certain bases, especially toward the ends of reads. A quality check allows us to visualize how reliable each base position is across all reads. If certain positions show low quality, we can trim them off. This ensures that we only use high-confidence sequences in downstream analyses, which leads to more accurate and meaningful results.
+Before analyzing the sequences, it's important to assess their quality. Sequencing machines aren't flawless—they may misread certain bases, especially toward the ends of reads. A quality check allows us to visualize how reliable each base position is across all reads. If certain positions show low quality, we can trim them off. This ensures that we only use high-confidence sequences in downstream analyses, which leads to more accurate and meaningful results.
 
 We can view the characteristics of the dataset and the quality scores of the data by creating a QIIME2 visualization artifact.
 
