@@ -144,7 +144,6 @@ HPC's typically have thousands of cores, made up by separate computers (nodes) t
 
 ![Sequencial vs Parallel Computing](../../assets/images/parallel.png)
 
-
 ## Qiime2 on HPC
 - CPU Power: Many QIIME2 plugins, such as dada2, vsearch, and feature-classifier, can utilize multithreading to significantly reduce processing time. On an HPC, users can request dozens of CPU cores per job, greatly accelerating large analyses involving hundreds or thousands of samples.
 
@@ -158,17 +157,14 @@ HPC's typically have thousands of cores, made up by separate computers (nodes) t
 
 
 
-# Understanding QIIME2 files
+# QIIME2
 
-> QIIME 2 uses two types of files: `.qza` files for storing data (called artifacts) and `.qzv` files for storing visualizations. These file formats are designed to bundle not just the raw or processed data, but also metadata about how the data was generated. This ensures that the full history (or 'provenance') of a dataset is preserved. As a result, any researcher examining your work can see exactly what steps you took and what settings you used. and trace. This helps track every step of your analysis, ensuring transparency and reproducibility, which are essential in science.
-
-QIIME 2 manages your data and results using two main file types: `.qza` (QIIME Zipped Artifact) for data, and `.qzv` for visualizations. These files are more than just containers — they store metadata about how the data was created, and help ensure your workflow is reproducible. For example, if you import a set of DNA sequences and run a quality control step, QIIME 2 automatically logs the commands and parameters used. You can open `.qzv` files in a web browser using [https://view.qiime2.org](https://view.qiime2.org) to explore interactive plots and summaries. This system makes microbiome analysis more transparent and shareable than traditional scripts or spreadsheets.
+## Understanding QIIME2 Files
+QIIME 2 organises your analysis using two main file types: .qza files for data (called QIIME Zipped Artifacts) and .qzv files for visualisations (QIIME Zipped Visualisations). These files are more than simple containers, as they include detailed information about how each was generated, such as the input files, commands, and parameters used. This is known as provenance tracking, and it allows others to trace every step of your workflow. You can open .qzv files in your browser at [https://view.qiime2.org](https://view.qiime2.org) to explore interactive summaries like quality plots, taxonomic profiles, and diversity results. This approach helps make your microbiome analysis more transparent, easier to share, and reproducible from start to finish.
 
 # Import your paired-end sequences
 
-> DNA sequencing generates data in the form of FASTQ files. Each FASTQ file contains a collection of DNA sequences (called reads) along with quality scores that indicate how confident the sequencer was in calling each base (A, T, C, or G). In paired-end sequencing, two separate FASTQ files are produced for each sample—one for the forward read and one for the reverse read. These reads come from opposite ends of the same DNA fragment and can be merged later to reconstruct the full sequence. Importing these files into QIIME 2 allows the software to begin processing them in a standardized format. Importing means telling QIIME where your raw data is and converting it into its internal format.
-
-For this project the reads were sequences using Illumina paired-end, 250 base pair reads with forward and reverse reads in separate files. The fastq is imported in to a QIIME2 data artifact ending in ```.qza```
+> DNA sequencing generates data in the form of FASTQ files. Importing these files into QIIME 2 allows the software to begin processing them in a standardized format. Importing means telling QIIME where your raw data is and converting it into its internal format.
 
 ```bash
 time qiime tools import \
