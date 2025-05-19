@@ -9,6 +9,17 @@ author: "George Kalogiannis"
 By George Kalogiannis, Designed from the official [QIIME2 tutorials](https://docs.qiime2.org/2024.2/tutorials/)
 {% include toc %}
 
+## Linking Taxa to Metadata
+
+```bash
+qiime metadata tabulate \
+  --m-input-file taxonomy.qza \
+  --o-visualization taxonomy.qzv
+  ```
+Time to run: 1 second
+
+* ```taxonomy.qzv``` [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Ftaxonomy.qzv) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/taxonomy.qzv)
+
 ## Filtering contaminants
 Looking at the the ```taxonomy.qzv``` file using https://view/qiime2.org We can see the data presented at different taxonomic levels and grouped by different experimental factors. If we drill down to taxonomic level 5 something looks a bit odd. There's lots of "Rickettsiales;f__mitochondria".  This is really  plant mitochondrial contamination. Some of these samples also have chloroplast contamination.  This kind of Taxonomic filtering isn't available in QIIME2 yet but it can be be done manually.
 
