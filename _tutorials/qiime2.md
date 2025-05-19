@@ -315,39 +315,30 @@ Database | Description | License
 There are several methods of taxonomic classification available. The most commonly used classifier is the [RDP classifier](https://rdp.cme.msu.edu/classifier/classifier.jsp). Other software includes [SINTAX](http://www.drive5.com/usearch/manual/cmd_sintax.html) and [16S classifier](http://metabiosys.iiserb.ac.in/16Sclassifier/). We will be using the QIIME2's built-in naive Bayesian classifier (which is built on Scikit-learn but similar to RDP), noting that the method, while fast and powerful, has a tendency  [over-classify](http://www.drive5.com/usearch/manual/tax_err.html) reads.
 
 There are two steps to taxonomic classification: [training the classifier](https://docs.qiime2.org/2024.2/tutorials/feature-classifier/) (or using a [pre-trained](https://docs.qiime2.org/2024.2/data-resources/) dataset) and classifying the sequence variants.  Generally it is best to train the classifier on the exact region of the 16S, 18S or ITS you sequenced.
-For this tutorial we will be using a classifier model trained on the Silva 99% database trimmed to the V4 region.
 
-```bash
-time qiime feature-classifier classify-sklearn \
-  --i-classifier  /project/microbiome_workshop/amplicon/data/taxonomy/gg-13-8-99-515-806-nb-classifier.qza \
-  --i-reads rep-seqs-dada2.qza \
-  --o-classification taxonomy.qza
-```
-Time to run: 4 minutes
-
-Output:
-* ```taxonomy.qza``` [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Ftaxonomy.qza) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/taxonomy.qza)
-
-```bash
-qiime metadata tabulate \
-  --m-input-file taxonomy.qza \
-  --o-visualization taxonomy.qzv
-  ```
-Time to run: 1 second
-
-* ```taxonomy.qzv``` [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Ftaxonomy.qzv) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/taxonomy.qzv)
+>For this tutorial we will be using a classifier model trained on the Silva 99% database trimmed to the V4 region.
+>
+>```bash
+>time qiime feature-classifier classify-sklearn \
+>  --i-classifier  /project/microbiome_workshop/amplicon/data/taxonomy/gg-13-8-99-515-806-nb-classifier.qza \
+>  --i-reads rep-seqs-dada2.qza \
+>  --o-classification taxonomy.qza
+>```
+>
+>Time to run: 4 minutes
+>
+>Output: ```taxonomy.qza``` [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Ftaxonomy.qza) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/taxonomy.qza)
 
 
-Create a bar plot visualization of the taxonomy data:
-```bash
-qiime taxa barplot \
-  --i-table table-dada2.qza \
-  --i-taxonomy taxonomy.qza \
-  --m-metadata-file /project/microbiome_workshop/amplicon/data/mapping.txt \
-  --o-visualization taxa-bar-plots.qzv
-```
-Time to run: 1 minute
-
-Output:
-* ```taxa-bar-plots.qzv``` [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Ftaxa-bar-plots.qzv) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/taxa-bar-plots.qzv)
+>Create a bar plot visualization of the taxonomy data:
+>```bash
+>qiime taxa barplot \
+>  --i-table table-dada2.qza \
+>  --i-taxonomy taxonomy.qza \
+>  --m-metadata-file /project/microbiome_workshop/amplicon/data/mapping.txt \
+>  --o-visualization taxa-bar-plots.qzv
+>```
+>Time to run: 1 minute
+>
+>Output: ```taxa-bar-plots.qzv``` [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Ftaxa-bar-plots.qzv) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/taxa-bar-plots.qzv)
 
