@@ -228,53 +228,45 @@ For the next step you can select either the Dada2 method or the Deblur method. S
 
 ### Option 1: Dada2 (Slower)
 
-```bash
-time qiime dada2 denoise-paired \
-  --i-demultiplexed-seqs demux.qza \
-  --o-table table-dada2 \
-  --o-representative-sequences rep-seqs-dada2 \
-  --p-trim-left-f 9 \
-  --p-trim-left-r 9 \
-  --p-trunc-len-f 220 \
-  --p-trunc-len-r 200 \
-  --p-n-threads 40 \
-  --p-n-reads-learn 200000
-```
-To submit this command using Sbatch:
-```bash
-sbatch /project/microbiome_workshop/amplicon/example/qiime2-phosphate-tutorial/dada2.sh
-```
-Time to run: 35 minutes
-
-Output:
-* ```rep-seqs-dada2.qza``` [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Frep-seqs-dada2.qza) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/rep-seqs-dada2.qza)
-* ```table-dada2.qzv``` [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Ftable-dada2.qzv) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/table-dada2.qzv)
+>```bash
+>time qiime dada2 denoise-paired \
+>  --i-demultiplexed-seqs demux.qza \   # the imported FASTQ data (paired-end reads).
+>  --o-table table-dada2 \   # the output file containing the ASV count table.
+>  --o-representative-sequences rep-seqs-dada2 \   # the actual DNA sequences of the ASVs.
+>  --p-trim-left-f 9 \   # trims 9 bases from the start of each forward/reverse read (e.g. to remove primers).
+>  --p-trim-left-r 9 \
+>  --p-trunc-len-f 220 \   # truncates reads to 220/200 bases (based on where quality drops off).
+>  --p-trunc-len-r 200 \
+>  --p-n-threads 24 \   # number of CPU threads to use. Adjust based on your system.
+>  --p-n-reads-learn 200000    # number of reads used to learn the error model. You can lower this on small datasets.
+>```
+>
+>Time to run: 35 minutes
+>
+>Output:
+> - ```rep-seqs-dada2.qza```: These are your representative sequences: the exact, cleaned-up ASV sequences found in your dataset. They are matched against reference databases later (like SILVA or Greengenes) to assign taxonomy. [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Frep-seqs-dada2.qza) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/rep-seqs-dada2.qza)
+> - ```table-dada2.qzv```: This is your feature table, stored in QIIME 2’s .qza format. Internally, it follows the BIOM (Biological Observation Matrix) standard. It records how many times each ASV appears in each sample, similar to a species count table. This is the key file you’ll use for diversity analysis, statistical testing, and visualisation. [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Ftable-dada2.qzv) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/table-dada2.qzv)
 
 ### Option 2: Deblur (Faster)
-Deblur only uses forward reads at this time. You could get around this by merging your data with an outside tool like [BBmerge](http://jgi.doe.gov/data-and-tools/bbtools/bb-tools-user-guide/bbmerge-guide/) then importing your data as single ended. For simplicity, in this tutorial we will just use the forward reads.
-
-```bash
- time qiime deblur denoise-16S \
-   --i-demultiplexed-seqs demux.qza \
-   --p-trim-length 220 \
-   --output-dir deblurresults \
-   --p-jobs-to-start 36
-```
-
-To submit this command using Sbatch:
-```bash
-sbatch /project/microbiome_workshop/amplicon/example/qiime2-phosphate-tutorial/deblur.sh
-```
-Time to run: 4 minutes
-
-Output:
-* ```deblurresults/representative_sequences.qza``` [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Fdeblurresults%2Frepresentative_sequences.qza) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/deblurresults/representative_sequences.qza)
-* ```deblurresults/stats.qza```
-[View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Fdeblurresults%2Fstats.qza) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/deblurresults/stats.qza)
-* ```deblurresults/table.qza```
+> Deblur only uses forward reads at this time. You could get around this by merging your data with an outside tool like [BBmerge](http://jgi.doe.gov/data-and-tools/bbtools/bb-tools-user-guide/bbmerge-guide/) then importing your data as single ended. For simplicity, in this tutorial we will just use the forward reads.
+> 
+>```bash
+> time qiime deblur denoise-16S \
+>   --i-demultiplexed-seqs demux.qza \   # the imported FASTQ data (paired-end reads).
+>   --p-trim-length 220 \    # truncates reads to 220 bases (based on where quality drops off).
+>   --output-dir deblurresults \   # the output directory containing the output files.
+>   --p-jobs-to-start 24    # number of CPU threads to use. Adjust based on your system.
+>```
+>
+> Time to run: 4 minutes
+>
+> Output: Okay, we have just done the hard part of amplicon sequence analysis.  At this point we have our BIOM count table, the representative sequence variants and a stats file for Deblur.
+>
+> - ```deblurresults/representative_sequences.qza```: A list of the representative sequences (representative_sequences.qza), which are the actual DNA sequences of the ASVs. [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Fdeblurresults%2Frepresentative_sequences.qza) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/deblurresults/representative_sequences.qza)
+> - ```deblurresults/stats.qza```: A statistics file which logs how many reads passed quality control and how many were removed at each filtering step. [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Fdeblurresults%2Fstats.qza) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/deblurresults/stats.qza)
+> - ```deblurresults/table.qza```: The same type of table as the one outputted by Dada2 above.
 [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Fdeblurresults%2Ftable.qza) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/deblurresults/table.qza)
 
-Okay, we have just done the hard part of amplicon sequence analysis.  At this point we have our BIOM count table, the representative sequence variants and a stats file for Deblur.
 
 We have just called sequence variants two different ways. In a real workflow you would only use one method.  From here on out we will use the output of dada2 only: ```table-dada2.qza```.  
 
