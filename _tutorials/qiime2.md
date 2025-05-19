@@ -9,6 +9,16 @@ author: "George Kalogiannis"
 By George Kalogiannis, Designed from the official [QIIME2 tutorials](https://docs.qiime2.org/2024.2/tutorials/)
 {% include toc %}
 
+# Learning Outcomes
+In this workshop, you’ll learn how to process and analyse microbial amplicon sequencing data using QIIME 2. Starting from raw FASTQ files, you’ll import your data, assess its quality, and use tools like DADA2 or Deblur to generate high-confidence sequence variants (ASVs). You’ll also learn how to assign taxonomy to those sequences and create summaries of microbial community structure.
+
+By the end of the session, you will be able to:
+- Import and quality-check amplicon data in QIIME 2
+- Identify ASVs and generate a feature table
+- Assign taxonomy using a reference database
+- View and interpret results through interactive visualisations
+- Submit resource-intensive steps to an HPC cluster (CHPC) for efficient processing
+
 # Data sets
 
 In this workshop, we will study microbial genes collected from the soil surrounding the roots of Arabidopsis thaliana plants. These plants were genetically modified to alter how they respond to phosphate stress. Phosphate (P) is a cornerstone nutrient for plants, driving ATP-based energy transfer, nucleic-acid synthesis, membrane formation, and phosphorylation-driven signalling. Because phosphate binds tightly to soil particles, it is frequently scarce, so plants switch on an integrated phosphate-starvation response (PSR): reshaping their roots, releasing phosphatases, and recruiting helpful microbes in the rhizosphere. These changes ripple outward, altering the surrounding microbial community and, in turn, feeding back on plant health.
