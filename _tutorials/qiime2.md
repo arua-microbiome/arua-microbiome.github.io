@@ -284,25 +284,25 @@ For the next step you can select either the Dada2 method or the Deblur method. S
 We have just called sequence variants two different ways. In a real workflow you would only use one method.  From here on out we will use the output of dada2 only: ```table-dada2.qza```.  
 
 ## Adding metadata and examining count tables
+Once you have generated your ASV count table, the next step is to summarise it and explore how many reads were retained in each sample. This command uses qiime feature-table summarize to produce an interactive .qzv file that includes per-sample read counts, total feature counts, and an overview of how balanced your dataset is.
 
-```bash
-time qiime feature-table summarize \
-  --i-table table-dada2.qza \
-  --o-visualization table-dada2.qzv \
-  --m-sample-metadata-file /project/microbiome_workshop/amplicon/data/mapping.txt
-  ```
-  Time to run: 30 seconds
-
- Output:
- * ```table-dada2.qzv``` [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Ftable-dada2.qzv) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/table-dada2.qzv)
+>```bash
+>time qiime feature-table summarize \
+>  --i-table table-dada2.qza \
+>  --o-visualization table-dada2.qzv \
+>  --m-sample-metadata-file /project/microbiome_workshop/amplicon/data/mapping.txt
+>  ```
+>  Time to run: 30 seconds
+>
+> Output: ```table-dada2.qzv``` [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Ftable-dada2.qzv) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/table-dada2.qzv)
 
 
 ## Taxonomic analysis
-> **Why taxonomy?**
-> Just knowing you have different sequences isn't enough — you want to know what organisms they come from. Taxonomy assigns biological names to the sequences.
+Sequence variants (ASVs) are high-resolution markers of microbial diversity, but on their own, they don’t tell us which organisms are present. While they help define the structure of the community, we often want to go a step further and identify the actual microbes behind each sequence. To do that, we need to assign taxonomy: linking each ASV to a known group of bacteria or archaea.
 
-Sequence variants are of limited usefulness by themselves. Often we are interested in what kinds of organisms are present in our sample, not just the diversity of the sample.  To identify these sequence variants two things are needed:  a reference database and an algorithm for identifying the sequence using the database.
+This process requires two key components: a reference database of well-annotated 16S rRNA sequences, and a classification algorithm that can compare our ASVs to that database. QIIME 2 handles this automatically using pretrained classifiers. The classifier searches for the closest match in the reference and labels each ASV accordingly, down to the genus or species level if possible.
 
+Earlier, when you ran a BLAST search on one of your raw reads, you may have seen a match to Arabidopsis thaliana. This illustrates why taxonomy assignment is more than just a formality. Host DNA, especially from chloroplasts or mitochondria, can end up in your sequences — and without a curated, microbial-only reference, those contaminants might remain in your results. By using the right database, we ensure that only relevant microbial taxa are kept for downstream analysis.
 The primary databases are:
 
 Database | Description | License
