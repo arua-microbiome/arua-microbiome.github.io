@@ -9,6 +9,20 @@ author: "George Kalogiannis"
 By George Kalogiannis, Designed from the official [QIIME2 tutorials](https://docs.qiime2.org/2024.2/tutorials/)
 {% include toc %}
 
+## Adding metadata and examining count tables
+Once you have generated your ASV count table, the next step is to summarise it and explore how many reads were retained in each sample. This command uses qiime feature-table summarize to produce an interactive .qzv file that includes per-sample read counts, total feature counts, and an overview of how balanced your dataset is.
+
+>```bash
+>time qiime feature-table summarize \
+>  --i-table table-dada2.qza \
+>  --o-visualization table-dada2.qzv \
+>  --m-sample-metadata-file /project/microbiome_workshop/amplicon/data/mapping.txt
+>  ```
+>  Time to run: 30 seconds
+>
+> Output: ```table-dada2.qzv``` [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Ftable-dada2.qzv) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/table-dada2.qzv)
+
+
 ## Linking Taxa to Metadata
 
 ```bash
