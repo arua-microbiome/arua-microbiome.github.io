@@ -109,7 +109,10 @@ This section checks that your paired-end FASTQ files truly match, which is essen
 >  <(zcat GC1GC1_R2.fastq.gz | sed -n '1~4p' | cut -d' ' -f1 | head -5)
 >```
 
-## 5 · BLAST searches
+## 5 · Where is genetic data stored?
+*needs text here*
+
+## 4 · BLAST searches
 
 If you’ve ever used BLAST (Basic Local Alignment Search Tool), you know the basic idea: you give it a DNA or protein sequence, and it compares that sequence to a reference database to find the best matches. It reports which known sequences are most similar, how long the matching region is, and how confident the match is. This is the foundation of how we assign names or functions to unknown sequences.
 
@@ -270,7 +273,7 @@ For the next step you can select either the Dada2 method or the Deblur method. S
 
 We have just called sequence variants two different ways. In a real workflow you would only use one method.  From here on out we will use the output of dada2 only: ```table-dada2.qza```.  
 
-# Adding metadata and examining count tables
+## Adding metadata and examining count tables
 
 ```bash
 time qiime feature-table summarize \
@@ -284,7 +287,7 @@ time qiime feature-table summarize \
  * ```table-dada2.qzv``` [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Ftable-dada2.qzv) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/table-dada2.qzv)
 
 
-# Taxonomic analysis
+## Taxonomic analysis
 > **Why taxonomy?**
 > Just knowing you have different sequences isn't enough — you want to know what organisms they come from. Taxonomy assigns biological names to the sequences.
 
