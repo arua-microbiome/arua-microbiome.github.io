@@ -124,8 +124,50 @@ This section checks that your paired-end FASTQ files truly match, which is essen
 >  <(zcat GC1GC1_R2.fastq.gz | sed -n '1~4p' | cut -d' ' -f1 | head -5)
 >```
 
-## 5 · Where is genetic data stored?
-*needs text here*
+## 5 · Where Is Genetic Data Stored?
+
+Genetic data can reside in three main locations, each serving different needs from private analysis to public archiving:
+
+### Local and Institutional Storage  
+- **File Systems on Local Machines**  
+  - Raw sequencing outputs (e.g. `.fastq.gz`, `.bam`) are typically stored on laboratory workstations or servers.  
+  - Organise by project, sample, date and run ID to facilitate retrieval and provenance tracking.  
+- **High-Performance Computing (HPC) Storage**  
+  - Shared parallel file systems (e.g. Lustre, GPFS) hold large QIIME 2 artifacts (`.qza`, `.qzv`) and intermediate files.  
+  - Quotas and directory hierarchies ensure fair resource usage and data integrity.  
+- **Cloud-Based File Stores**  
+  - Object storage (e.g. Amazon S3, Google Cloud Storage) provides scalable capacity for active projects.  
+  - Versioning and lifecycle policies can automate archiving of old datasets.  
+
+### Public Repositories and Data Archives  
+- **International Nucleotide Sequence Database Collaboration (INSDC)**  
+  - Consortium of NCBI SRA (USA), European Nucleotide Archive (ENA, Europe), and DNA Data Bank of Japan (DDBJ).  
+- **Sequence Read Archive (SRA, NCBI)**  
+  - Largest repository for high-throughput sequencing data, storing both raw reads and alignment information.  
+  - Data mirrored to cloud platforms (e.g. AWS Open Data) for efficient downloading and analysis.  
+- **European Nucleotide Archive (ENA)**  
+  - Maintains its own instance of SRA under INSDC guidelines; preferred for submissions from Europe.  
+- **DNA Data Bank of Japan (DDBJ)**  
+  - Japanese node of the INSDC; accepts depositions from Asian and Pacific research groups.  
+
+### Domain-Specific and Secondary Archives  
+- **MG-RAST (Metagenomics RAST Server)**  
+  - Automated analysis pipelines with public access to annotated metagenomes.  
+- **Qiita**  
+  - Collaborative platform for microbiome studies; stores both sequence data and processed feature tables with associated metadata.  
+- **Galaxy Data Libraries**  
+  - Community-curated repositories within Galaxy instances, facilitating reproducible workflows.  
+
+### Key Considerations for Data Storage  
+- **Metadata Integration**  
+  - Always accompany raw data with metadata tables (e.g. sample descriptors, barcodes, experimental conditions).  
+- **File Formats and Compression**  
+  - Use `.fastq.gz` for raw reads; `.bam` for alignments; QIIME 2’s `.qza`/`.qzv` for processed artifacts.  
+- **Access and Permissions**  
+  - Define appropriate access levels: private projects vs. publicly released datasets (often mandated by funders/journals).  
+- **Provenance and Reproducibility**  
+  - Leverage QIIME 2’s built-in provenance tracking to embed processing history within `.qza` files.  
+
 
 ## 4 · BLAST searches
 
