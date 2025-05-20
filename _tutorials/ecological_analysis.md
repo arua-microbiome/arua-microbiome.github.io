@@ -6,8 +6,14 @@ mathjax: true
 author: "George Kalogiannis"
 
 ---
-By George Kalogiannis, Designed from the official [QIIME2 tutorials](https://docs.qiime2.org/2024.2/tutorials/)
+You’ve reached the point in the workflow where you can confidently download raw amplicon reads, clean them up, and generate reliable ASV tables and taxonomic summaries. In other words, you now know what sequences are present and how many of each occur in every sample. The next step is to turn those counts into ecological insight: measuring within-sample diversity, comparing whole communities across treatments, and linking patterns to phylogenetic relationships. The sections that follow introduce the core ecological tools you’ll use—alpha and beta diversity metrics, phylogeny-based distances, and statistical tests that reveal how environmental or experimental factors shape the microbiome.
 {% include toc %}
+
+# Learning Outcomes
+By the end of this session you will be able to:
+- Compute alpha- and beta-diversity metrics and visualise them in interactive .qzv files
+- Construct a phylogenetic tree and run UniFrac-based ordination and PERMANOVA tests
+- Export QIIME artifacts to R with qiime2R and produce custom ggplot figures
 
 ## Adding metadata and examining count tables
 Once you have generated your ASV count table, the next step is to summarise it and explore how many reads were retained in each sample. This command uses qiime feature-table summarize to produce an interactive .qzv file that includes per-sample read counts, total feature counts, and an overview of how balanced your dataset is.
