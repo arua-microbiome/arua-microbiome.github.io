@@ -220,7 +220,7 @@ Before analyzing the sequences, it's important to assess their quality like we d
 >
 > Time to run: 1 minute
 >
->Output: * ```demux.qzv``` [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Fdemux.qzv) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/demux.qzv)
+>Output: * ```demux.qzv``` [View](https://view.qiime2.org/?src=) \| [Download]()
 
 >This will create a visualization file. You can download the file to your local computer. From a new terminal window on your local computer copy the file:
 >
@@ -257,8 +257,8 @@ For the next step you can select either the Dada2 method or the Deblur method. S
 >Time to run: 35 minutes
 >
 >Output:
-> - ```rep-seqs-dada2.qza```: These are your representative sequences: the exact, cleaned-up ASV sequences found in your dataset. They are matched against reference databases later (like SILVA or Greengenes) to assign taxonomy. [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Frep-seqs-dada2.qza) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/rep-seqs-dada2.qza)
-> - ```table-dada2.qzv```: This is your feature table, stored in QIIME 2’s .qza format. Internally, it follows the BIOM (Biological Observation Matrix) standard. It records how many times each ASV appears in each sample, similar to a species count table. This is the key file you’ll use for diversity analysis, statistical testing, and visualisation. [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Ftable-dada2.qzv) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/table-dada2.qzv)
+> - ```rep-seqs-dada2.qza```: These are your representative sequences: the exact, cleaned-up ASV sequences found in your dataset. They are matched against reference databases later (like SILVA or Greengenes) to assign taxonomy. [View](https://view.qiime2.org/?src=) \| [Download]()
+> - ```table-dada2.qzv```: This is your feature table, stored in QIIME 2’s .qza format. Internally, it follows the BIOM (Biological Observation Matrix) standard. It records how many times each ASV appears in each sample, similar to a species count table. This is the key file you’ll use for diversity analysis, statistical testing, and visualisation. [View](https://view.qiime2.org/?src=) \| [Download]()
 
 ### Option 2: Deblur (Faster)
 > Deblur only uses forward reads at this time. You could get around this by merging your data with an outside tool like [BBmerge](http://jgi.doe.gov/data-and-tools/bbtools/bb-tools-user-guide/bbmerge-guide/) then importing your data as single ended. For simplicity, in this tutorial we will just use the forward reads.
@@ -275,10 +275,10 @@ For the next step you can select either the Dada2 method or the Deblur method. S
 >
 > Output: Okay, we have just done the hard part of amplicon sequence analysis.  At this point we have our BIOM count table, the representative sequence variants and a stats file for Deblur.
 >
-> - ```deblurresults/representative_sequences.qza```: A list of the representative sequences (representative_sequences.qza), which are the actual DNA sequences of the ASVs. [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Fdeblurresults%2Frepresentative_sequences.qza) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/deblurresults/representative_sequences.qza)
-> - ```deblurresults/stats.qza```: A statistics file which logs how many reads passed quality control and how many were removed at each filtering step. [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Fdeblurresults%2Fstats.qza) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/deblurresults/stats.qza)
+> - ```deblurresults/representative_sequences.qza```: A list of the representative sequences (representative_sequences.qza), which are the actual DNA sequences of the ASVs. [View](https://view.qiime2.org/?src=) \| [Download]()
+> - ```deblurresults/stats.qza```: A statistics file which logs how many reads passed quality control and how many were removed at each filtering step. [View](https://view.qiime2.org/?src=) \| [Download]()
 > - ```deblurresults/table.qza```: The same type of table as the one outputted by Dada2 above.
-[View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Fdeblurresults%2Ftable.qza) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/deblurresults/table.qza)
+[View](https://view.qiime2.org/?src=) \| [Download]()
 
 
 We have just called sequence variants two different ways. In a real workflow you would only use one method.  From here on out we will use the output of dada2 only: ```table-dada2.qza```.  
@@ -313,7 +313,7 @@ There are two steps to taxonomic classification: [training the classifier](https
 >
 >Time to run: 4 minutes
 >
->Output: ```taxonomy.qza``` [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Ftaxonomy.qza) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/taxonomy.qza)
+>Output: ```taxonomy.qza``` [View](https://view.qiime2.org/?src=) \| [Download]()
 
 
 >Create a bar plot visualization of the taxonomy data:
@@ -326,5 +326,5 @@ There are two steps to taxonomic classification: [training the classifier](https
 >```
 >Time to run: 1 minute
 >
->Output: ```taxa-bar-plots.qzv``` [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Ftaxa-bar-plots.qzv) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/taxa-bar-plots.qzv)
+>Output: ```taxa-bar-plots.qzv``` [View](https://view.qiime2.org/?src=) \| [Download]()
 
