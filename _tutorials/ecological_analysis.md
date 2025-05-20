@@ -15,7 +15,7 @@ By the end of this session you will be able to:
 - Construct a phylogenetic tree and run UniFrac-based ordination and PERMANOVA tests
 - Export QIIME artifacts to R with qiime2R and produce custom ggplot figures
 
-## Adding metadata and examining count tables
+# Adding metadata and examining count tables
 Once your ASV table has been generated, it needs to be connected to your sample metadata and taxonomic assignments. This step is essential for creating meaningful visual summaries and performing any ecological comparisons. Without metadata, your sequences are just anonymous counts. Metadata provides biological context — which genotype the sample comes from, which compartment (e.g. root zone, bulk soil), and which treatment it received. Taxonomy links each ASV to a known organism or group of organisms, letting us ask not just how communities vary, but who is driving that variation.
 
 > QIIME 2 allows you to integrate the count table with your mapping file to visualise how read counts distribute across samples.
@@ -43,7 +43,7 @@ Once your ASV table has been generated, it needs to be connected to your sample 
 >  Time to run: 30 seconds
 >
 
-## Filtering contaminants
+# Filtering contaminants
 Sequencing from soil or root material often includes host DNA like mitochondria or chloroplasts. These non-microbial sequences can obscure patterns in microbial community composition and inflate diversity estimates. Filtering out these contaminants is a standard practice in microbiome workflows, especially when studying plant-associated microbes. This helps ensure that the dataset reflects only the true microbial community of interest.
 
 Looking at the the ```taxonomy.qzv``` file using https://view/qiime2.org We can see the data presented at different taxonomic levels and grouped by different experimental factors. If we drill down to taxonomic level 5 something looks a bit odd. There's lots of "Rickettsiales;f__mitochondria".  This is really  plant mitochondrial contamination. Some of these samples also have chloroplast contamination.
@@ -86,13 +86,13 @@ Looking at the the ```taxonomy.qzv``` file using https://view/qiime2.org We can 
 >
 >Output: ```taxa-bar-plots-filtered.qzv``` [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Ftaxa-bar-plots-filtered.qzv) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/taxa-bar-plots-filtered.qzv)
 
-## Phylogenetics
+# Phylogenetics
 
 A phylogenetic tree is a diagram that represents the evolutionary relationships among different organisms. By aligning and comparing the sequences, we can infer how closely related they are and construct a tree that reflects their shared evolutionary history. Some communities may appear different in terms of ASV presence but are composed of closely related taxa. To assess this, we construct a phylogenetic tree of all ASVs. 
 
 This tree is essential for certain types of diversity metrics, such as UniFrac, which measure not just the presence or absence of microbes, but how evolutionarily different the communities are. Understanding these relationships helps us interpret microbial functions and ecological roles more effectively. It's also useful for certain types of diversity comparisons between samples.
 
-### Multiple sequence alignment
+## Multiple sequence alignment
 We begin by using Mafft, which aligns all representative ASV sequences so that homologous nucleotide positions are lined up across sequences:
 
 >```bash
@@ -103,7 +103,7 @@ We begin by using Mafft, which aligns all representative ASV sequences so that h
 >
 >Output: ```aligned-rep-seqs.qza``` [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Faligned-rep-seqs.qza) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/aligned-rep-seqs.qza)
 
-### Masking sites
+## Masking sites
 Masking is the process of removing highly variable, gappy, or uninformative positions from a multiple sequence alignment. These positions often arise from sequencing noise, misalignments, or non-homologous regions, and can distort phylogenetic inference by introducing noise into the tree-building process.
 
 >In QIIME 2, this command takes the aligned ASV sequences and filters out alignment columns (positions) that don't contain reliable, conserved sequence information—leaving a cleaner dataset for more accurate and robust tree construction:
@@ -116,7 +116,7 @@ Masking is the process of removing highly variable, gappy, or uninformative posi
 >
 >Output: ```masked-aligned-rep-seqs.qza``` [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Fmasked-aligned-rep-seqs.qza) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/masked-aligned-rep-seqs.qza)
 
-### Creating a tree
+## Creating a tree
 FastTree builds a phylogenetic tree from the masked, aligned ASV sequences using an approximate maximum-likelihood method. This tree reflects the evolutionary relationships among ASVs and is essential for phylogeny-based diversity metrics like UniFrac.
 
 >The resulting tree is unrooted, meaning it shows relationships but not direction of ancestry:
@@ -129,7 +129,7 @@ FastTree builds a phylogenetic tree from the masked, aligned ASV sequences using
 >
 >Output: ```unrooted-tree.qza``` [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Funrooted-tree.qza) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/unrooted-tree.qza)
 
-### Midpoint rooting
+## Midpoint rooting
 Rooting the tree defines a starting point for evolutionary comparisons. Since our tree is initially unrooted (no known ancestor), we use midpoint rooting, which places the root at the midpoint of the longest distance between any two tips—giving a balanced view of divergence.
 
 >```bash
@@ -141,7 +141,7 @@ Rooting the tree defines a starting point for evolutionary comparisons. Since ou
 >Output: ```rooted-tree.qza``` [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Frooted-tree.qza) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/rooted-tree.qza)
 
 
-## Diversity
+# Diversity
 
 Microbial ecology is the study of how microbes interact with each other and their environment. In agricultural settings, these interactions can profoundly affect crop health, nutrient cycling, and disease suppression. Ecological analysis allows us to characterize microbial diversity, compare communities between samples (like different soil types or plant treatments), and identify patterns that inform how microbial communities function and respond to changes.
 
@@ -167,27 +167,9 @@ Common metrics include:
 
 QIIME 2 calculates these distances and uses techniques like Principal Coordinates Analysis (PCoA) to visualize differences.
 
-## Ordination and Visualization
+# Ordination and Visualization
 
 Ordination is a statistical method that reduces complex distance matrices into 2 or 3 dimensions for easier visualization. QIIME 2 uses **Emperor** to create 3D plots of PCoA results. These plots help identify clusters of similar samples, which can reflect treatment effects, environmental conditions, or sample types.
-
-## Differential Abundance Analysis
-
-Identifying which microbes are more or less abundant between groups (e.g., treated vs. untreated plants) is crucial. While traditional statistical methods like t-tests aren't suitable for microbiome data (because it's compositional and sparse), specialized tools like **Songbird**, **ANCOM**, or **DESeq2** can model these differences.
-
-As an example, if a plant genotype promotes beneficial microbes that suppress disease, a differential abundance test might identify those beneficial taxa as more abundant in samples from that genotype.
-
-## Why It Matters for Agriculture
-
-Microbiome analysis in agriculture helps us:
-
-- Understand how farming practices impact soil health.
-- Improve crop yields by promoting beneficial microbes.
-- Monitor soil and plant health non-invasively.
-- Design more sustainable systems that rely less on chemical inputs.
-
-By linking microbial community structure with environmental or treatment variables, ecological analysis becomes a powerful tool for both research and practical decision-making in agriculture.
-
 
 > **What is ordination?**
 > It's a way to simplify and visualize complex data. For example, it helps you see patterns in how samples cluster based on their microbial composition.
@@ -203,7 +185,11 @@ Ordination is a dimensionality reduction technique that enables the visualizatio
  * ```pcoa-visualization.qzv``` [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Fpcoa-visualization.qzv) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/pcoa-visualization.qzv)
 
 
-# Differential abundance of sequence variants
+# Differential Abundance Analysis
+
+Identifying which microbes are more or less abundant between groups (e.g., treated vs. untreated plants) is crucial. While traditional statistical methods like t-tests aren't suitable for microbiome data (because it's compositional and sparse), specialized tools like **Songbird**, **ANCOM**, or **DESeq2** can model these differences.
+
+As an example, if a plant genotype promotes beneficial microbes that suppress disease, a differential abundance test might identify those beneficial taxa as more abundant in samples from that genotype.
 
 > ⚠️ **Note:** The `gneiss` plugin has been deprecated in recent QIIME 2 versions. Consider using `songbird` or external tools like `ALDEx2` for differential abundance analysis.
 
