@@ -96,23 +96,23 @@ This tree is essential for certain types of diversity metrics, such as UniFrac, 
 We begin by using Mafft, which aligns all representative ASV sequences so that homologous nucleotide positions are lined up across sequences:
 
 >```bash
->time qiime alignment mafft \
+>qiime alignment mafft \
 >  --i-sequences rep-seqs-dada2-filtered.qza \
 >  --o-alignment aligned-rep-seqs.qza
 >```
->Time to run: 1 minute
 >
 >Output: ```aligned-rep-seqs.qza``` [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Faligned-rep-seqs.qza) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/aligned-rep-seqs.qza)
 
 ### Masking sites
 Masking is the process of removing highly variable, gappy, or uninformative positions from a multiple sequence alignment. These positions often arise from sequencing noise, misalignments, or non-homologous regions, and can distort phylogenetic inference by introducing noise into the tree-building process.
 
->In QIIME 2, the masking step is done with:
+>In QIIME 2, this command takes the aligned ASV sequences and filters out alignment columns (positions) that don't contain reliable, conserved sequence information—leaving a cleaner dataset for more accurate and robust tree construction:
+>
+>```bash
 >qiime alignment mask \
 >  --i-alignment aligned-rep-seqs.qza \
 >  --o-masked-alignment masked-aligned-rep-seqs.qza
->
->This command takes the aligned ASV sequences and filters out alignment columns (positions) that don't contain reliable, conserved sequence information—leaving a cleaner dataset for more accurate and robust tree construction.
+>```
 >
 >Output: ```masked-aligned-rep-seqs.qza``` [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Fmasked-aligned-rep-seqs.qza) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/masked-aligned-rep-seqs.qza)
 
@@ -120,8 +120,9 @@ Masking is the process of removing highly variable, gappy, or uninformative posi
 FastTree builds a phylogenetic tree from the masked, aligned ASV sequences using an approximate maximum-likelihood method. This tree reflects the evolutionary relationships among ASVs and is essential for phylogeny-based diversity metrics like UniFrac.
 
 >The resulting tree is unrooted, meaning it shows relationships but not direction of ancestry:
+>
 >```bash
->time qiime phylogeny fasttree \
+> qiime phylogeny fasttree \
 >  --i-alignment masked-aligned-rep-seqs.qza \
 >  --o-tree unrooted-tree.qza
 >```
