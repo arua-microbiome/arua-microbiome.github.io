@@ -10,7 +10,9 @@ By George Kalogiannis, Designed from the official [QIIME2 tutorials](https://doc
 {% include toc %}
 
 # Learning Outcomes
-In this workshop, you’ll learn how to process and analyse microbial amplicon sequencing data using QIIME 2. Starting from raw FASTQ files, you’ll import your data, assess its quality, and use tools like DADA2 or Deblur to generate high-confidence sequence variants (ASVs). You’ll also learn how to assign taxonomy to those sequences and create summaries of microbial community structure.
+In this workshop, you’ll learn how to process and analyse microbial 16S rDNA amplicon sequencing data using QIIME 2. 
+Starting from raw sequencing reads (.FASTQ files), you’ll import your data, assess its quality, and use tools like DADA2 and Deblur to generate high-confidence amplicon sequence variants (ASVs). 
+You’ll also learn how to assign taxonomy to specific sequences of interest and create summaries of microbial community structure.
 
 By the end of the session, you will be able to:
 - Import and quality-check amplicon data in QIIME 2
@@ -21,9 +23,12 @@ By the end of the session, you will be able to:
 
 # Data sets
 
-In this workshop, we will study microbial genes collected from the soil surrounding the roots of Arabidopsis thaliana plants. These plants were genetically modified to alter how they respond to phosphate stress. Phosphate (P) is a cornerstone nutrient for plants, driving ATP-based energy transfer, nucleic-acid synthesis, membrane formation, and phosphorylation-driven signalling. Because phosphate binds tightly to soil particles, it is frequently scarce, so plants switch on an integrated phosphate-starvation response (PSR): reshaping their roots, releasing phosphatases, and recruiting helpful microbes in the rhizosphere. These changes ripple outward, altering the surrounding microbial community and, in turn, feeding back on plant health.
+In this workshop, we will study microbial 16S rDNA genes collected from the soil surrounding the roots of Arabidopsis thaliana plants. These plants were genetically modified to alter how they respond to phosphate stress. 
+Phosphate (P) is a cornerstone nutrient for plants, driving ATP-based energy transfer, nucleic-acid synthesis, membrane formation, and phosphorylation-driven signalling. Phosphate binds tightly to soil particles, therefore it is frequently scarce. Consequently, plants switch on an integrated phosphate-starvation response (PSR): reshaping their roots, releasing phosphatases, and recruiting helpful microbes in the rhizosphere. 
+These changes ripple outward, altering the surrounding microbial community and, in turn, feeding back on plant health.
 
-Our workshop dataset comes from _Arabidopsis thaliana_ mutants studied by Castrillo et al. (2017). Each mutant disables a gene that links phosphate sensing to immunity, creating a “natural experiment” for microbiome shifts. To determine the role of phosphate starvation response in controlling microbiome composition, we will analyse five mutants related to the Pi-transport system (pht1;1, pht1;1;pht1;4, phf1, nla and pho2) and two mutants directly involved in the transcriptional regulation of the P-starvation response (phr1 and spx1;spx2).
+Our workshop dataset comes from _Arabidopsis thaliana_ mutants studied by Castrillo et al. (2017). Each mutant disables a gene that links phosphate sensing to immunity, creating a “natural experiment” for microbiome shifts. 
+To determine the role of phosphate starvation response in controlling microbiome composition, we will analyse five mutants related to the Pi-transport system (pht1;1, pht1;1;pht1;4, phf1, nla and pho2) and two mutants directly involved in the transcriptional regulation of the P-starvation response (phr1 and spx1;spx2).
 
 The microbiome dataset itself comprises 146 paired-end Illumina MiSeq libraries (2 × 250 bp) that target the hyper-variable V4 region of the bacterial 16S rRNA gene, covering root-zone, bulk-soil and endophytic compartments for each plant line. Technical replicates have been merged, low-quality reads removed, and every sample has been rarefied to 10 000 high-quality reads so that comparisons across genotypes are on an equal footing. 
 
@@ -42,7 +47,7 @@ Alongside the raw FASTQ files you’ll find a manifest (listing file paths and r
 
 ## 1 · What actually comes off a sequencer?
 
-Modern DNA sequencers, Illumina (short, very accurate reads), PacBio HiFi and Oxford Nanopore (long, increasingly accurate reads), do not give you a “genome” or a list of species. They give you a bag of millions of little DNA fragments called reads. 
+Modern DNA sequencers, Illumina (short, very accurate reads), PacBio HiFi and Oxford Nanopore (long, increasingly accurate reads), do not give you a “genome” or a list of species. They give you a big text file of characters representing millions of little DNA fragments called reads.
 
 Reads can be created in two ways: single or paired. In single-end sequencing, the machine reads each DNA fragment from one end only, starting at the 5′ end and working its way across the fragment until the read is complete. In paired-end sequencing, the machine reads from both ends of the same fragment: one read starts at the 5′ end and moves toward the middle (the forward read), and the other starts at the opposite 3′ end and also moves toward the middle (the reverse read). This gives you two reads per fragment that come from opposite directions, which helps improve accuracy and recover more of the original sequence.
 
@@ -50,10 +55,10 @@ Reads can be created in two ways: single or paired. In single-end sequencing, th
 
 These reads are written to disk as plain-text files, almost always compressed and ending in .fastq.gz.
 
-- FASTA files ( .fasta, .fa ) hold only the nucleotide strings; they are mainly used once reads have been cleaned and merged.
-- FASTQ files ( .fastq, .fq ) hold both the sequence and its Phred quality scores, telling you how confident the instrument was at each base.
+- FASTA files ( .fasta, .fa ) hold only the nucleotide characters A/T/C/G; they are mainly used once reads have been cleaned and merged (assembled).
+- FASTQ files ( .fastq, .fq ) hold both the sequence and its Phred quality scores, telling you how confident the instrument was when reading each basepair of the DNA.
 
->Once you have the downloads in place, peek inside one of the real files, say GC1GC1_R1.fastq.gz (forward reads from replicate GC1, experiment GC1), to convince yourself what a FASTQ record looks like and to check that the quality scores are sensible before you hand the data to QIIME 2. You can do this in bash like this:
+>Once you have the downloads in place, peek inside one of the real files, say GC1GC1_R1.fastq.gz (forward reads from replicate GC1, experiment GC1), to explore by yourself what a FASTQ record looks like and to check that the quality scores are sensible before you hand the data to QIIME 2. You can do this in bash like this:
 >```bash
 ># ── Bash one-liner: show the first two reads (8 lines) ───────────
 >zcat GC1GC1_R1.fastq.gz | head -n 8
@@ -78,7 +83,7 @@ Before you begin any analysis, it’s important to check that your files actuall
 >```
 
 ## 3 · Checking read quality with Q-scores
-Sequencers give every base a Phred quality score (Q) that converts machine‐signal strength into an error estimate. In Illumina-style sequencing, the machine builds each read one base at a time and each round of chemical incorporation is called a cycle. Looking at per-cycle numbers lets you spot where quality begins to drop off toward the end of the reads, and lets you set the number you wish to truncate the reads at:
+Sequencers give every base a Phred quality score (Q) that converts machine‐signal strength into an error estimate. In Illumina-style short read sequencing, the machine builds each read one base at a time and each round of chemical incorporation is called a cycle. Looking at per-cycle numbers lets you spot where quality begins to drop off toward the end of the reads, and lets you set the number you wish to truncate the reads at:
 
 | Score |	Error rate | Meaning |
 | --- | --- | --- |
