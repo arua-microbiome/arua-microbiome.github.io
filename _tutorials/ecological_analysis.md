@@ -28,7 +28,7 @@ Once your ASV table has been generated, it needs to be connected to your sample 
 >
 > Time to run: 30 seconds
 > 
-> Output: ```table-dada2.qzv``` [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Ftable-dada2.qzv) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/table-dada2.qzv)
+> Output: ```table-dada2.qzv``` [View](https://view.qiime2.org/?src=) \| [Download]()
 
 
 > To visualise taxonomic composition by group or treatment:
@@ -58,7 +58,7 @@ Looking at the the ```taxonomy.qzv``` file using https://view/qiime2.org We can 
 >```
 >
 >Output:
-> - ```table-dada2-filtered.qza``` [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Ftable-dada2-filtered.qza) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/table-dada2-filtered.qza)
+> - ```table-dada2-filtered.qza``` [View](https://view.qiime2.org/?src=) \| [Download]()
 
 
 >Then remove those same taxa from the actual DNA sequences of the ASVs, ensuring both abundance data and sequence data are clean for downstream analysis.
@@ -72,7 +72,7 @@ Looking at the the ```taxonomy.qzv``` file using https://view/qiime2.org We can 
 
 
 >Output:
-> - ```rep-seqs-dada2-filtered.qza``` [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Ftable-dada2-filtered.qza) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/table-dada2-filtered.qza)
+> - ```rep-seqs-dada2-filtered.qza``` [View](https://view.qiime2.org/?src=) \| [Download]()
 
 
 >Since we have altered the qza file we can create a new bar plots:
@@ -84,7 +84,7 @@ Looking at the the ```taxonomy.qzv``` file using https://view/qiime2.org We can 
 >  --o-visualization taxa-bar-plots-filtered.qzv
 >```
 >
->Output: ```taxa-bar-plots-filtered.qzv``` [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Ftaxa-bar-plots-filtered.qzv) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/taxa-bar-plots-filtered.qzv)
+>Output: ```taxa-bar-plots-filtered.qzv``` [View](https://view.qiime2.org/?src=) \| [Download]()
 
 # Phylogenetics
 
@@ -101,7 +101,7 @@ We begin by using Mafft, which aligns all representative ASV sequences so that h
 >  --o-alignment aligned-rep-seqs.qza
 >```
 >
->Output: ```aligned-rep-seqs.qza``` [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Faligned-rep-seqs.qza) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/aligned-rep-seqs.qza)
+>Output: ```aligned-rep-seqs.qza``` [View](https://view.qiime2.org/?src=) \| [Download]()
 
 ## Masking sites
 Masking is the process of removing highly variable, gappy, or uninformative positions from a multiple sequence alignment. These positions often arise from sequencing noise, misalignments, or non-homologous regions, and can distort phylogenetic inference by introducing noise into the tree-building process.
@@ -114,7 +114,7 @@ Masking is the process of removing highly variable, gappy, or uninformative posi
 >  --o-masked-alignment masked-aligned-rep-seqs.qza
 >```
 >
->Output: ```masked-aligned-rep-seqs.qza``` [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Fmasked-aligned-rep-seqs.qza) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/masked-aligned-rep-seqs.qza)
+>Output: ```masked-aligned-rep-seqs.qza``` [View](https://view.qiime2.org/?src=) \| [Download]()
 
 ## Creating a tree
 FastTree builds a phylogenetic tree from the masked, aligned ASV sequences using an approximate maximum-likelihood method. This tree reflects the evolutionary relationships among ASVs and is essential for phylogeny-based diversity metrics like UniFrac.
@@ -127,7 +127,7 @@ FastTree builds a phylogenetic tree from the masked, aligned ASV sequences using
 >  --o-tree unrooted-tree.qza
 >```
 >
->Output: ```unrooted-tree.qza``` [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Funrooted-tree.qza) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/unrooted-tree.qza)
+>Output: ```unrooted-tree.qza``` [View](https://view.qiime2.org/?src=) \| [Download]()
 
 ## Midpoint rooting
 Rooting the tree defines a starting point for evolutionary comparisons. Since our tree is initially unrooted (no known ancestor), we use midpoint rooting, which places the root at the midpoint of the longest distance between any two tips—giving a balanced view of divergence.
@@ -138,7 +138,7 @@ Rooting the tree defines a starting point for evolutionary comparisons. Since ou
 >  --o-rooted-tree rooted-tree.qza
 > ```
 >
->Output: ```rooted-tree.qza``` [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Frooted-tree.qza) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/rooted-tree.qza)
+>Output: ```rooted-tree.qza``` [View](https://view.qiime2.org/?src=) \| [Download]()
 
 
 # Diversity
@@ -182,7 +182,7 @@ Ordination is a dimensionality reduction technique that enables the visualizatio
  Time to run: 15 seconds
 
  Output:
- * ```pcoa-visualization.qzv``` [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Fpcoa-visualization.qzv) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/pcoa-visualization.qzv)
+ * ```pcoa-visualization.qzv``` [View](https://view.qiime2.org/?src=) \| [Download]()
 
 
 # Differential Abundance Analysis
@@ -222,7 +222,7 @@ time qiime gneiss add-pseudocount \
 Time to run: 6 seconds
 
 Output:
-* ```composition.qza``` [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Fcomposition.qza) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/composition.qza)
+* ```composition.qza``` [View](https://view.qiime2.org/?src=) \| [Download]()
 
 
 Perform [Ward's agglomerative clustering](https://arxiv.org/abs/1111.6285)
@@ -234,7 +234,7 @@ time qiime gneiss correlation-clustering \
 Time to run: 5 minutes
 
 Output:
-* ```hierarchy.qza``` [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Fhierarchy.qza) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/hierarchy.qza)
+* ```hierarchy.qza``` [View](https://view.qiime2.org/?src=) \| [Download]()
 
 A tree has now been generated that can be used for making comparisons of sample groups.
 
@@ -249,7 +249,7 @@ time qiime gneiss ilr-transform \
 Time to run: 15 seconds
 
 Output:
-* ```balances.qza``` [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Fbalances.qza) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/balances.qza)
+* ```balances.qza``` [View](https://view.qiime2.org/?src=) \| [Download]()
 
 The balances are normally distributed an can now be analyzed using mixed linear
 models  We can perform a regression on the three categorical data types, Genotype, Fraction (soil or endophytic compartment) or Soil).  Themodel explains about 10% of the total variation at all nodes of the trees. This is typical for these complex experiments.  The amount that can be explained increases as we move up the covariance tree. Overall the most predictive factor is Genotype which is encouraging.
@@ -264,7 +264,7 @@ time qiime gneiss ols-regression \
 ```
 
 Output:
-* ```regression_summary.qzv``` [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Fregression_summary.qzv) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/regression_summary.qzv)
+* ```regression_summary.qzv``` [View](https://view.qiime2.org/?src=) \| [Download]()
 
 
 One of the assumptions if the ordinary least squares model is that the fixed factors are random, in other words the authors randomly arrived at the genotypes they knocked out. Of course that's not true, the genotypes were selected because they had an impact on the phosphorus stress response.  They are Fixed factors. A mixed linear model can account for fixed and random factors and effects. Gneiss offerers a linear mixed model regression too but the interface seems to be in development  so there is not much I can say about it but we can try it now. Statistical modeling is done by the [statsmodels](http://www.statsmodels.org/stable/mixed_linear.html) python package.
@@ -280,7 +280,7 @@ qiime gneiss lme-regression \
 ```
 
 Output:
-* ```linear_mixed_effects_model.qzv``` [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Flinear_mixed_effects_model.qzv) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/linear_mixed_effects_model.qzv)
+* ```linear_mixed_effects_model.qzv``` [View](https://view.qiime2.org/?src=) \| [Download]()
 
 
 We can look at the most statistically significant balances and examine what taxa make up those partitions.
@@ -299,7 +299,7 @@ qiime gneiss balance-taxonomy \
 
 
 Output:
-* ```y0_taxa_summary.qzv``` [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Fy0_taxa_summary.qzv) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/y0_taxa_summary.qzv)
+* ```y0_taxa_summary.qzv``` [View](https://view.qiime2.org/?src=) \| [Download]()
 
 
 In this case the y0 balance is a split between samples that have plants in them and raw soil. It makes sense that this is the largest effect.  What happens if you run balance y2 or decrease the taxonomic level?
