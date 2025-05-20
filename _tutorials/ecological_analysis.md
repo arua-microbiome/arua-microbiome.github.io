@@ -16,149 +16,131 @@ By the end of this session you will be able to:
 - Export QIIME artifacts to R with qiime2R and produce custom ggplot figures
 
 ## Adding metadata and examining count tables
-Once you have generated your ASV count table, the next step is to summarise it and explore how many reads were retained in each sample. This command uses qiime feature-table summarize to produce an interactive .qzv file that includes per-sample read counts, total feature counts, and an overview of how balanced your dataset is.
+Once your ASV table has been generated, it needs to be connected to your sample metadata and taxonomic assignments. This step is essential for creating meaningful visual summaries and performing any ecological comparisons. Without metadata, your sequences are just anonymous counts. Metadata provides biological context — which genotype the sample comes from, which compartment (e.g. root zone, bulk soil), and which treatment it received. Taxonomy links each ASV to a known organism or group of organisms, letting us ask not just how communities vary, but who is driving that variation.
 
->```bash
->time qiime feature-table summarize \
+> QIIME 2 allows you to integrate the count table with your mapping file to visualise how read counts distribute across samples.
+> ```bash
+> time qiime feature-table summarize \
 >  --i-table table-dada2.qza \
->  --o-visualization table-dada2.qzv \
->  --m-sample-metadata-file /project/microbiome_workshop/amplicon/data/mapping.txt
->  ```
->  Time to run: 30 seconds
+>  --m-sample-metadata-file mapping.txt \
+>  --o-visualization table-dada2.qzv
+> ```
 >
+> Time to run: 30 seconds
+> 
 > Output: ```table-dada2.qzv``` [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Ftable-dada2.qzv) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/table-dada2.qzv)
 
 
-## Linking Taxa to Metadata
-
-```bash
-qiime metadata tabulate \
-  --m-input-file taxonomy.qza \
-  --o-visualization taxonomy.qzv
-  ```
-Time to run: 1 second
-
-* ```taxonomy.qzv``` [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Ftaxonomy.qzv) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/taxonomy.qzv)
+> To visualise taxonomic composition by group or treatment:
+>```bash
+> time qiime taxa barplot \
+>  --i-table table-dada2.qza \
+>  --i-taxonomy taxonomy.qza \
+>  --m-metadata-file mapping.txt \
+>  --o-visualization taxa-bar-plots.qzv
+>```
+>
+>  Time to run: 30 seconds
+>
 
 ## Filtering contaminants
-Looking at the the ```taxonomy.qzv``` file using https://view/qiime2.org We can see the data presented at different taxonomic levels and grouped by different experimental factors. If we drill down to taxonomic level 5 something looks a bit odd. There's lots of "Rickettsiales;f__mitochondria".  This is really  plant mitochondrial contamination. Some of these samples also have chloroplast contamination.  This kind of Taxonomic filtering isn't available in QIIME2 yet but it can be be done manually.
+Sequencing from soil or root material often includes host DNA like mitochondria or chloroplasts. These non-microbial sequences can obscure patterns in microbial community composition and inflate diversity estimates. Filtering out these contaminants is a standard practice in microbiome workflows, especially when studying plant-associated microbes. This helps ensure that the dataset reflects only the true microbial community of interest.
 
-By viewing the ```taxonomy.qzv``` file in the browser we can easily search for the sequence ID's that do or do not match "mitochondria or chloroplast". We can also do this via the command line:
+Looking at the the ```taxonomy.qzv``` file using https://view/qiime2.org We can see the data presented at different taxonomic levels and grouped by different experimental factors. If we drill down to taxonomic level 5 something looks a bit odd. There's lots of "Rickettsiales;f__mitochondria".  This is really  plant mitochondrial contamination. Some of these samples also have chloroplast contamination.
 
-First create a list of all sequence variant ids that are not mitochondria or chloroplasts.
-
-```bash
-# Export taxonomy data to tabular format
-qiime tools export --output-dir taxonomy-export taxonomy.qza
-
-# search for matching lines with grep then select the id column
-grep -v -i "mitochondia|chloroplast|Feature" taxonomy-export/taxonomy.tsv | cut  -f 1 > no-chloro-mito-ids.txt
-```
-
-Convert our Qiime data artifact to the underlying [biom](http://biom-format.org/) file
-```bash
-# Export data to biom format
-qiime tools export --output-dir dada2-table-export table-dada2.qza
-# Move into the directory
-cd dada2-table-export
-
-# Convert the HDF5 biom file to a tsv biom file
-biom subset-table \
-  --input-hdf5-fp feature-table.biom \
-  --axis observation \
-  --ids ../no-chloro-mito-ids.txt \
-  --output-fp feature-table-subset.biom
-
-# Create a new QIIME2 data artifact with the filtered Biom file
-qiime tools import \
-  --input-path feature-table-filtered.biom \
-  --output-path ../table-dada2-filtered.qza \
-  --type FeatureTable[Frequency]
-
-cd ..
-```
-Time to run: 2 minutes
-
-Output:
-* ```table-dada2-filtered.qza``` [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Ftable-dada2-filtered.qza) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/table-dada2-filtered.qza)
+>First remove unwanted taxa (like mitochondria and chloroplasts) from the ASV count table: 
+>```bash
+>qiime taxa filter-table \
+>  --i-table table-dada2.qza \
+>  --i-taxonomy taxonomy.qza \
+>  --p-exclude mitochondria,chloroplast \
+>  --o-filtered-table table-dada2-filtered.qza
+>```
+>
+>Output:
+> - ```table-dada2-filtered.qza``` [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Ftable-dada2-filtered.qza) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/table-dada2-filtered.qza)
 
 
-Since we have altered the qza file we can create a new bar plots:
-
-```bash
-qiime taxa barplot \
-  --i-table table-dada2-filtered.qza \
-  --i-taxonomy taxonomy.qza \
-  --m-metadata-file /project/microbiome_workshop/amplicon/data/mapping.txt \
-  --o-visualization taxa-bar-plots-filtered.qzv
-
-```
-Time to run: 1 minute
-
-Output:
-* ```taxa-bar-plots-filtered.qzv``` [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Ftaxa-bar-plots-filtered.qzv) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/taxa-bar-plots-filtered.qzv)
+>Then remove those same taxa from the actual DNA sequences of the ASVs, ensuring both abundance data and sequence data are clean for downstream analysis.
+>```bash
+>qiime taxa filter-seqs \
+>  --i-sequences rep-seqs-dada2.qza \
+>  --i-taxonomy taxonomy.qza \
+>  --p-exclude mitochondria,chloroplast \
+>  --o-filtered-sequences rep-seqs-dada2-filtered.qza
+>```
 
 
+>Output:
+> - ```rep-seqs-dada2-filtered.qza``` [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Ftable-dada2-filtered.qza) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/table-dada2-filtered.qza)
 
+
+>Since we have altered the qza file we can create a new bar plots:
+>```bash
+>qiime taxa barplot \
+>  --i-table table-dada2-filtered.qza \
+>  --i-taxonomy taxonomy.qza \
+>  --m-metadata-file mapping.txt \
+>  --o-visualization taxa-bar-plots-filtered.qzv
+>```
+>
+>Output: ```taxa-bar-plots-filtered.qzv``` [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Ftaxa-bar-plots-filtered.qzv) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/taxa-bar-plots-filtered.qzv)
 
 ## Phylogenetics
 
-> A phylogenetic tree is a diagram that represents the evolutionary relationships among different organisms—or in this case, different microbial DNA sequences. By aligning and comparing the sequences, we can infer how closely related they are and construct a tree that reflects their shared evolutionary history. This tree is essential for certain types of diversity metrics, such as UniFrac, which measure not just the presence or absence of microbes, but how evolutionarily different the communities are. Understanding these relationships helps us interpret microbial functions and ecological roles more effectively. It's useful for certain types of diversity comparisons between samples.
+A phylogenetic tree is a diagram that represents the evolutionary relationships among different organisms. By aligning and comparing the sequences, we can infer how closely related they are and construct a tree that reflects their shared evolutionary history. Some communities may appear different in terms of ASV presence but are composed of closely related taxa. To assess this, we construct a phylogenetic tree of all ASVs. 
 
-There are a number of diversity metrics like unifrac distance that require the construction of a phylogenetic tree.
+This tree is essential for certain types of diversity metrics, such as UniFrac, which measure not just the presence or absence of microbes, but how evolutionarily different the communities are. Understanding these relationships helps us interpret microbial functions and ecological roles more effectively. It's also useful for certain types of diversity comparisons between samples.
 
 ### Multiple sequence alignment
-First Mafft is used to align the sequences
+We begin by using Mafft, which aligns all representative ASV sequences so that homologous nucleotide positions are lined up across sequences:
 
-```bash
-time qiime alignment mafft \
-  --i-sequences rep-seqs-dada2.qza \
-  --o-alignment aligned-rep-seqs.qza
-```
-Time to run: 1 minute
-
-Output:
-* ```aligned-rep-seqs.qza``` [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Faligned-rep-seqs.qza) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/aligned-rep-seqs.qza)
+>```bash
+>time qiime alignment mafft \
+>  --i-sequences rep-seqs-dada2-filtered.qza \
+>  --o-alignment aligned-rep-seqs.qza
+>```
+>Time to run: 1 minute
+>
+>Output: ```aligned-rep-seqs.qza``` [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Faligned-rep-seqs.qza) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/aligned-rep-seqs.qza)
 
 ### Masking sites
-Some sites in the alignment are not phylogenetically informative. These sites are masked.
+Masking is the process of removing highly variable, gappy, or uninformative positions from a multiple sequence alignment. These positions often arise from sequencing noise, misalignments, or non-homologous regions, and can distort phylogenetic inference by introducing noise into the tree-building process.
 
-```bash
-time qiime alignment mask \
-  --i-alignment aligned-rep-seqs.qza \
-  --o-masked-alignment masked-aligned-rep-seqs.qza
-```
-Time to run: 1 minute
-
-Output:
-* ```masked-aligned-rep-seqs.qza``` [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Fmasked-aligned-rep-seqs.qza) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/masked-aligned-rep-seqs.qza)
+>In QIIME 2, the masking step is done with:
+>qiime alignment mask \
+>  --i-alignment aligned-rep-seqs.qza \
+>  --o-masked-alignment masked-aligned-rep-seqs.qza
+>
+>This command takes the aligned ASV sequences and filters out alignment columns (positions) that don't contain reliable, conserved sequence information—leaving a cleaner dataset for more accurate and robust tree construction.
+>
+>Output: ```masked-aligned-rep-seqs.qza``` [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Fmasked-aligned-rep-seqs.qza) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/masked-aligned-rep-seqs.qza)
 
 ### Creating a tree
-Fastree is used to generate a phylogenetic tree from the masked alignment.
-```bash
-time qiime phylogeny fasttree \
-  --i-alignment masked-aligned-rep-seqs.qza \
-  --o-tree unrooted-tree.qza
-```
-Time to run: 1 minute
+FastTree builds a phylogenetic tree from the masked, aligned ASV sequences using an approximate maximum-likelihood method. This tree reflects the evolutionary relationships among ASVs and is essential for phylogeny-based diversity metrics like UniFrac.
 
-Output:
-* ```unrooted-tree.qza``` [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Funrooted-tree.qza) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/unrooted-tree.qza)
+>The resulting tree is unrooted, meaning it shows relationships but not direction of ancestry:
+>```bash
+>time qiime phylogeny fasttree \
+>  --i-alignment masked-aligned-rep-seqs.qza \
+>  --o-tree unrooted-tree.qza
+>```
+>
+>Output: ```unrooted-tree.qza``` [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Funrooted-tree.qza) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/unrooted-tree.qza)
 
 ### Midpoint rooting
-Fastree creates an unrooted tree. We can root the tree at it's midpoint with this command:
-```bash
-time qiime phylogeny midpoint-root \
-  --i-tree unrooted-tree.qza \
-  --o-rooted-tree rooted-tree.qza
- ```
-Time to run: 5 seconds
+Rooting the tree defines a starting point for evolutionary comparisons. Since our tree is initially unrooted (no known ancestor), we use midpoint rooting, which places the root at the midpoint of the longest distance between any two tips—giving a balanced view of divergence.
 
-Output:
-* ```rooted-tree.qza``` [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Frooted-tree.qza) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/rooted-tree.qza)
+>```bash
+>qiime phylogeny midpoint-root \
+>  --i-tree unrooted-tree.qza \
+>  --o-rooted-tree rooted-tree.qza
+> ```
+>
+>Output: ```rooted-tree.qza``` [View](https://view.qiime2.org/?src=https%3A%2F%2Fusda-ars-gbru.github.io%2FMicrobiome-workshop%2Fassets%2Fqiime%2Frooted-tree.qza) \| [Download](https://usda-ars-gbru.github.io/Microbiome-workshop/assets/qiime/rooted-tree.qza)
 
 
-# Ecological Analysis of Microbial Communities in Agriculture
+## Diversity
 
 Microbial ecology is the study of how microbes interact with each other and their environment. In agricultural settings, these interactions can profoundly affect crop health, nutrient cycling, and disease suppression. Ecological analysis allows us to characterize microbial diversity, compare communities between samples (like different soil types or plant treatments), and identify patterns that inform how microbial communities function and respond to changes.
 
