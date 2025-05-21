@@ -290,9 +290,10 @@ For the next step you can select either the Dada2 method or the Deblur method. S
 
 >```bash
 >time qiime dada2 denoise-paired \
->  --i-demultiplexed-seqs demux.qza \   # the imported FASTQ data (paired-end reads).
->  --o-table table-dada2 \   # the output file containing the ASV count table.
->  --o-representative-sequences rep-seqs-dada2 \   # the actual DNA sequences of the ASVs.
+>  --i-demultiplexed-seqs wednesday_outputs/demux.qza \   # the imported FASTQ data (paired-end reads).
+>  --o-table wednesday_outputs/table-dada2 \   # the output file containing the ASV count table.
+>  --o-representative-sequences wednesday_outputs/rep-seqs-dada2 \   # the actual DNA sequences of the ASVs.
+>  --o-denoising-stats wednesday_outputs/denoising-stats.qza \    # denoising statistics
 >  --p-trim-left-f 9 \   # trims 9 bases from the start of each forward/reverse read (e.g. to remove primers).
 >  --p-trim-left-r 9 \
 >  --p-trunc-len-f 220 \   # truncates reads to 220/200 bases (based on where quality drops off).
@@ -312,9 +313,9 @@ For the next step you can select either the Dada2 method or the Deblur method. S
 > 
 >```bash
 > time qiime deblur denoise-16S \
->   --i-demultiplexed-seqs demux.qza \   # the imported FASTQ data (paired-end reads).
+>   --i-demultiplexed-seqs wednesday_outputs/demux.qza \   # the imported FASTQ data (paired-end reads).
 >   --p-trim-length 220 \    # truncates reads to 220 bases (based on where quality drops off).
->   --output-dir deblurresults \   # the output directory containing the output files.
+>   --output-dir wednesday_outputs/deblurresults \   # the output directory containing the output files.
 >   --p-jobs-to-start 24    # number of CPU threads to use. Adjust based on your system.
 >```
 >
@@ -355,7 +356,7 @@ There are two steps to taxonomic classification: [training the classifier](https
 >time qiime feature-classifier classify-sklearn \
 >  --i-classifier  /project/microbiome_workshop/amplicon/data/taxonomy/gg-13-8-99-515-806-nb-classifier.qza \
 >  --i-reads rep-seqs-dada2.qza \
->  --o-classification taxonomy.qza
+>  --o-classification wednesday_outputs/taxonomy.qza
 >```
 >
 >Time to run: 4 minutes
