@@ -209,7 +209,21 @@ HPC's typically have thousands of cores, made up by separate computers (nodes) t
 *insert text here*
 
 ## Interacting with the CHPC
-*sftp/scp/ssh*
+To connect to the server, run the following command, including the username you specified at sign-up:
+```bash
+ssh <username>@lengau.chpc.ac.za
+```
+
+In a separate terminal window, you can then connect and transfer files using the following command:
+```bash
+sftp gkalogiannis@lengau.chpc.ac.za
+```
+
+
+To request an interactive job on the CHPC, run the following command. This will request 24 cores (an entire computing node) for 3hrs:
+```bash
+qsub -I -l select=1:ncpus=24:mpiprocs=24 -q serial -P CBBI1023 -l walltime=3:00:00   
+```
 
 *conda envs*
 
@@ -245,7 +259,7 @@ sample-2      $PWD/some/filepath/sample2_R1.fastq
 >```bash
 >time qiime tools import \
 >  --type 'SampleData[PairedEndSequencesWithQuality]' \
->  --input-path wednesday_manifest.tsv \
+>  --input-path wednesday_data/wednesday_manifest.tsv \
 >  --output-path wednesday_outputs/demux.qza \
 >  --input-format PairedEndFastqManifestPhred33V2
 >```
@@ -319,7 +333,7 @@ For the next step you can select either the Dada2 method or the Deblur method. S
 >   --p-jobs-to-start 24    # number of CPU threads to use. Adjust based on your system.
 >```
 >
-> Time to run: 4 minutes
+> Time to run: 3 minutes
 >
 > Output: Okay, we have just done the hard part of amplicon sequence analysis.  At this point we have our BIOM count table, the representative sequence variants and a stats file for Deblur.
 >
@@ -354,25 +368,36 @@ There are two steps to taxonomic classification: [training the classifier](https
 >
 >```bash
 >time qiime feature-classifier classify-sklearn \
->  --i-classifier  /project/microbiome_workshop/amplicon/data/taxonomy/gg-13-8-99-515-806-nb-classifier.qza \
->  --i-reads rep-seqs-dada2.qza \
+>  --i-classifier wednesday_data/silva-138-99-nb-classifier.qza \
+>  --i-reads wednesday_outputs/rep-seqs-dada2.qza \
 >  --o-classification wednesday_outputs/taxonomy.qza
 >```
 >
->Time to run: 4 minutes
+>Time to run: 1 minute
 >
 >Output: ```taxonomy.qza``` [View](https://view.qiime2.org/?src=) \| [Download]()
 
 
 >Create a bar plot visualization of the taxonomy data:
 >```bash
->qiime taxa barplot \
->  --i-table table-dada2.qza \
->  --i-taxonomy taxonomy.qza \
->  --m-metadata-file /project/microbiome_workshop/amplicon/data/mapping.txt \
->  --o-visualization taxa-bar-plots.qzv
+>time qiime taxa barplot \
+>  --i-table wednesday_outputs/table-dada2.qza \
+>  --i-taxonomy wednesday_outputs/taxonomy.qza \
+>  --o-visualization wednesday_outputs/taxa-bar-plots.qzv
 >```
 >Time to run: 1 minute
 >
 >Output: ```taxa-bar-plots.qzv``` [View](https://view.qiime2.org/?src=) \| [Download]()
 
+
+# Summary
+
+Congratulations! You've now imported raw FASTQ sequences into QIIME 2, inspected their quality, and used DADA2 or Deblur to clean and denoise them, generating amplicon sequence variants (ASVs) that reflect the microbial diversity in your samples. You've produced:
+
+- A feature table showing how many times each ASV appeared in each sample
+- A list of representative ASV sequences
+- A quality summary of the reads
+- A taxonomic assignment of each ASV, using the SILVA database
+- Bar plots that visually summarise which microbes are present in each condition
+
+Tomorrow, you'll explore alpha and beta diversity, use ordination methods like PCoA, and run statistical tests to evaluate how microbiome composition shifts across different Arabidopsis genotypes. You’ll also learn how to export and share your results for publication or collaboration.
