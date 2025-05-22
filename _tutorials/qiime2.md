@@ -389,3 +389,15 @@ There are two steps to taxonomic classification: [training the classifier](https
 >
 >Output: ```taxa-bar-plots.qzv``` [View](https://view.qiime2.org/?src=) \| [Download]()
 
+
+# Summary
+
+Congratulations! You've now imported raw FASTQ sequences into QIIME 2, inspected their quality, and used DADA2 or Deblur to clean and denoise them, generating amplicon sequence variants (ASVs) that reflect the microbial diversity in your samples. You've produced:
+
+- A feature table showing how many times each ASV appeared in each sample
+- A list of representative ASV sequences
+- A quality summary of the reads
+- A taxonomic assignment of each ASV, using the SILVA database
+- Bar plots that visually summarise which microbes are present in each condition
+
+Tomorrow, you'll explore alpha and beta diversity, use ordination methods like PCoA, and run statistical tests to evaluate how microbiome composition shifts across different Arabidopsis genotypes. You’ll also learn how to export and share your results for publication or collaboration.
