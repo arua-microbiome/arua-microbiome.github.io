@@ -1,3 +1,4 @@
+*.qza filter=lfs diff=lfs merge=lfs -text
 assets/fonts/* linguist-vendored
 assets/js/main.min.js linguist-vendored
 assets/js/lunr/* linguist-vendored
