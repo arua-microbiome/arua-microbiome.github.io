@@ -21,9 +21,9 @@ Once your ASV table has been generated, it needs to be connected to your sample 
 > QIIME 2 allows you to integrate the count table with your mapping file to visualise how read counts distribute across samples.
 > ```bash
 > time qiime feature-table summarize \
->  --i-table table-dada2.qza \
->  --m-sample-metadata-file mapping.txt \
->  --o-visualization table-dada2.qzv
+>  --i-table wednesday_outputs/table-dada2.qza \
+>  --m-sample-metadata-file wednesday_data/wednesday_metadata.csv \
+>  --o-visualization thursday_outputs/table-dada2.qzv
 > ```
 >
 > Time to run: 30 seconds
