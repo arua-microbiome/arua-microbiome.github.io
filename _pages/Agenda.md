@@ -7,7 +7,7 @@ layout: single
 
 You can access the presentations for the week from the link to this [Google Drive](https://drive.google.com/drive/folders/111oonoSc12wz-jm6id99FmZw9lvSU_tW?usp=sharing)
 
-### Monday, May 26, 2025 - Symposium: Introduction to Microbiome Research and Data Acquisition
+### Monday, May 26, 2025 - Symposium: Introduction to Microbiome <br> Research and Data Acquisition
 
 | Time  | Event                                                                                 | Speaker/facilitator       | 
 |-------|---------------------------------------------------------------------------------------|---------------------------| 
@@ -44,7 +44,7 @@ You can access the presentations for the week from the link to this [Google Driv
 
 
 
-### Wednesday, May 28, 2025 - Quality Control and Taxonomic Analysis of Microbiome Amplicon Data
+### Wednesday, May 28, 2025 - Quality Control and Taxonomic <br> Analysis of Microbiome Amplicon Data
 
 | Time  | Event                                                       | Speaker/facilitator                           | 
 |-------|-------------------------------------------------------------|-----------------------------------------------| 
@@ -58,15 +58,15 @@ You can access the presentations for the week from the link to this [Google Driv
 
 ### Thursday, May 29, 2025 - Diversity and Statistical Analysis of Microbial Communities 
 
-| Time  | Event                                                                         | Speaker/facilitator                                                      | 
-|-------|-------------------------------------------------------------------------------|--------------------------------------------------------------------------| 
-| 9:00  | Phylogenetics and diversity metrics of microbiomes (practical)                | Mr. George Kalogiannis, Dr. Paidamoyo Mataranyika & Dr. Balig Panossian  |
-| 10:30 | Coffee/Tea Break                                                              |                                                                          |
-| 11:00 | Phylogenetics and diversity metrics of microbiomes (practical) - _continued_  | Mr. George Kalogiannis, Dr. Paidamoyo Mataranyika & Dr. Balig Panossian  |
-| 12:30 | Lunch                                                                         |                                                                          |
-| 14:00 | Phylogenetics and diversity metrics of microbiomes (practical) - _continued_  | Mr. George Kalogiannis, Dr. Paidamoyo Mataranyika & Dr. Balig Panossian  |
-| 15:00 | Discussion session: _How confident are we in microbiome analysis outputs?_    |                                                                          |
-| 16:00 | End of day wrap-up                                                            |                                                                          | 
+| Time  | Event                                                                         | Speaker/facilitator                                                          | 
+|-------|-------------------------------------------------------------------------------|------------------------------------------------------------------------------| 
+| 9:00  | Phylogenetics and diversity metrics of microbiomes (practical)                | Mr. George Kalogiannis, Dr. Paidamoyo Mataranyika & <br> Dr. Balig Panossian |
+| 10:30 | Coffee/Tea Break                                                              |                                                                              |
+| 11:00 | Phylogenetics and diversity metrics of microbiomes (practical) - _continued_  | Mr. George Kalogiannis, Dr. Paidamoyo Mataranyika & <br> Dr. Balig Panossian     |
+| 12:30 | Lunch                                                                         |                                                                              |
+| 14:00 | Phylogenetics and diversity metrics of microbiomes (practical) - _continued_  | Mr. George Kalogiannis, Dr. Paidamoyo Mataranyika & <br> Dr. Balig Panossian      |
+| 15:00 | Discussion session: _How confident are we in microbiome analysis outputs?_    |                                                                              |
+| 16:00 | End of day wrap-up                                                            |                                                                              | 
 
 
 ### Friday, May 30, 2025 - Applied Project and Presentations 
