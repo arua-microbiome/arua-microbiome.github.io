@@ -1,20 +1,29 @@
 ---
-title: "Attendees and organisers"
-excerpt: "The participants and organizers for workshop."
+title: "Organisers"
+excerpt: "The Workshop Organisers."
 permalink: /people/
 layout: single
 header:
 ---
 
-## Participants
 We are grateful for the collaboration between Imperial College London and the ARUA universities, whose partnership made the organisation of this event possible.
 
-### Participants
+### Organisers
 
-Participant | Position | Affiliation |
-------------|---------- | --- | --- |
-Samraat Pawar | Professor of Theoretical Ecology | Imperial College London |
-George Kalogiannis | Research Assistant | Imperial College London |
-Balig Panossian | Research Associate | Imperial College London |
-Paidamoyo Mataranyika | Research Associate | Imperial College London |
+| Participant           | Position                         | Affiliation             |
+|-----------------------|----------------------------------|-------------------------| 
+| Thulani Makhalanyane  | Professor of Microbiology        | Stellenbosch University |
+| Samraat Pawar         | Professor of Theoretical Ecology | Imperial College London |
+| Olubukola Babalola    | Professor of                     |                         |
+| Nonsikelelo Hlongwa   | Postdoctoral Research Fellow     | Stellenbosch University |
+| Samuel Leareng        | Postdoctoral Research Fellow     | Stellenbosch University |
+| Paidamoyo Mataranyika | Postdoctoral Research Associate  | Imperial College London |
+| Balig Panossian       | Postdoctoral Research Associate  | Imperial College London |
+| George Kalogiannis    | Research Assistant               | Imperial College London |
+
+
+
+
+
+
 
