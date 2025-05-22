@@ -14,7 +14,7 @@ We are grateful for the collaboration between Imperial College London and the AR
 |-----------------------|----------------------------------|-------------------------| 
 | Thulani Makhalanyane  | Professor of Microbiology        | Stellenbosch University |
 | Samraat Pawar         | Professor of Theoretical Ecology | Imperial College London |
-| Olubukola Babalola    | Professor of                     |                         |
+| Olubukola Babalola    | Provost's Visiting Professor     | Imperial College London |
 | Nonsikelelo Hlongwa   | Postdoctoral Research Fellow     | Stellenbosch University |
 | Samuel Leareng        | Postdoctoral Research Fellow     | Stellenbosch University |
 | Paidamoyo Mataranyika | Postdoctoral Research Associate  | Imperial College London |
