@@ -134,6 +134,32 @@ Rooting the tree defines a starting point for evolutionary comparisons. Since ou
 >
 >Output: ```rooted-tree.qza``` [View](https://view.qiime2.org/?src=) \| [Download]()
 
+## Visualisation
+Once you’ve generated a rooted phylogenetic tree and cleaned, filtered abundance data, it’s time to visualise these relationships in an interactive, intuitive way. QIIME 2’s Empress plugin allows you to explore phylogenetic trees alongside sample metadata and taxonomic annotations. This is particularly powerful for understanding not only which taxa are present, but how community shifts map onto the evolutionary history of your organisms.
+
+> The tree-plot command displays the phylogenetic tree and overlays taxonomic information. This is useful for checking the structure of the tree and seeing how ASVs group by lineage. It’s also a helpful tool to explore diversity patterns across evolutionary lineages.
+>```bash
+> qiime empress tree-plot \
+>  --i-tree thursday_outputs/rooted-tree.qza \
+>  --m-feature-metadata-file wednesday_outputs/taxonomy.qza \
+>  --o-visualization thursday_outputs/empress-tree-tax.qzv
+>```
+>
+>Output: ```empress-tree-tax.qzv``` [View]() \| [Download]()
+
+>The community-plot command takes things further by integrating the phylogenetic tree, ASV abundance table, sample metadata, and taxonomy. This interactive plot lets you explore which lineages dominate particular samples or treatments, trace shifts in community composition, and highlight specific branches or taxa across groups.
+>```bash
+> qiime empress community-plot \
+>  --i-tree thursday_outputs/rooted-tree.qza \
+>  --i-feature-table thursday_outputs/table-dada2-filtered.qza \
+>  --m-sample-metadata-file wednesday_data/wednesday_metadata.tsv \
+>  --m-feature-metadata-file wednesday_outputs/taxonomy.qza \
+>  --o-visualization thursday_outputs/community-empress-tree-tax.qzv
+>```
+>
+>>Output: ```community-empress-tree-tax.qzv``` [View]() \| [Download]()
+
+
 
 # Diversity
 
