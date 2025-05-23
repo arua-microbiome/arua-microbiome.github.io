@@ -20,28 +20,25 @@ Once your ASV table has been generated, it needs to be connected to your sample 
 
 > QIIME 2 allows you to integrate the count table with your mapping file to visualise how read counts distribute across samples.
 > ```bash
-> time qiime feature-table summarize \
+> qiime feature-table summarize \
 >  --i-table wednesday_outputs/table-dada2.qza \
 >  --m-sample-metadata-file wednesday_data/wednesday_metadata.csv \
 >  --o-visualization thursday_outputs/table-dada2.qzv
 > ```
->
-> Time to run: 30 seconds
 > 
 > Output: ```table-dada2.qzv``` [View](https://view.qiime2.org/?src=) \| [Download]()
 
 
 > To visualise taxonomic composition by group or treatment:
 >```bash
-> time qiime taxa barplot \
->  --i-table table-dada2.qza \
->  --i-taxonomy taxonomy.qza \
->  --m-metadata-file mapping.txt \
->  --o-visualization taxa-bar-plots.qzv
+> qiime taxa barplot \
+>  --i-table wednesday_outputs/table-dada2.qza \
+>  --i-taxonomy wednesday_outputs/taxonomy.qza \
+>  --m-metadata-file wednesday_data/wednesday_metadata.tsv \
+>  --o-visualization thursday_outputs/taxa-bar-plots.qzv
 >```
 >
->  Time to run: 30 seconds
->
+> Output: ```taxa-bar-plots.qzv``` [View](https://view.qiime2.org/?src=) \| [Download]()
 
 # Filtering contaminants
 Sequencing from soil or root material often includes host DNA like mitochondria or chloroplasts. These non-microbial sequences can obscure patterns in microbial community composition and inflate diversity estimates. Filtering out these contaminants is a standard practice in microbiome workflows, especially when studying plant-associated microbes. This helps ensure that the dataset reflects only the true microbial community of interest.
@@ -51,37 +48,34 @@ Looking at the the ```taxonomy.qzv``` file using https://view/qiime2.org We can 
 >First remove unwanted taxa (like mitochondria and chloroplasts) from the ASV count table: 
 >```bash
 >qiime taxa filter-table \
->  --i-table table-dada2.qza \
->  --i-taxonomy taxonomy.qza \
+>  --i-table wednesday_outputs/table-dada2.qza \
+>  --i-taxonomy wednesday_outputs/taxonomy.qza \
 >  --p-exclude mitochondria,chloroplast \
->  --o-filtered-table table-dada2-filtered.qza
+>  --o-filtered-table thursday_outputs/table-dada2-filtered.qza
 >```
 >
->Output:
-> - ```table-dada2-filtered.qza``` [View](https://view.qiime2.org/?src=) \| [Download]()
+>Output: ```table-dada2-filtered.qza``` [View](https://view.qiime2.org/?src=) \| [Download]()
 
 
 >Then remove those same taxa from the actual DNA sequences of the ASVs, ensuring both abundance data and sequence data are clean for downstream analysis.
 >```bash
 >qiime taxa filter-seqs \
->  --i-sequences rep-seqs-dada2.qza \
->  --i-taxonomy taxonomy.qza \
+>  --i-sequences wednesday_outputs/rep-seqs-dada2.qza \
+>  --i-taxonomy wednesday_outputs/taxonomy.qza \
 >  --p-exclude mitochondria,chloroplast \
->  --o-filtered-sequences rep-seqs-dada2-filtered.qza
+>  --o-filtered-sequences thursday_outputs/rep-seqs-dada2-filtered.qza
 >```
-
-
->Output:
-> - ```rep-seqs-dada2-filtered.qza``` [View](https://view.qiime2.org/?src=) \| [Download]()
+>
+>Output: ```rep-seqs-dada2-filtered.qza``` [View](https://view.qiime2.org/?src=) \| [Download]()
 
 
 >Since we have altered the qza file we can create a new bar plots:
 >```bash
 >qiime taxa barplot \
->  --i-table table-dada2-filtered.qza \
->  --i-taxonomy taxonomy.qza \
->  --m-metadata-file mapping.txt \
->  --o-visualization taxa-bar-plots-filtered.qzv
+>  --i-table thursday_outputs/table-dada2-filtered.qza \
+>  --i-taxonomy wednesday_outputs/taxonomy.qza \
+>  --m-metadata-file wednesday_data/wednesday_metadata.tsv \
+>  --o-visualization thursday_outputs/taxa-bar-plots-filtered.qzv
 >```
 >
 >Output: ```taxa-bar-plots-filtered.qzv``` [View](https://view.qiime2.org/?src=) \| [Download]()
@@ -139,6 +133,32 @@ Rooting the tree defines a starting point for evolutionary comparisons. Since ou
 > ```
 >
 >Output: ```rooted-tree.qza``` [View](https://view.qiime2.org/?src=) \| [Download]()
+
+## Visualisation
+Once you’ve generated a rooted phylogenetic tree and cleaned, filtered abundance data, it’s time to visualise these relationships in an interactive, intuitive way. QIIME 2’s Empress plugin allows you to explore phylogenetic trees alongside sample metadata and taxonomic annotations. This is particularly powerful for understanding not only which taxa are present, but how community shifts map onto the evolutionary history of your organisms.
+
+> The tree-plot command displays the phylogenetic tree and overlays taxonomic information. This is useful for checking the structure of the tree and seeing how ASVs group by lineage. It’s also a helpful tool to explore diversity patterns across evolutionary lineages.
+>```bash
+> qiime empress tree-plot \
+>  --i-tree thursday_outputs/rooted-tree.qza \
+>  --m-feature-metadata-file wednesday_outputs/taxonomy.qza \
+>  --o-visualization thursday_outputs/empress-tree-tax.qzv
+>```
+>
+>Output: ```empress-tree-tax.qzv``` [View]() \| [Download]()
+
+>The community-plot command takes things further by integrating the phylogenetic tree, ASV abundance table, sample metadata, and taxonomy. This interactive plot lets you explore which lineages dominate particular samples or treatments, trace shifts in community composition, and highlight specific branches or taxa across groups.
+>```bash
+> qiime empress community-plot \
+>  --i-tree thursday_outputs/rooted-tree.qza \
+>  --i-feature-table thursday_outputs/table-dada2-filtered.qza \
+>  --m-sample-metadata-file wednesday_data/wednesday_metadata.tsv \
+>  --m-feature-metadata-file wednesday_outputs/taxonomy.qza \
+>  --o-visualization thursday_outputs/community-empress-tree-tax.qzv
+>```
+>
+>>Output: ```community-empress-tree-tax.qzv``` [View]() \| [Download]()
+
 
 
 # Diversity
