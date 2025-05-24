@@ -167,13 +167,55 @@ Microbial ecology is the study of how microbes interact with each other and thei
 
 ## Alpha Diversity: Within-Sample Diversity
 
-Alpha diversity refers to the number and evenness of microbial species in a single sample. Common metrics include:
+Alpha diversity refers to the number and evenness of microbial species in a single sample. Three common metrics that Qiime2 can calculate are these:
 
-- **Observed Features**: The count of unique sequence variants or species.
-- **Shannon Diversity Index**: Takes into account both richness and evenness; higher values indicate more diverse communities.
-- **Faith’s Phylogenetic Diversity**: Considers how evolutionarily diverse a community is, using a phylogenetic tree.
+>**Observed Features**: The count of unique sequence variants or species.
+>
+>```bash
+>qiime diversity alpha \
+>  --i-table thursday_outputs/table-dada2-filtered.qza \
+>  --p-metric observed_features \
+>  --o-alpha-diversity thursday_outputs/alpha-observed-features.qza
+>```
+>
+>Output: ```alpha-observed-features.qza``` [View]() \| [Download]()
 
-In agriculture, alpha diversity can reflect the health or disturbance of a soil environment — for example, more diverse microbial communities are often associated with healthier or less disturbed soils.
+ 
+>**Shannon Diversity Index**: Takes into account both richness and evenness; higher values indicate more diverse communities.
+>
+>```bash
+>qiime diversity alpha \
+>  --i-table thursday_outputs/table-dada2-filtered.qza \
+>  --p-metric shannon \
+>  --o-alpha-diversity thursday_outputs/alpha-shannon.qza
+>```
+>
+>Output: ```alpha-shannon.qza``` [View]() \| [Download]()
+
+>**Faith’s Phylogenetic Diversity**: Considers how evolutionarily diverse a community is, using a phylogenetic tree.
+>
+>```bash
+>qiime diversity alpha-phylogenetic \
+>  --i-table thursday_outputs/table-dada2-filtered.qza \
+>  --i-phylogeny thursday_outputs/rooted-tree.qza \
+>  --p-metric faith_pd \
+>  --o-alpha-diversity thursday_outputs/alpha-faith-pd.qza
+>```
+>
+>Output: ```alpha-faith-pqd.qza``` [View]() \| [Download]()
+
+
+As we have seen throughout the day, Qiime ```.qza``` don't contain data in an interpretable format. We thus want to export the alpha diversity metrics into three separate tables, using the ```export``` function.
+
+>Repeat this for each sample:
+>
+>```bash
+>qiime tools export \
+>  --input-path thursday_outputs/alpha-<metric>.qza \
+>  --output-path thursday_outputs/alpha-<metric>
+>```
+>
+>Output: three directories containing alpha-diversity outputs.
 
 ## Beta Diversity: Between-Sample Differences
 
