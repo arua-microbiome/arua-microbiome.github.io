@@ -205,7 +205,7 @@ Alpha diversity refers to the number and evenness of microbial species in a sing
 >Output: ```alpha-faith-pqd.qza``` [View]() \| [Download]()
 
 
-As we have seen throughout the day, Qiime ```.qza``` don't contain data in an interpretable format. We thus want to export the alpha diversity metrics into three separate tables, using the ```export``` function.
+As we have seen throughout the day, Qiime ```.qza``` files don't contain data in an interpretable format. We thus want to export the alpha diversity metrics into three separate tables, using the ```export``` function.
 
 >Repeat this for each sample:
 >
