@@ -215,21 +215,34 @@ Much of the work we will be doing in this workshop will be on the HPC system pro
 
 >In a separate terminal window, you can then connect and transfer files using the following command:
 >```bash
->sftp gkalogiannis@lengau.chpc.ac.za   # sets up a secure file transfer connection between your computer and the CHPC
+>sftp <username>@lengau.chpc.ac.za   # sets up a secure file transfer connection between your computer and the CHPC
 >
 >get <CHPC-directory> <local-directory>   # use this to get data from the CHPC and put it into a directory on your computer
 >
 >put <local-directory> <CHPC-directory>   # use this to put data onto the CHPC
 >```
 
+## Setting up Anaconda3
+
+We have a list of conda packages that have to be installed. Please download this file (conda_environment.yml)[../../assets/conda_environment.yml], put it onto the CHPC. 
+
+First we must load the necessary anaconda3 python module on the CHPC:
+
+>```bash
+>module load chpc/python/anaconda3-2024.10.1
+>```
+
+To make installations, the CHPC requires us to ssh to a node with internet connection:
+
+>```bash
+>ssh chpclic1
+>```
+
+
 To request an interactive job on the CHPC, run the following command. This will request 24 cores (an entire computing node) for 3hrs and lets you run your jobs straight into the terminal:
 ```bash
 qsub -I -l select=1:ncpus=24:mpiprocs=24 -q serial -P WCHPC -l walltime=3:00:00   
 ```
-
-*conda envs*
-
-*directories*
 
 # QIIME2
 
