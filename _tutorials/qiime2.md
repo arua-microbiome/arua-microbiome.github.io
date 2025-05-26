@@ -226,8 +226,6 @@ Much of the work we will be doing in this workshop will be on the HPC system pro
 
 The CHPC has a detailed explanation of setting up anaconda and python on the Lengau cluster. [See here](https://wiki.chpc.ac.za/guide:python?s[]=%2Apython%2A).
 
-We also have a list of conda packages that have to be installed. Please download this file (conda_environment.yml)[../../assets/conda_environment.yml], put it onto the CHPC. 
-
 First we must load the necessary anaconda3 python module on the CHPC:
 
 >```bash
@@ -240,6 +238,11 @@ To make installations, the CHPC requires us to ssh to a node with internet conne
 >ssh chpclic1
 >```
 
+We will be using the packages set up in the available conda environments on the CHPC. Each time we start working with Qiime, we will want to load up the environments with the following command:
+
+```bash
+conda activate /apps/chpc/bio/anaconda3-2020.02/envs/qiime2-amplicon-2024.5
+```
 
 To request an interactive job on the CHPC, run the following command. This will request 24 cores (an entire computing node) for 3hrs and lets you run your jobs straight into the terminal:
 
