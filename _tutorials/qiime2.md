@@ -224,7 +224,9 @@ Much of the work we will be doing in this workshop will be on the HPC system pro
 
 ## Setting up Anaconda3
 
-We have a list of conda packages that have to be installed. Please download this file (conda_environment.yml)[../../assets/conda_environment.yml], put it onto the CHPC. 
+The CHPC has a detailed explanation of setting up anaconda and python on the Lengau cluster. [See here](https://wiki.chpc.ac.za/guide:python?s[]=%2Apython%2A).
+
+We also have a list of conda packages that have to be installed. Please download this file (conda_environment.yml)[../../assets/conda_environment.yml], put it onto the CHPC. 
 
 First we must load the necessary anaconda3 python module on the CHPC:
 
@@ -240,6 +242,7 @@ To make installations, the CHPC requires us to ssh to a node with internet conne
 
 
 To request an interactive job on the CHPC, run the following command. This will request 24 cores (an entire computing node) for 3hrs and lets you run your jobs straight into the terminal:
+
 ```bash
 qsub -I -l select=1:ncpus=24:mpiprocs=24 -q serial -P WCHPC -l walltime=3:00:00   
 ```
