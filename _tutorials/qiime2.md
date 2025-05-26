@@ -206,23 +206,25 @@ HPC's typically have thousands of cores, made up by separate computers (nodes) t
 - Job Scheduling: HPCs use job scheduling systems (e.g., SLURM, PBS) to manage and queue computational tasks. This enables long or resource-heavy QIIME2 workflows to run in the background without tying up your local machine.
 
 ## Connecting to the CHPC
-*insert text here*
+Much of the work we will be doing in this workshop will be on the HPC system provided by the National Integrated Cyberinfrastructure System (NICIS). This is a Linux system (so forget any Windows or Mac way of thinking!). There are 2 ways to communitcate with the CHPC: 
 
-## Interacting with the CHPC
-To connect to the server, run the following command, including the username you specified at sign-up:
+> To connect to the server, run the following command, including the username you have been assigned. This is what we will be using for the rest of the day to run our jobs:
+>```bash
+>ssh <username>@lengau.chpc.ac.za   # sets up a direct connection between your computer and the CHPC.
+>```
+
+>In a separate terminal window, you can then connect and transfer files using the following command:
+>```bash
+>sftp gkalogiannis@lengau.chpc.ac.za   # sets up a secure file transfer connection between your computer and the CHPC
+>
+>get <CHPC-directory> <local-directory>   # use this to get data from the CHPC and put it into a directory on your computer
+>
+>put <local-directory> <CHPC-directory>   # use this to put data onto the CHPC
+>```
+
+To request an interactive job on the CHPC, run the following command. This will request 24 cores (an entire computing node) for 3hrs and lets you run your jobs straight into the terminal:
 ```bash
-ssh <username>@lengau.chpc.ac.za
-```
-
-In a separate terminal window, you can then connect and transfer files using the following command:
-```bash
-sftp gkalogiannis@lengau.chpc.ac.za
-```
-
-
-To request an interactive job on the CHPC, run the following command. This will request 24 cores (an entire computing node) for 3hrs:
-```bash
-qsub -I -l select=1:ncpus=24:mpiprocs=24 -q serial -P CBBI1023 -l walltime=3:00:00   
+qsub -I -l select=1:ncpus=24:mpiprocs=24 -q serial -P WCHPC -l walltime=3:00:00   
 ```
 
 *conda envs*
