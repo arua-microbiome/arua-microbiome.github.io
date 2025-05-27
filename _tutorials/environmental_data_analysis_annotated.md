@@ -9,7 +9,7 @@ author: "Paida Mataranyika"
 By Paida Mataranyika {% include toc %}
 
 # Download the data:
-Click here to download the data: [Data File](../../assets/)
+Click here to download the data: [Data File](../../assets/environmental_metadata.csv)
 
 # Exploring Environmental Data: Relationships and Visualisation
 
