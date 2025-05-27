@@ -37,7 +37,7 @@ Alongside the raw FASTQ files you’ll find a manifest (listing file paths and r
 > Castrillo, G., Teixeira, P.J.P.L., Paredes, S.H., Law, T.F., de Lorenzo, L., Feltcher, M.E., Finkel, O.M., Breakfield, N.W., Mieczkowski, P., Jones, C.D., Paz-Ares, J., Dangl, J.L., 2017. Root microbiota drive direct integration of phosphate stress and immunity. Nature 543, 513–518. [doi:10.1038/nature21417](https://dx.doi.org/10.1038/nature21417)
 
 
-# Genetics Primer
+# Genetics Refresher
 
 ## 1 · What actually comes off a sequencer?
 
@@ -52,10 +52,10 @@ These reads are written to disk as plain-text files, almost always compressed an
 - FASTA files ( .fasta, .fa ) hold only the nucleotide characters A/T/C/G; they are mainly used once reads have been cleaned and merged (assembled).
 - FASTQ files ( .fastq, .fq ) hold both the sequence and its Phred quality scores, telling you how confident the instrument was when reading each basepair of the DNA.
 
->Once you have the downloads in place, peek inside one of the real files, say GC1GC1_R1.fastq.gz (forward reads from replicate GC1, experiment GC1), to explore by yourself what a FASTQ record looks like and to check that the quality scores are sensible before you hand the data to QIIME 2. You can do this in bash like this:
+>Once you have the downloads in place, peek inside one of the real files, say GC1GC1_R1.fastq.gz (forward reads from replicate ```GC1```, experiment ```GC1```), to explore by yourself what a FASTQ record looks like and to check that the quality scores are sensible before you hand the data to QIIME 2. You can do this in bash like this:
 >```bash
 ># ── Bash one-liner: show the first two reads (8 lines) ───────────
->zcat GC1GC1_R1.fastq.gz | head -n 8
+>zcat /mnt/lustre/groups/WCHPC/wednesday_data/fastq/GC1GC1_R1.fastq.gz | head -n 8
 >```
 >Breaking that command down, ```zcat``` prints the unzipped file, ```head -n 8``` takes the top 8 lines of the file.
 
@@ -67,10 +67,10 @@ Before you begin any analysis, it’s important to check that your files actuall
 >Since each read in a FASTQ file takes up four lines (a header, sequence, separator, and quality line), you can calculate the number of reads by dividing the total number of lines by 4. This gives you a quick way to verify that your samples are complete before moving on.
 >```bash
 >## count reads in one compressed file
->zcat GC1GC1_R1.fastq.gz | wc -l | awk '{print $1/4 " reads"}'
+>zcat /mnt/lustre/groups/WCHPC/wednesday_data/fastq/GC1GC1_R1.fastq.gz | wc -l | awk '{print $1/4 " reads"}'
 >
 ># loop across every forward read file and list counts
->for f in *_R1.fastq.gz; do
+>for f in /mnt/lustre/groups/WCHPC/wednesday_data/fastq/*_R1.fastq.gz; do
 >  echo -n "$f  "
 >  zcat "$f" | wc -l | awk '{printf "%d reads\n",$1/4}'
 >done
@@ -92,7 +92,7 @@ So while QIIME doesn’t run BLAST directly by default, it’s doing the same ty
 
 > Lets run a blast search for the first sequence in our file. Print the first sequence and its information and paste it into the BLAST Nucleotide website: [blast.ncbi.nlm.nih.gov/](blast.ncbi.nlm.nih.gov/).
 >```bash
->zcat GC1GC1_R1.fastq.gz | head -n 4
+>zcat /mnt/lustre/groups/WCHPC/wednesday_data/fastq/GC1GC1_R1.fastq.gz | head -n 4
 >```
 
  **What do you see? Is it a bacterium that you have identified?** Hold onto this thought until we discuss contamination later.
@@ -139,25 +139,22 @@ Much of the work we will be doing in this workshop will be on the HPC system pro
 
 The CHPC has a detailed explanation of setting up anaconda and python on the Lengau cluster. [See here](https://wiki.chpc.ac.za/guide:python?s[]=%2Apython%2A).
 
-First we must load the necessary anaconda3 python module on the CHPC:
-
+>First we must load the necessary anaconda3 python module on the CHPC:
 >```bash
 >module load chpc/python/anaconda3-2020.02
 >```
 
-We will be using the packages set up in the available conda environments on the CHPC. Each time we start working with Qiime and **every time we switch node**, we will want to load up the environments with the following command:
-
+>We will be using the packages set up in the available conda environments on the CHPC. Each time we start working with Qiime and **every time we switch node**, we will want to load up the environments with the following command:
 >```bash
 >conda activate /apps/chpc/bio/anaconda3-2020.02/envs/qiime2-amplicon-2024.5
 >```
 
-To request an interactive job on the CHPC, run the following command. This will request 24 cores (an entire computing node) for 4hrs and lets you run your jobs straight into the terminal:
-
+>To request an interactive job on the CHPC, run the following command. This will request 24 cores (an entire computing node) for 4hrs and lets you run your jobs straight into the terminal:
 >```bash
 >qsub -I -l select=1:ncpus=24:mpiprocs=24 -q serial -P WCHPC -l walltime=4:00:00   
 >```
 
-Also make a directory that you can store your outputs in:
+>Also make a directory that you can store your outputs in:
 >```bash
 >mkdir wednesday_outputs
 >```
