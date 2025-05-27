@@ -226,11 +226,8 @@ When a base falls below Q20 it can introduce false sequence variants, so we norm
 >
 >Output: * ```demux.qzv```
 
->This will create a visualization file. You can download the file to your local computer. From a new terminal window on your local computer copy the file:
->
->```bash
->scp <user.name>@lengau.chpc.ac.za:/path/to/data .
->```
+>This will create a visualization file. **Download the file to your local computer (using sftp).**
+
 >Now you can view the file on your local computer using the [QIIME2 visualization server](https://view.qiime2.org). Alternatively you can view the precomputed file on that server using the button above.
 >
 >When viewing the data look for the point in the forward and reverse reads where quality scores decline below 25-30. We will need to trim reads to this point to create high quality sequence variants.
@@ -241,9 +238,9 @@ Sequencing isn’t perfect and errors, noise, and artefacts are common. To make 
 
 Modern tools like [Dada2](https://dx.doi.org/10.1038/nmeth.3869), [Deblur](https://dx.doi.org/10.1128/mSystems.00191-16), and [UNOISE2](https://doi.org/10.1101/081257) aim to identify these exact sequences by using statistical error correction models, taking an information theoretic approach and applying a heuristic. This is a major improvement over older methods like OTU picking, where sequences were grouped based on a similarity threshold. ASVs (Amplicon Sequence Variants) provide higher resolution, greater reproducibility, and better biological accuracy.
 
-For the next step you can select either the Dada2 method or the Deblur method. Sequence variant selection is the slowest step in the tutorial.
+Sequence variant selection is the slowest step in the tutorial.
 
-### Option 1: Dada2 (Slower)
+### Dada2
 
 >```bash
 > time qiime dada2 denoise-paired \
@@ -265,28 +262,6 @@ For the next step you can select either the Dada2 method or the Deblur method. S
 > - ```rep-seqs-dada2.qza```: These are your representative sequences: the exact, cleaned-up ASV sequences found in your dataset. They are matched against reference databases later (like SILVA or Greengenes) to assign taxonomy.
 > - ```table-dada2.qzv```: This is your feature table, stored in QIIME 2’s .qza format. Internally, it follows the BIOM (Biological Observation Matrix) standard. It records how many times each ASV appears in each sample, similar to a species count table. This is the key file you’ll use for diversity analysis, statistical testing, and visualisation. 
 
-### Option 2: Deblur (Faster)
-> Deblur only uses forward reads at this time. You could get around this by merging your data with an outside tool like [BBmerge](http://jgi.doe.gov/data-and-tools/bbtools/bb-tools-user-guide/bbmerge-guide/) then importing your data as single ended. For simplicity, in this tutorial we will just use the forward reads.
-> 
->```bash
-> time qiime deblur denoise-16S \
->   --i-demultiplexed-seqs wednesday_outputs/demux.qza \   # the imported FASTQ data (paired-end reads).
->   --p-trim-length 220 \    # truncates reads to 220 bases (based on where quality drops off).
->   --output-dir wednesday_outputs/deblurresults \   # the output directory containing the output files.
->   --p-jobs-to-start 24    # number of CPU threads to use. Adjust based on your system.
->```
->
-> Time to run: 3 minutes
->
-> Output: Okay, we have just done the hard part of amplicon sequence analysis.  At this point we have our BIOM count table, the representative sequence variants and a stats file for Deblur.
->
-> - ```deblurresults/representative_sequences.qza```: A list of the representative sequences (representative_sequences.qza), which are the actual DNA sequences of the ASVs. 
-> - ```deblurresults/stats.qza```: A statistics file which logs how many reads passed quality control and how many were removed at each filtering step. 
-> - ```deblurresults/table.qza```: The same type of table as the one outputted by Dada2 above.
-
-
-We have just called sequence variants two different ways. In a real workflow you would only use one method.  From here on out we will use the output of dada2 only: ```table-dada2.qza```.  
-
 ## Taxonomic analysis
 Sequence variants (ASVs) are high-resolution markers of microbial diversity, but on their own, they don’t tell us which organisms are present. While they help define the structure of the community, we often want to go a step further and identify the actual microbes behind each sequence. To do that, we need to assign taxonomy: linking each ASV to a known group of bacteria or archaea.
 
@@ -297,7 +272,6 @@ The primary databases are:
 
 Database | Description | License
 ---------|-------------|--------
-[Greengenes](http://greengenes.secondgenome.com/) | A curated database of archaea and bacteria - static since 2013 | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/deed.en_US)
 [Silva](https://www.arb-silva.de/) | The most up-to-date and extensive  database of prokaryotes and eukaryotes, several versions | [Free academic](https://www.arb-silva.de/silva-license-information) / [Paid commercial license](http://www.ribocon.com/silva_licenses)
 [The RDP database](https://rdp.cme.msu.edu/) | A large collection of archaeal bacterial and fungal sequences | [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/deed.en_US)
 [UNITE](https://unite.ut.ee/) | The primary database for fungal ITS and 28S data | Not stated
@@ -331,15 +305,81 @@ There are two steps to taxonomic classification: [training the classifier](https
 >
 >Output: ```taxa-bar-plots.qzv``` 
 
+# Adding metadata and examining count tables
+Once your ASV table has been generated, it needs to be connected to your sample metadata and taxonomic assignments. This step is essential for creating meaningful visual summaries and performing any ecological comparisons. Without metadata, your sequences are just anonymous counts. Metadata provides biological context — which genotype the sample comes from, which compartment (e.g. root zone, bulk soil), and which treatment it received. Taxonomy links each ASV to a known organism or group of organisms, letting us ask not just how communities vary, but who is driving that variation.
+
+> QIIME 2 allows you to integrate the count table with your mapping file to visualise how read counts distribute across samples.
+> ```bash
+> qiime feature-table summarize \
+>  --i-table wednesday_outputs/table-dada2.qza \
+>  --m-sample-metadata-file wednesday_data/wednesday_metadata.csv \
+>  --o-visualization thursday_outputs/table-dada2.qzv
+> ```
+> 
+> Output: ```table-dada2.qzv``` [View](https://view.qiime2.org/?src=) \| [Download]()
+
+> To visualise taxonomic composition by group or treatment:
+>```bash
+> qiime taxa barplot \
+>  --i-table wednesday_outputs/table-dada2.qza \
+>  --i-taxonomy wednesday_outputs/taxonomy.qza \
+>  --m-metadata-file wednesday_data/wednesday_metadata.tsv \
+>  --o-visualization thursday_outputs/taxa-bar-plots.qzv
+>```
+>
+> Output: ```taxa-bar-plots.qzv``` [View](https://view.qiime2.org/?src=) \| [Download]()
+
+# Filtering contaminants
+Sequencing from soil or root material often includes host DNA like mitochondria or chloroplasts. These non-microbial sequences can obscure patterns in microbial community composition and inflate diversity estimates. Filtering out these contaminants is a standard practice in microbiome workflows, especially when studying plant-associated microbes. This helps ensure that the dataset reflects only the true microbial community of interest.
+
+Looking at the the ```taxonomy.qzv``` file using https://view/qiime2.org We can see the data presented at different taxonomic levels and grouped by different experimental factors. If we drill down to taxonomic level 5 something looks a bit odd. There's lots of "Rickettsiales;f__mitochondria".  This is really  plant mitochondrial contamination. Some of these samples also have chloroplast contamination.
+
+>First remove unwanted taxa (like mitochondria and chloroplasts) from the ASV count table: 
+>```bash
+>qiime taxa filter-table \
+>  --i-table wednesday_outputs/table-dada2.qza \
+>  --i-taxonomy wednesday_outputs/taxonomy.qza \
+>  --p-exclude mitochondria,chloroplast \
+>  --o-filtered-table thursday_outputs/table-dada2-filtered.qza
+>```
+>
+>Output: ```table-dada2-filtered.qza``` [View](https://view.qiime2.org/?src=) \| [Download]()
+
+
+>Then remove those same taxa from the actual DNA sequences of the ASVs, ensuring both abundance data and sequence data are clean for downstream analysis.
+>```bash
+>qiime taxa filter-seqs \
+>  --i-sequences wednesday_outputs/rep-seqs-dada2.qza \
+>  --i-taxonomy wednesday_outputs/taxonomy.qza \
+>  --p-exclude mitochondria,chloroplast \
+>  --o-filtered-sequences thursday_outputs/rep-seqs-dada2-filtered.qza
+>```
+>
+>Output: ```rep-seqs-dada2-filtered.qza``` [View](https://view.qiime2.org/?src=) \| [Download]()
+
+
+>Since we have altered the qza file we can create a new bar plots:
+>```bash
+>qiime taxa barplot \
+>  --i-table thursday_outputs/table-dada2-filtered.qza \
+>  --i-taxonomy wednesday_outputs/taxonomy.qza \
+>  --m-metadata-file wednesday_data/wednesday_metadata.tsv \
+>  --o-visualization thursday_outputs/taxa-bar-plots-filtered.qzv
+>```
+>
+>Output: ```taxa-bar-plots-filtered.qzv``` [View](https://view.qiime2.org/?src=) \| [Download]()
+
+
 
 # Summary
 
-Congratulations! You've now imported raw FASTQ sequences into QIIME 2, inspected their quality, and used DADA2 or Deblur to clean and denoise them, generating amplicon sequence variants (ASVs) that reflect the microbial diversity in your samples. You've produced:
+Congratulations! You've now imported raw FASTQ sequences into QIIME 2, inspected their quality, and used DADA2 or Deblur to clean and denoise them, generating amplicon sequence variants (ASVs) and filtered organelle and host contaminants. These are a good representation of microbial diversity in your samples. You've produced:
 
 - A feature table showing how many times each ASV appeared in each sample
 - A list of representative ASV sequences
 - A quality summary of the reads
 - A taxonomic assignment of each ASV, using the SILVA database
 - Bar plots that visually summarise which microbes are present in each condition
+- All done having removed contaminants from your samples
 
 Tomorrow, you'll explore alpha and beta diversity, use ordination methods like PCoA, and run statistical tests to evaluate how microbiome composition shifts across different Arabidopsis genotypes. You’ll also learn how to export and share your results for publication or collaboration.
