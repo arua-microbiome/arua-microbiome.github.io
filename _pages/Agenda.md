@@ -74,7 +74,7 @@ You can access the presentations for the week from the link to this [Google Driv
 | Time  | Event                                                                            | Speaker/facilitator                     | 
 |-------|----------------------------------------------------------------------------------|-----------------------------------------| 
 | 8:30  | Hackathon: _How do lifestyle food practices influence the human gut microbiome?_ | George Kalogiannis                      |
-| 10:00 | Seminar: _Ask a science journalist _                                             |  Sarah Wild                             |
+| 10:00 | Seminar: _Ask a science journalist_                                             |  Sarah Wild                             |
 | 11:00 | Coffee/Tea Break                                                                 |                                         |
 | 11:15 | _Hackathon continued - With instructor support_                                  | Balig Panossian & Paidamoyo Mataranyika |
 | 12:30 | Lunch                                                                            |                                         |
