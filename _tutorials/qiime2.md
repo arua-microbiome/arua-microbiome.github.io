@@ -101,69 +101,13 @@ When a base falls below Q20 it can introduce false sequence variants, so we norm
 >```
 >For the posiion in ```POS```, ```%low``` indicates the fraction of bases under Q20, while ```%high``` indicates the fraction of bases over Q30. Although somewhat arbitrary, we want to pick a position to truncate at where we maximise accuracy - this could be 235 across all files, for example.
 
+## 4 · Where Is Genetic Data Stored?
 
-## 4 · “Do my paired files really match?”
+Genetic data is typically stored across three main locations: local and institutional systems, high-performance computing (HPC) environments, and cloud-based storage. On local machines and institutional servers, raw sequencing outputs like .fastq.gz and .bam files are organised by project, sample, date, and run ID for easy retrieval and provenance tracking. HPC systems often employ parallel file systems such as Lustre or GPFS to store large intermediate files and QIIME 2 artifacts (.qza, .qzv), with quotas and structured directories ensuring efficient and fair use. Cloud-based storage platforms like Amazon S3 or Google Cloud Storage offer scalable solutions for ongoing projects, supporting automated dataset archiving through versioning and lifecycle policies.
 
-This section checks that your paired-end FASTQ files truly match, which is essential before you run any microbiome pipeline like QIIME 2 or DADA2. Each pair of files—one forward read file (*_R1.fastq.gz) and one reverse read file (*_R2.fastq.gz) should contain the same number of reads, and those reads should be from the same DNA fragments. If the files get out of sync (due to download errors, interruptions, or corrupted files), your pipeline will fail or produce misleading results.
+Beyond private and institutional repositories, genetic data is commonly deposited in public archives to support transparency and reuse. The International Nucleotide Sequence Database Collaboration (INSDC) integrates the NCBI Sequence Read Archive (SRA), the European Nucleotide Archive (ENA), and the DNA Data Bank of Japan (DDBJ), providing global infrastructure for raw and processed sequencing data. Secondary and domain-specific archives like MG-RAST, Qiita, and Galaxy Data Libraries cater to metagenomics and microbiome studies, offering both storage and analysis pipelines. Effective data management requires integrating metadata (e.g., sample descriptors, barcodes), adhering to standard file formats (.fastq.gz, .bam, .qza/.qzv), setting access permissions, and ensuring reproducibility, for example through QIIME 2’s embedded provenance tracking.
 
-> This compares the number of reads in each file. ```zcat``` unzips the .fastq.gz file directly in memory. ```wc -l``` counts the total number of lines. FASTQ files use 4 lines per read, so dividing by 4 gives you the read count.
->```bash
->echo "R1: $(($(zcat GC1GC1_R1.fastq.gz | wc -l)/4))   R2: $(($(zcat GC1GC1_R2.fastq.gz | wc -l)/4))"
->```
-
-> This checks that the read IDs match between files. ```sed -n '1~4p'``` pulls out every 4th line starting from line 1 (the read headers). ```cut -d' ' -f1``` trims each header to just the read ID, ignoring barcode info. ```paste``` prints them side by side so you can compare them easily.
->```bash
->paste \
->  <(zcat GC1GC1_R1.fastq.gz | sed -n '1~4p' | cut -d' ' -f1 | head -5) \
->  <(zcat GC1GC1_R2.fastq.gz | sed -n '1~4p' | cut -d' ' -f1 | head -5)
->```
-
-## 5 · Where Is Genetic Data Stored?
-
-Genetic data can reside in three main locations, each serving different needs from private analysis to public archiving:
-
-### Local and Institutional Storage  
-- **File Systems on Local Machines**  
-  - Raw sequencing outputs (e.g. `.fastq.gz`, `.bam`) are typically stored on laboratory workstations or servers.  
-  - Organise by project, sample, date and run ID to facilitate retrieval and provenance tracking.  
-- **High-Performance Computing (HPC) Storage**  
-  - Shared parallel file systems (e.g. Lustre, GPFS) hold large QIIME 2 artifacts (`.qza`, `.qzv`) and intermediate files.  
-  - Quotas and directory hierarchies ensure fair resource usage and data integrity.  
-- **Cloud-Based File Stores**  
-  - Object storage (e.g. Amazon S3, Google Cloud Storage) provides scalable capacity for active projects.  
-  - Versioning and lifecycle policies can automate archiving of old datasets.  
-
-### Public Repositories and Data Archives  
-- **International Nucleotide Sequence Database Collaboration (INSDC)**  
-  - Consortium of NCBI SRA (USA), European Nucleotide Archive (ENA, Europe), and DNA Data Bank of Japan (DDBJ).  
-- **Sequence Read Archive (SRA, NCBI)**  
-  - Largest repository for high-throughput sequencing data, storing both raw reads and alignment information.  
-  - Data mirrored to cloud platforms (e.g. AWS Open Data) for efficient downloading and analysis.  
-- **European Nucleotide Archive (ENA)**  
-  - Maintains its own instance of SRA under INSDC guidelines; preferred for submissions from Europe.  
-- **DNA Data Bank of Japan (DDBJ)**  
-  - Japanese node of the INSDC; accepts depositions from Asian and Pacific research groups.  
-
-### Domain-Specific and Secondary Archives  
-- **MG-RAST (Metagenomics RAST Server)**  
-  - Automated analysis pipelines with public access to annotated metagenomes.  
-- **Qiita**  
-  - Collaborative platform for microbiome studies; stores both sequence data and processed feature tables with associated metadata.  
-- **Galaxy Data Libraries**  
-  - Community-curated repositories within Galaxy instances, facilitating reproducible workflows.  
-
-### Key Considerations for Data Storage  
-- **Metadata Integration**  
-  - Always accompany raw data with metadata tables (e.g. sample descriptors, barcodes, experimental conditions).  
-- **File Formats and Compression**  
-  - Use `.fastq.gz` for raw reads; `.bam` for alignments; QIIME 2’s `.qza`/`.qzv` for processed artifacts.  
-- **Access and Permissions**  
-  - Define appropriate access levels: private projects vs. publicly released datasets (often mandated by funders/journals).  
-- **Provenance and Reproducibility**  
-  - Leverage QIIME 2’s built-in provenance tracking to embed processing history within `.qza` files.  
-
-
-## 4 · BLAST searches
+## 5 · BLAST searches
 
 If you’ve ever used BLAST (Basic Local Alignment Search Tool), you know the basic idea: you give it a DNA or protein sequence, and it compares that sequence to a reference database to find the best matches. It reports which known sequences are most similar, how long the matching region is, and how confident the match is. This is the foundation of how we assign names or functions to unknown sequences.
 
