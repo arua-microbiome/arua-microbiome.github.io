@@ -147,15 +147,20 @@ First we must load the necessary anaconda3 python module on the CHPC:
 
 We will be using the packages set up in the available conda environments on the CHPC. Each time we start working with Qiime and **every time we switch node**, we will want to load up the environments with the following command:
 
-```bash
-conda activate /apps/chpc/bio/anaconda3-2020.02/envs/qiime2-amplicon-2024.5
-```
+>```bash
+>conda activate /apps/chpc/bio/anaconda3-2020.02/envs/qiime2-amplicon-2024.5
+>```
 
 To request an interactive job on the CHPC, run the following command. This will request 24 cores (an entire computing node) for 4hrs and lets you run your jobs straight into the terminal:
 
-```bash
-qsub -I -l select=1:ncpus=24:mpiprocs=24 -q serial -P WCHPC -l walltime=4:00:00   
-```
+>```bash
+>qsub -I -l select=1:ncpus=24:mpiprocs=24 -q serial -P WCHPC -l walltime=4:00:00   
+>```
+
+Also make a directory that you can store your outputs in:
+>```bash
+>mkdir wednesday_outputs
+>```
 
 # QIIME2
 
@@ -187,7 +192,7 @@ sample-2      $PWD/some/filepath/sample2_R1.fastq
 >```bash
 >time qiime tools import \
 >  --type 'SampleData[PairedEndSequencesWithQuality]' \
->  --input-path wednesday_data/wednesday_manifest.tsv \
+>  --input-path /mnt/lustre/groups/WCHPC/wednesday_data/wednesday_manifest.tsv \
 >  --output-path wednesday_outputs/demux.qza \
 >  --input-format PairedEndFastqManifestPhred33V2
 >```
@@ -278,7 +283,7 @@ There are two steps to taxonomic classification: [training the classifier](https
 >
 >```bash
 >time qiime feature-classifier classify-sklearn \
->  --i-classifier wednesday_data/silva-138-99-nb-classifier.qza \
+>  --i-classifier /mnt/lustre/groups/WCHPC/wednesday_data/silva-138-99-nb-classifier.qza \
 >  --i-reads wednesday_outputs/rep-seqs-dada2.qza \
 >  --o-classification wednesday_outputs/taxonomy.qza
 >```
@@ -306,8 +311,8 @@ Once your ASV table has been generated, it needs to be connected to your sample 
 > ```bash
 > qiime feature-table summarize \
 >  --i-table wednesday_outputs/table-dada2.qza \
->  --m-sample-metadata-file wednesday_data/wednesday_metadata.csv \
->  --o-visualization thursday_outputs/table-dada2.qzv
+>  --m-sample-metadata-file /mnt/lustre/groups/WCHPC/wednesday_data/wednesday_metadata.csv \
+>  --o-visualization wednesday_outputs/table-dada2.qzv
 > ```
 > 
 > Output: ```table-dada2.qzv```
@@ -317,8 +322,8 @@ Once your ASV table has been generated, it needs to be connected to your sample 
 > qiime taxa barplot \
 >  --i-table wednesday_outputs/table-dada2.qza \
 >  --i-taxonomy wednesday_outputs/taxonomy.qza \
->  --m-metadata-file wednesday_data/wednesday_metadata.tsv \
->  --o-visualization thursday_outputs/taxa-bar-plots.qzv
+>  --m-metadata-file /mnt/lustre/groups/WCHPC/wednesday_data/wednesday_metadata.tsv \
+>  --o-visualization wednesday_outputs/taxa-bar-plots.qzv
 >```
 >
 > Output: ```taxa-bar-plots.qzv```
@@ -334,7 +339,7 @@ Looking at the the ```taxonomy.qzv``` file using https://view/qiime2.org We can 
 >  --i-table wednesday_outputs/table-dada2.qza \
 >  --i-taxonomy wednesday_outputs/taxonomy.qza \
 >  --p-exclude mitochondria,chloroplast \
->  --o-filtered-table thursday_outputs/table-dada2-filtered.qza
+>  --o-filtered-table wednesday_outputs/table-dada2-filtered.qza
 >```
 >
 >Output: ```table-dada2-filtered.qza```
@@ -346,7 +351,7 @@ Looking at the the ```taxonomy.qzv``` file using https://view/qiime2.org We can 
 >  --i-sequences wednesday_outputs/rep-seqs-dada2.qza \
 >  --i-taxonomy wednesday_outputs/taxonomy.qza \
 >  --p-exclude mitochondria,chloroplast \
->  --o-filtered-sequences thursday_outputs/rep-seqs-dada2-filtered.qza
+>  --o-filtered-sequences wednesday_outputs/rep-seqs-dada2-filtered.qza
 >```
 >
 >Output: ```rep-seqs-dada2-filtered.qza```
@@ -357,8 +362,8 @@ Looking at the the ```taxonomy.qzv``` file using https://view/qiime2.org We can 
 >qiime taxa barplot \
 >  --i-table thursday_outputs/table-dada2-filtered.qza \
 >  --i-taxonomy wednesday_outputs/taxonomy.qza \
->  --m-metadata-file wednesday_data/wednesday_metadata.tsv \
->  --o-visualization thursday_outputs/taxa-bar-plots-filtered.qzv
+>  --m-metadata-file /mnt/lustre/groups/WCHPC/wednesday_data/wednesday_metadata.tsv \
+>  --o-visualization wednesday_outputs/taxa-bar-plots-filtered.qzv
 >```
 >
 >Output: ```taxa-bar-plots-filtered.qzv```
