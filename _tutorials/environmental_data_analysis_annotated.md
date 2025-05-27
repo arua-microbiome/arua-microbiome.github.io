@@ -4,31 +4,23 @@ excerpt: "Metagenome-associated environmental data exploration"
 layout: single
 mathjax: true
 author: "Paida Mataranyika"
-
 ---
-By Paida Mataranyika
-{% include toc %}
+
+By Paida Mataranyika {% include toc %}
+
+# Download the data:
+Click here to download the data: [Data File](../../assets/)
 
 # Exploring Environmental Data: Relationships and Visualisation
 
-Take a look at the environmental data collected. Could we derive relationships or interactions based on the data?
+Take a look at the environmental data collected. Could we derive relationships or interactions based on the data? To do this, we will begin by loading the necessary packages.
 
 ### Load Required Packages
 
-```r
-# Check if 'ggvenn' package is installed; if not, install and then load it
-if (!require(ggvenn)) install.packages("ggvenn")
-library(ggvenn)
+``` r
 
 # Install Bioconductor if not already installed and use it to install genomic annotation packages
 install.packages("Bioconductor")
-if (!require("BiocManager", quietly = TRUE)) install.packages("BiocManager")
-library("BiocManager")
-BiocManager::install(c("GenomicFeatures", "AnnotationDbi"))
-
-# Install and load 'VennDiagram' for creating Venn diagrams
-if (!require(VennDiagram)) install.packages("VennDiagram")
-library(VennDiagram)
 
 # Install and load 'tidyverse', a collection of R packages for data manipulation and visualization
 if (!require(tidyverse)) install.packages("tidyverse")
@@ -46,13 +38,19 @@ install.packages("gtable")  # For manipulating 'ggplot2' graphic objects
 library("gtable")
 library(dplyr)
 library(conflicted)
+
+# Install and load clustering tools
+if (!require(cluster)) install.packages("cluster")
+library(cluster)
 ```
 
 ### Load and Inspect Environmental Data
 
-```r
+Loading and inspecting the data is a critical first step. It allows us to ensure data is loaded correctly, to filter unnecessary and missing data, to understand the structure and data types, and to summarize the data.
+
+``` r
 # Read data from CSV and filter out rows with empty site names
-data <- read.csv("refined_metadata.csv")
+data <- read.csv("../data/environmental_metadata.csv")
 refined_metadata <- data %>% filter(site_name != "")
 
 # Display structure of the dataset
@@ -76,7 +74,9 @@ refined_metadata %>%
 
 ### Visualise Crop Rotation Distribution
 
-```r
+We visualise crop rotation distribution in the script to gain a clear and immediate understanding of how crop rotation practices are spread across the data set. This section predominantly sets out to understand or paint a picture (literally) to understand category prevalence.
+
+``` r
 # Create a bar plot showing the distribution of 'crop_rotation_primary_y0'
 refined_metadata %>%
   count(crop_rotation_primary_y0) %>%
@@ -88,7 +88,7 @@ refined_metadata %>%
 
 ### Wheat Type by Soil Texture
 
-```r
+``` r
 # Group data by crop rotation and soil texture and count observations
 # Create a grouped bar plot to visualize the relationship
 refined_metadata %>%
@@ -101,7 +101,9 @@ refined_metadata %>%
 
 ### Chi-Square Test for Associations
 
-```r
+The Chi-square test helps validate observed patterns by determining whether there is a statistically significant association or relationship between two categorical variables.
+
+``` r
 # Create a contingency table between crop rotation and take-all disease visibility
 contingency_table <- table(refined_metadata$crop_rotation_primary_y0, refined_metadata$takeall_seen)
 
@@ -115,7 +117,9 @@ chisq.test(contingency_table, simulate.p.value = TRUE, B = 10000)
 
 ### Convert Categorical Variables to Factors
 
-```r
+This step sets the data in a format that R can compute- factors. This prevents misinterpretation and enables us to actually plot the data.
+
+``` r
 # Convert several categorical variables to factors for analysis
 refined_metadata <- refined_metadata %>%
   mutate(
@@ -128,10 +132,10 @@ refined_metadata <- refined_metadata %>%
 
 ### Clustering Analysis
 
-```r
-# Install and load clustering tools
-if (!require(cluster)) install.packages("cluster")
-library(cluster)
+By performing clustering analysis we can explore natural groupings or patterns in the environmental data that might not be obvious through basic summaries or visualisations. Essentially it reveals natural groupings that can guide further investigation and improve understanding. Other cluster options are hierarchical and visualisations can be done via PCA.
+
+``` r
+
 
 # Convert categorical variables into a one-hot encoded matrix
 refined_metadata_encoded <- model.matrix(~ crop_rotation_primary_y0 + 
