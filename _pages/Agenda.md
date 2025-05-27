@@ -13,8 +13,8 @@ You can access the presentations for the week from the link to this [Google Driv
 |-------|---------------------------------------------------------------------------------------|-----------------------------------| 
 | 8:00  | Register and Mingle                                                                   |                                   |
 | 8:30  | **Introductory Talks**                                                                |                                   |
-|       | Title TBD                                                                             | Prof. Sibusiso Moyo               |
-|       | Title TBD                                                                             | Prof. Tom Bell                    |
+|       | Introduction to the Workshop                                                          | Prof. Sibusiso Moyo               |
+|       | Introduction to the Imperial Global Hub                                              | Prof. Sarah Fidler                |
 | 9:00  | The Promise of Microbial Communities for Agricultural Applications                    | Prof. Olubukola Oluranti Babalola |
 | 9:25  | Ecology and Evolution of the Microbiome                                               | Prof. Tom Bell                    |
 | 9:50  | Engineering Agricultural Microbiomes using Ecology and Evolution                      | Prof. Samraat Pawar               |
@@ -74,9 +74,10 @@ You can access the presentations for the week from the link to this [Google Driv
 | Time  | Event                                                                            | Speaker/facilitator                     | 
 |-------|----------------------------------------------------------------------------------|-----------------------------------------| 
 | 8:30  | Hackathon: _How do lifestyle food practices influence the human gut microbiome?_ | George Kalogiannis                      |
-| 10:30 | Coffee/Tea Break                                                                 |                                         |
-| 11:00 | _Hackathon continued - With instructor support_                                  | Balig Panossian & Paidamoyo Mataranyika |
+| 10:00 | Seminar: _Ask a science journalist _                                             |  Sarah Wild                             |
+| 11:00 | Coffee/Tea Break                                                                 |                                         |
+| 11:15 | _Hackathon continued - With instructor support_                                  | Balig Panossian & Paidamoyo Mataranyika |
 | 12:30 | Lunch                                                                            |                                         |
-| 14:00 | Hackathon Presentations                                                          |                                         |
+| 13:30 | Hackathon Wrap-up and Presentations                                                          |                                         |
 | 15:00 | Discussion session: _Going beyond metagenomics and diversity analyses_           |                                         |
 | 16:00 | End of day wrap-up                                                               |                                         | 
