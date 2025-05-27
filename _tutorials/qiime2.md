@@ -145,22 +145,16 @@ First we must load the necessary anaconda3 python module on the CHPC:
 >module load chpc/python/anaconda3-2020.02
 >```
 
-To make installations, the CHPC requires us to ssh to a node with internet connection:
-
->```bash
->ssh chpclic1
->```
-
 We will be using the packages set up in the available conda environments on the CHPC. Each time we start working with Qiime and **every time we switch node**, we will want to load up the environments with the following command:
 
 ```bash
 conda activate /apps/chpc/bio/anaconda3-2020.02/envs/qiime2-amplicon-2024.5
 ```
 
-To request an interactive job on the CHPC, run the following command. This will request 24 cores (an entire computing node) for 3hrs and lets you run your jobs straight into the terminal:
+To request an interactive job on the CHPC, run the following command. This will request 24 cores (an entire computing node) for 4hrs and lets you run your jobs straight into the terminal:
 
 ```bash
-qsub -I -l select=1:ncpus=24:mpiprocs=24 -q serial -P WCHPC -l walltime=3:00:00   
+qsub -I -l select=1:ncpus=24:mpiprocs=24 -q serial -P WCHPC -l walltime=4:00:00   
 ```
 
 # QIIME2
@@ -316,7 +310,7 @@ Once your ASV table has been generated, it needs to be connected to your sample 
 >  --o-visualization thursday_outputs/table-dada2.qzv
 > ```
 > 
-> Output: ```table-dada2.qzv``` [View](https://view.qiime2.org/?src=) \| [Download]()
+> Output: ```table-dada2.qzv```
 
 > To visualise taxonomic composition by group or treatment:
 >```bash
@@ -327,7 +321,7 @@ Once your ASV table has been generated, it needs to be connected to your sample 
 >  --o-visualization thursday_outputs/taxa-bar-plots.qzv
 >```
 >
-> Output: ```taxa-bar-plots.qzv``` [View](https://view.qiime2.org/?src=) \| [Download]()
+> Output: ```taxa-bar-plots.qzv```
 
 # Filtering contaminants
 Sequencing from soil or root material often includes host DNA like mitochondria or chloroplasts. These non-microbial sequences can obscure patterns in microbial community composition and inflate diversity estimates. Filtering out these contaminants is a standard practice in microbiome workflows, especially when studying plant-associated microbes. This helps ensure that the dataset reflects only the true microbial community of interest.
@@ -343,7 +337,7 @@ Looking at the the ```taxonomy.qzv``` file using https://view/qiime2.org We can 
 >  --o-filtered-table thursday_outputs/table-dada2-filtered.qza
 >```
 >
->Output: ```table-dada2-filtered.qza``` [View](https://view.qiime2.org/?src=) \| [Download]()
+>Output: ```table-dada2-filtered.qza```
 
 
 >Then remove those same taxa from the actual DNA sequences of the ASVs, ensuring both abundance data and sequence data are clean for downstream analysis.
@@ -355,7 +349,7 @@ Looking at the the ```taxonomy.qzv``` file using https://view/qiime2.org We can 
 >  --o-filtered-sequences thursday_outputs/rep-seqs-dada2-filtered.qza
 >```
 >
->Output: ```rep-seqs-dada2-filtered.qza``` [View](https://view.qiime2.org/?src=) \| [Download]()
+>Output: ```rep-seqs-dada2-filtered.qza```
 
 
 >Since we have altered the qza file we can create a new bar plots:
@@ -367,7 +361,7 @@ Looking at the the ```taxonomy.qzv``` file using https://view/qiime2.org We can 
 >  --o-visualization thursday_outputs/taxa-bar-plots-filtered.qzv
 >```
 >
->Output: ```taxa-bar-plots-filtered.qzv``` [View](https://view.qiime2.org/?src=) \| [Download]()
+>Output: ```taxa-bar-plots-filtered.qzv```
 
 
 
