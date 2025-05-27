@@ -76,38 +76,13 @@ Before you begin any analysis, it’s important to check that your files actuall
 >done
 >```
 
-## 3 · Checking read quality with Q-scores
-Sequencers give every base a Phred quality score (Q) that converts machine‐signal strength into an error estimate. In Illumina-style short read sequencing, the machine builds each read one base at a time and each round of chemical incorporation is called a cycle. Looking at per-cycle numbers lets you spot where quality begins to drop off toward the end of the reads, and lets you set the number you wish to truncate the reads at:
-
-| Score |	Error rate | Meaning |
-| --- | --- | --- |
-| Q20	| 1 error in 100 bases (99% accurate) |	Acceptable but starting to get noisy |
-| Q30	| 1 error in 1000 bases (99.9% accurate)	| Clean data - the Illumina gold standard |
-
-When a base falls below Q20 it can introduce false sequence variants, so we normally trim reads where Q20/Q30 statistics start to degrade.
-
-> The conda package ```seqtk``` provides useful commands for inspecting fastq base quality scores. This command summarises the quality scores of each base:
->```bash
->seqtk fqchk GC1GC1_R1.fastq.gz
->```
->
->You will see output like this:
->```
->POS  #bases  %A  %C  %G  %T  %N  avgQ  errQ  %low  %high
->ALL  956250  26.7 19.3 35.1 18.9 0.0 35.2 19.3 5.5 94.5
->1    3825    ...   ...  ...  ... 0.0 31.3 ...  10.3 89.7
->⋮
->250  3825    ...   ...  ...  ... 0.0 28.4 ...  22.0 74.0
->```
->For the posiion in ```POS```, ```%low``` indicates the fraction of bases under Q20, while ```%high``` indicates the fraction of bases over Q30. Although somewhat arbitrary, we want to pick a position to truncate at where we maximise accuracy - this could be 235 across all files, for example.
-
-## 4 · Where Is Genetic Data Stored?
+## 3 · Where Is Genetic Data Stored?
 
 Genetic data is typically stored across three main locations: local and institutional systems, high-performance computing (HPC) environments, and cloud-based storage. On local machines and institutional servers, raw sequencing outputs like .fastq.gz and .bam files are organised by project, sample, date, and run ID for easy retrieval and provenance tracking. HPC systems often employ parallel file systems such as Lustre or GPFS to store large intermediate files and QIIME 2 artifacts (.qza, .qzv), with quotas and structured directories ensuring efficient and fair use. Cloud-based storage platforms like Amazon S3 or Google Cloud Storage offer scalable solutions for ongoing projects, supporting automated dataset archiving through versioning and lifecycle policies.
 
 Beyond private and institutional repositories, genetic data is commonly deposited in public archives to support transparency and reuse. The International Nucleotide Sequence Database Collaboration (INSDC) integrates the NCBI Sequence Read Archive (SRA), the European Nucleotide Archive (ENA), and the DNA Data Bank of Japan (DDBJ), providing global infrastructure for raw and processed sequencing data. Secondary and domain-specific archives like MG-RAST, Qiita, and Galaxy Data Libraries cater to metagenomics and microbiome studies, offering both storage and analysis pipelines. Effective data management requires integrating metadata (e.g., sample descriptors, barcodes), adhering to standard file formats (.fastq.gz, .bam, .qza/.qzv), setting access permissions, and ensuring reproducibility, for example through QIIME 2’s embedded provenance tracking.
 
-## 5 · BLAST searches
+## 4 · BLAST searches
 
 If you’ve ever used BLAST (Basic Local Alignment Search Tool), you know the basic idea: you give it a DNA or protein sequence, and it compares that sequence to a reference database to find the best matches. It reports which known sequences are most similar, how long the matching region is, and how confident the match is. This is the foundation of how we assign names or functions to unknown sequences.
 
@@ -167,7 +142,7 @@ The CHPC has a detailed explanation of setting up anaconda and python on the Len
 First we must load the necessary anaconda3 python module on the CHPC:
 
 >```bash
->module load chpc/python/anaconda3-2024.10.1
+>module load chpc/python/anaconda3-2020.02
 >```
 
 To make installations, the CHPC requires us to ssh to a node with internet connection:
@@ -176,7 +151,7 @@ To make installations, the CHPC requires us to ssh to a node with internet conne
 >ssh chpclic1
 >```
 
-We will be using the packages set up in the available conda environments on the CHPC. Each time we start working with Qiime, we will want to load up the environments with the following command:
+We will be using the packages set up in the available conda environments on the CHPC. Each time we start working with Qiime and **every time we switch node**, we will want to load up the environments with the following command:
 
 ```bash
 conda activate /apps/chpc/bio/anaconda3-2020.02/envs/qiime2-amplicon-2024.5
@@ -228,7 +203,16 @@ sample-2      $PWD/some/filepath/sample2_R1.fastq
 >Output: ```demux.qza```
 
 ## Examine the quality of the data
-Before analyzing the sequences, it's important to assess their quality like we did before in the [Genetics Primer](#3--checking-read-quality-with-q-scores). A quality check using QIIME2 allows us to visualize how reliable each base position is across all reads. If certain positions show low quality, we can trim them off. 
+Before analyzing the sequences, it's important to assess their quality. A quality check using QIIME2 allows us to visualize how reliable each base position is across all reads. If certain positions show low quality, we can trim them off. 
+
+Sequencers give every base a Phred quality score (Q) that converts machine‐signal strength into an error estimate. In Illumina-style short read sequencing, the machine builds each read one base at a time and each round of chemical incorporation is called a cycle. Looking at per-cycle numbers lets you spot where quality begins to drop off toward the end of the reads, and lets you set the number you wish to truncate the reads at:
+
+| Score |	Error rate | Meaning |
+| --- | --- | --- |
+| Q20	| 1 error in 100 bases (99% accurate) |	Acceptable but starting to get noisy |
+| Q30	| 1 error in 1000 bases (99.9% accurate)	| Clean data - the Illumina gold standard |
+
+When a base falls below Q20 it can introduce false sequence variants, so we normally trim reads where Q20/Q30 statistics start to degrade.
 
 >We can view the characteristics of the dataset and the quality scores of the data by creating a QIIME2 visualization artifact.
 >
@@ -240,7 +224,7 @@ Before analyzing the sequences, it's important to assess their quality like we d
 >
 > Time to run: 1 minute
 >
->Output: * ```demux.qzv``` [View](https://view.qiime2.org/?src=) \| [Download]()
+>Output: * ```demux.qzv```
 
 >This will create a visualization file. You can download the file to your local computer. From a new terminal window on your local computer copy the file:
 >
@@ -278,8 +262,8 @@ For the next step you can select either the Dada2 method or the Deblur method. S
 >Time to run: 35 minutes
 >
 >Output:
-> - ```rep-seqs-dada2.qza```: These are your representative sequences: the exact, cleaned-up ASV sequences found in your dataset. They are matched against reference databases later (like SILVA or Greengenes) to assign taxonomy. [View](https://view.qiime2.org/?src=) \| [Download]()
-> - ```table-dada2.qzv```: This is your feature table, stored in QIIME 2’s .qza format. Internally, it follows the BIOM (Biological Observation Matrix) standard. It records how many times each ASV appears in each sample, similar to a species count table. This is the key file you’ll use for diversity analysis, statistical testing, and visualisation. [View](https://view.qiime2.org/?src=) \| [Download]()
+> - ```rep-seqs-dada2.qza```: These are your representative sequences: the exact, cleaned-up ASV sequences found in your dataset. They are matched against reference databases later (like SILVA or Greengenes) to assign taxonomy.
+> - ```table-dada2.qzv```: This is your feature table, stored in QIIME 2’s .qza format. Internally, it follows the BIOM (Biological Observation Matrix) standard. It records how many times each ASV appears in each sample, similar to a species count table. This is the key file you’ll use for diversity analysis, statistical testing, and visualisation. 
 
 ### Option 2: Deblur (Faster)
 > Deblur only uses forward reads at this time. You could get around this by merging your data with an outside tool like [BBmerge](http://jgi.doe.gov/data-and-tools/bbtools/bb-tools-user-guide/bbmerge-guide/) then importing your data as single ended. For simplicity, in this tutorial we will just use the forward reads.
@@ -296,10 +280,9 @@ For the next step you can select either the Dada2 method or the Deblur method. S
 >
 > Output: Okay, we have just done the hard part of amplicon sequence analysis.  At this point we have our BIOM count table, the representative sequence variants and a stats file for Deblur.
 >
-> - ```deblurresults/representative_sequences.qza```: A list of the representative sequences (representative_sequences.qza), which are the actual DNA sequences of the ASVs. [View](https://view.qiime2.org/?src=) \| [Download]()
-> - ```deblurresults/stats.qza```: A statistics file which logs how many reads passed quality control and how many were removed at each filtering step. [View](https://view.qiime2.org/?src=) \| [Download]()
+> - ```deblurresults/representative_sequences.qza```: A list of the representative sequences (representative_sequences.qza), which are the actual DNA sequences of the ASVs. 
+> - ```deblurresults/stats.qza```: A statistics file which logs how many reads passed quality control and how many were removed at each filtering step. 
 > - ```deblurresults/table.qza```: The same type of table as the one outputted by Dada2 above.
-[View](https://view.qiime2.org/?src=) \| [Download]()
 
 
 We have just called sequence variants two different ways. In a real workflow you would only use one method.  From here on out we will use the output of dada2 only: ```table-dada2.qza```.  
@@ -334,7 +317,7 @@ There are two steps to taxonomic classification: [training the classifier](https
 >
 >Time to run: 1 minute
 >
->Output: ```taxonomy.qza``` [View](https://view.qiime2.org/?src=) \| [Download]()
+>Output: ```taxonomy.qza```
 
 
 >Create a bar plot visualization of the taxonomy data:
@@ -346,7 +329,7 @@ There are two steps to taxonomic classification: [training the classifier](https
 >```
 >Time to run: 1 minute
 >
->Output: ```taxa-bar-plots.qzv``` [View](https://view.qiime2.org/?src=) \| [Download]()
+>Output: ```taxa-bar-plots.qzv``` 
 
 
 # Summary
