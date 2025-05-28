@@ -214,35 +214,66 @@ Beta diversity compares microbial composition across samples. It helps you answe
 
 QIIME 2 calculates these distances and uses techniques like Principal Coordinates Analysis (PCoA) to visualize differences.
 
-# Ordination and Visualization
+# Statistical Analysis of Diversity
 
-Ordination is a dimensionality reduction technique that enables the visualization of sample differences. QIIME has a plugin called emperor that calculates a Bray-Curtis dissimilarity matrix and uses principal coordinates analysis (PCoA). you could also export the pcoa data and plot it yourself in the package of your choice.
+It's time to move the data outputs into the ARUA directory we were working in on Tuesday. Place the data into the ```data``` directory, we will be running our code from the ```code``` directory. You can bring the data onto your local machine using ```sftp```.
 
-> ```bash
->qiime emperor plot \
->  --i-pcoa core-diversity/bray_curtis_pcoa_results.qza \
->  --m-metadata-file /project/microbiome_workshop/amplicon/data/mapping.txt \
->  --o-visualization pcoa-visualization.qzv
+>```r
+># Load libraries
+>library(dplyr)
+>library(vegan)
+>library(readr)
+>set.seed(719885)
+>
+># Load data
+>metadata <- read.csv("wednesday_metadata.tsv", sep = '\t')
+>alpha <- read.csv("alpha-diversity.tsv", sep = '\t')
+>colnames(alpha)[1] <- "sample.id"
+>
+>distance_matrix <- read.delim("distance-matrix.tsv", row.names = 1, check.names = FALSE)
+>
+># Merge metadata and alpha diversity
+>metadata <- metadata %>%
+>  filter(Genotype != "Soil") %>%
+>  inner_join(alpha, by = c("sample.id"))
+>
+>
+># Convert to factors
+>metadata$Genotype <- factor(metadata$Genotype)
+>metadata$Experiment <- factor(metadata$Experiment)
+>
+># Linear model
+>lm_shannon <- lm(shannon_entropy ~ Genotype + Experiment, data = metadata)
+>summary(lm_shannon)
+>
+># Match order
+>valid_ids <- intersect(rownames(distance_matrix), metadata$sample.id)
+>metadata <- metadata %>% filter(sample.id %in% valid_ids)
+>distance_matrix <- distance_matrix[valid_ids, valid_ids]
+>metadata <- metadata[match(rownames(distance_matrix), metadata$sample.id), ]
+>
+># Create grouped genotype variable
+>metadata <- metadata %>%
+>  mutate(GenotypeGroup = case_when(
+>    Genotype == "phr1" ~ "PHR1",
+>    Genotype == "SPX1/SPX2" ~ "SPX",
+>    TRUE ~ "non_psr"
+>  )) %>%
+>  mutate(GenotypeGroup = factor(GenotypeGroup))
+>
+># Rerun models:
+>
+>## 4.1 Alpha diversity (Shannon)
+>lm_grouped <- lm(shannon_entropy ~ GenotypeGroup + Experiment, data = metadata)
+>summary(lm_grouped)
+>
+>## 4.2 Beta diversity (Bray-Curtis)
+>adonis_grouped <- adonis2(as.dist(distance_matrix) ~ GenotypeGroup + Experiment, data = metadata)
+>print(adonis_grouped)
 >```
->Output:```pcoa-visualization.qzv```
 
 
-# Differential Abundance Analysis
 
-Identifying which microbes are more or less abundant between groups (e.g., treated vs. untreated plants) is crucial. While traditional statistical methods like t-tests aren't suitable for microbiome data (because it's compositional and sparse), specialized tools like **Songbird**, **ANCOM**, or **DESeq2** can model these differences.
-
-As an example, if a plant genotype promotes beneficial microbes that suppress disease, a differential abundance test might identify those beneficial taxa as more abundant in samples from that genotype.
-
-If you are doing an experimental manipulation rather than just observing an environment you will likely have an experimental design with treatments and want to know which bacteria respond to these treatments. The best way to go this is an active area of applied statistics research.
-
-The problem is challenging for several reasons:
-* The data is compositional so the abundance of each taxa affects every other taxa.
-* The data is over-dispersed count data, fitting (arguably) a negative binomial model.
-* The data is sparse and some 0's mean a taxa is not present while other zeros mean an organism is present at a level below the limit of detection for the sequences sampled.
-* Each library is sampled to a different depth so the issue of how to standardize the data comes up (simply dividing by the sum does not work).
-
-**To rarefy or not to rarefy?** It is a common but controversial practice to downsample count data to the lowest count in your dataset to get around the issue of differential sequencing depth. In their paper titled "Waste not want not, why rarifying microbiome data is inadmissible" [McMurdie et al. (2014)](https://doi.org/10.1371/journal.pcbi.1003531) point out that this is a large waste of data and statistical power, and advocate for using differential expression software like DESeq2 that uses special normalizations and a negative binomial distribution to model data. The software uses a generalized linear model so it has a very flexible experimental design interface.  [Weiss et al. (2017)](https://doi.org/10.1186/s40168-017-0237-y) argue that the assumptions underling both the normalization and the distribution used by DEseq2 and other normalization methods are inappropriate for microbiome data. [Ancom](https://dx.doi.org/10.3402%2Fmehd.v26.27663) uses a zero inflated Gaussian model but only allows for simple two-way comparisons not richer statistical models. Gneiss [(paper)](http://doi.org/10.1128/mSystems.00162-16), [(tutorial)](https://forum.qiime2.org/t/gneiss-tutorial/932) is currently the only compositional method available in QIIME2 (support for ANCOM was dropped).  The only thing everyone agrees on is that agrees you can't just do a T-test.
-{: .notice--warning}
 
 
 
