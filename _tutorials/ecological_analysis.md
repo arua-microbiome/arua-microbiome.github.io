@@ -227,9 +227,9 @@ It's time to move the data outputs into the ARUA directory we were working in on
 >set.seed(719885)
 >
 ># Load data
->metadata <- read.delim("../data/wednesday_metadata.tsv")
->alpha <- read.delim("../data/alpha-diversity.tsv")
->distance_matrix <- read.delim("distance-matrix.tsv", row.names = 1, check.names = FALSE)
+>metadata <- read.csv("../data/wednesday_metadata.tsv", sep = "\t")
+>alpha <- read.csv("../data/alpha-diversity.tsv", sep = "\t")
+>distance_matrix <- read.csv("distance-matrix.tsv", sep = "\t")
 >
 ># Prepare and merge metadata
 >colnames(alpha)[1] <- "sample.id"
