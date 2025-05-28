@@ -216,7 +216,7 @@ QIIME 2 calculates these distances and uses techniques like Principal Coordinate
 
 # Statistical Analysis of Diversity
 
-It's time to move the data outputs into the ARUA directory we were working in on Tuesday. Place the data into the ```data``` directory, we will be running our code from the ```code``` directory. You can bring the data onto your local machine using ```sftp```.
+It's time to move the data outputs into the ARUA directory we were working in on Tuesday and **open up R**. Place the data into the ```data``` directory, we will be running our code from the ```code``` directory. You can bring the data onto your local machine using ```sftp```.
 
 >```r
 ># Load libraries
