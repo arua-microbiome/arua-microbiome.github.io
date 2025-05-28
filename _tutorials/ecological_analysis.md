@@ -223,52 +223,53 @@ It's time to move the data outputs into the ARUA directory we were working in on
 >library(dplyr)
 >library(vegan)
 >library(readr)
+>library(ggplot2)
 >set.seed(719885)
 >
 ># Load data
->metadata <- read.csv("../data/wednesday_metadata.tsv", sep = '\t')
->alpha <- read.csv("../data/alpha-diversity.tsv", sep = '\t')
->colnames(alpha)[1] <- "sample.id"
->
+>metadata <- read.delim("../data/wednesday_metadata.tsv")
+>alpha <- read.delim("../data/alpha-diversity.tsv")
 >distance_matrix <- read.delim("distance-matrix.tsv", row.names = 1, check.names = FALSE)
 >
-># Merge metadata and alpha diversity
+># Prepare and merge metadata
+>colnames(alpha)[1] <- "sample.id"
+>
 >metadata <- metadata %>%
 >  filter(Genotype != "Soil") %>%
->  inner_join(alpha, by = c("sample.id"))
+>  inner_join(alpha, by = "sample.id") %>%
+>  mutate(
+>    GenotypeGroup = case_when(
+>      Genotype == "phr1" ~ "PHR1",
+>      Genotype == "SPX1/SPX2" ~ "SPX",
+>      TRUE ~ "non_psr"
+>    ),
+>    GenotypeGroup = factor(GenotypeGroup),
+>    Genotype = factor(Genotype),
+>    Experiment = factor(Experiment)
+>  )
 >
-># Convert to factors
->metadata$Genotype <- factor(metadata$Genotype)
->metadata$Experiment <- factor(metadata$Experiment)
->
-># Linear model
->lm_shannon <- lm(shannon_entropy ~ Genotype + Experiment, data = metadata)
->summary(lm_shannon)
->
-># Match order
+># Match sample IDs with distance matrix
 >valid_ids <- intersect(rownames(distance_matrix), metadata$sample.id)
->metadata <- metadata %>% filter(sample.id %in% valid_ids)
 >distance_matrix <- distance_matrix[valid_ids, valid_ids]
->metadata <- metadata[match(rownames(distance_matrix), metadata$sample.id), ]
+>metadata <- metadata %>% filter(sample.id %in% valid_ids) %>%
+>  arrange(factor(sample.id, levels = rownames(distance_matrix)))
 >
-># Create grouped genotype variable
->metadata <- metadata %>%
->  mutate(GenotypeGroup = case_when(
->    Genotype == "phr1" ~ "PHR1",
->    Genotype == "SPX1/SPX2" ~ "SPX",
->    TRUE ~ "non_psr"
->  )) %>%
->  mutate(GenotypeGroup = factor(GenotypeGroup))
+># Alpha diversity model
+>summary(lm(shannon_entropy ~ GenotypeGroup + Experiment, data = metadata))
 >
-># Rerun models:
+># Beta diversity (PERMANOVA)
+>adonis_result <- adonis2(as.dist(distance_matrix) ~ GenotypeGroup + Experiment, data = metadata)
+>print(adonis_result)
 >
->## 4.1 Alpha diversity (Shannon)
->lm_grouped <- lm(shannon_entropy ~ GenotypeGroup + Experiment, data = metadata)
->summary(lm_grouped)
->
->## 4.2 Beta diversity (Bray-Curtis)
->adonis_grouped <- adonis2(as.dist(distance_matrix) ~ GenotypeGroup + Experiment, data = metadata)
->print(adonis_grouped)
+># Plot: Alpha diversity boxplot
+>ggplot(metadata, aes(x = GenotypeGroup, y = shannon_entropy, fill = GenotypeGroup)) +
+>  geom_boxplot(alpha = 0.8) +
+>  labs(title = "Alpha Diversity (Shannon Index)",
+>       x = "Genotype Group",
+>       y = "Shannon Entropy") +
+>  theme_minimal() +
+>  theme(legend.position = "none",
+>        axis.text.x = element_text(angle = 45, hjust = 1))
 >```
 
 
