@@ -163,9 +163,7 @@ As we have seen throughout the day, Qiime ```.qza``` files don't contain data in
 
 ## Beta Diversity: Between-Sample Differences
 
-Beta diversity compares microbial composition across samples. It helps you answer questions like “Do different fertilizers cause different microbial communities?” or “Are microbes in root zones different from those in bulk soil?”
-
-Common metrics include:
+Beta diversity compares microbial composition across samples. It helps you answer questions like “Do different fertilizers cause different microbial communities?” or “Are microbes in root zones different from those in bulk soil?”. Common metrics include:
 
 >**Bray-Curtis Dissimilarity**: Based on differences in counts.
 >This abundance-based metric calculates dissimilarity between two communities based on the counts of shared features.
