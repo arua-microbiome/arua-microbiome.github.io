@@ -102,7 +102,7 @@ Once you’ve generated a rooted phylogenetic tree and cleaned, filtered abundan
 >  --o-visualization thursday_outputs/community-empress-tree-tax.qzv
 >```
 >
->>Output: ```community-empress-tree-tax.qzv```
+>Output: ```community-empress-tree-tax.qzv```
 
 
 # Diversity
