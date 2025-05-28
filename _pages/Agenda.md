@@ -60,7 +60,7 @@ You can access the presentations for the week from the link to this [Google Driv
 
 | Time  | Event                                                                         | Speaker/facilitator                                              | 
 |-------|-------------------------------------------------------------------------------|------------------------------------------------------------------| 
-| 9:00  | Phylogenetics and diversity metrics of microbiomes (practical)                | George Kalogiannis, Paidamoyo Mataranyika & <br> Balig Panossian |
+| 8:30  | Phylogenetics and diversity metrics of microbiomes (practical)                | George Kalogiannis, Paidamoyo Mataranyika & <br> Balig Panossian |
 | 10:30 | Coffee/Tea Break                                                              |                                                                  |
 | 11:00 | Phylogenetics and diversity metrics of microbiomes (practical) - _continued_  | George Kalogiannis, Paidamoyo Mataranyika & <br> Balig Panossian |
 | 12:30 | Lunch                                                                         |                                                                  |
