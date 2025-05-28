@@ -141,7 +141,7 @@ The CHPC has a detailed explanation of setting up anaconda and python on the Len
 
 >First we must load the necessary anaconda3 python module on the CHPC:
 >```bash
->module load chpc/python/anaconda3-2020.02
+>module load chpc/python/anaconda/3-2020.02
 >```
 
 >We will be using the packages set up in the available conda environments on the CHPC. Each time we start working with Qiime and **every time we switch node**, we will want to load up the environments with the following command:
