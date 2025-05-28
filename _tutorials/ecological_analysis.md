@@ -237,7 +237,6 @@ It's time to move the data outputs into the ARUA directory we were working in on
 >  filter(Genotype != "Soil") %>%
 >  inner_join(alpha, by = c("sample.id"))
 >
->
 ># Convert to factors
 >metadata$Genotype <- factor(metadata$Genotype)
 >metadata$Experiment <- factor(metadata$Experiment)
