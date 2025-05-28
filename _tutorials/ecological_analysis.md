@@ -190,6 +190,7 @@ Common metrics include:
 >Output: ```beta-jaccard.qza```
 
 >**UniFrac (weighted/unweighted)**: Measures how phylogenetically different two communities are.
+>
 >a. Unweighted UniFrac
 >```bash
 >qiime diversity beta-phylogenetic \
@@ -217,11 +218,6 @@ QIIME 2 calculates these distances and uses techniques like Principal Coordinate
 
 # Ordination and Visualization
 
-Ordination is a statistical method that reduces complex distance matrices into 2 or 3 dimensions for easier visualization. QIIME 2 uses **Emperor** to create 3D plots of PCoA results. These plots help identify clusters of similar samples, which can reflect treatment effects, environmental conditions, or sample types.
-
-> **What is ordination?**
-> It's a way to simplify and visualize complex data. For example, it helps you see patterns in how samples cluster based on their microbial composition.
-
 Ordination is a dimensionality reduction technique that enables the visualization of sample differences. QIIME has a plugin called emperor that calculates a Bray-Curtis dissimilarity matrix and uses principal coordinates analysis (PCoA). you could also export the pcoa data and plot it yourself in the package of your choice.
 
 > ```bash
@@ -238,8 +234,6 @@ Ordination is a dimensionality reduction technique that enables the visualizatio
 Identifying which microbes are more or less abundant between groups (e.g., treated vs. untreated plants) is crucial. While traditional statistical methods like t-tests aren't suitable for microbiome data (because it's compositional and sparse), specialized tools like **Songbird**, **ANCOM**, or **DESeq2** can model these differences.
 
 As an example, if a plant genotype promotes beneficial microbes that suppress disease, a differential abundance test might identify those beneficial taxa as more abundant in samples from that genotype.
-
-> ⚠️ **Note:** The `gneiss` plugin has been deprecated in recent QIIME 2 versions. Consider using `songbird` or external tools like `ALDEx2` for differential abundance analysis.
 
 If you are doing an experimental manipulation rather than just observing an environment you will likely have an experimental design with treatments and want to know which bacteria respond to these treatments. The best way to go this is an active area of applied statistics research.
 
