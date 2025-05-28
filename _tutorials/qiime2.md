@@ -238,18 +238,19 @@ Sequence variant selection is the slowest step in the tutorial.
 
 ### Dada2
 
+>This code will send a number every single second Dada2 is running, so that your interactive session can stay open:
 >```bash
-> time qiime dada2 denoise-paired \
->   --i-demultiplexed-seqs wednesday_outputs/demux.qza \   # the imported FASTQ data (paired-end reads).
->   --o-table wednesday_outputs/table-dada2 \   # the output file containing the ASV count table.
->   --o-representative-sequences wednesday_outputs/rep-seqs-dada2 \   # the actual DNA sequences of the ASVs.
->   --o-denoising-stats wednesday_outputs/denoising-stats.qza \    # denoising statistics
->   --p-trim-left-f 9 \   # trims 9 bases from the start of each forward/reverse read (e.g. to remove primers).
->   --p-trim-left-r 9 \
->   --p-trunc-len-f 220 \   # truncates reads to 220/200 bases (based on where quality drops off).
->   --p-trunc-len-r 200 \
->   --p-n-threads 24 \   # number of CPU threads to use. Adjust based on your system.
->   --p-n-reads-learn 200000    # number of reads used to learn the error model. You can lower this on small datasets.
+>(qiime dada2 denoise-paired \
+>  --i-demultiplexed-seqs wednesday_outputs/demux.qza \
+>  --o-table wednesday_outputs/table-dada2 \
+>  --o-representative-sequences wednesday_outputs/rep-seqs-dada2 \
+>  --o-denoising-stats wednesday_outputs/denoising-stats.qza \
+>  --p-trim-left-f 9 \
+>  --p-trim-left-r 9 \
+>  --p-trunc-len-f 220 \
+>  --p-trunc-len-r 200 \
+>  --p-n-threads 24 \
+>  --p-n-reads-learn 200000) & pid=$!; i=0; while kill -0 $pid 2>/dev/null; do echo $i; sleep 1; ((i++)); done; wait $pid
 >```
 >
 >Time to run: 35 minutes
