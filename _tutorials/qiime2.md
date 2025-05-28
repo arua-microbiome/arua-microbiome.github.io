@@ -151,7 +151,7 @@ The CHPC has a detailed explanation of setting up anaconda and python on the Len
 
 >To request an interactive job on the CHPC, run the following command. This will request 24 cores (an entire computing node) for 4hrs and lets you run your jobs straight into the terminal:
 >```bash
->qsub -I -l select=1:ncpus=24:mpiprocs=24 -q serial -P WCHPC -l walltime=4:00:00   
+>qsub -I -l select=1:ncpus=24:mpiprocs=24 -P WCHPC -l walltime=4:00:00   
 >```
 
 >Also make a directory that you can store your outputs in:
