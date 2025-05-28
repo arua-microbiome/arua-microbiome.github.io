@@ -3,17 +3,27 @@ title: "Ecological analysis with QIIME2"
 excerpt: "An example workflow using QIIME2 version 2024.2"
 layout: single
 mathjax: true
-author: "George Kalogiannis"
+authors: "George Kalogiannis & Balig Panossian"
 
 ---
-You’ve reached the point in the workflow where you can confidently download raw amplicon reads, clean them up, and generate reliable ASV tables and taxonomic summaries. In other words, you now know what sequences are present and how many of each occur in every sample. The next step is to turn those counts into ecological insight: measuring within-sample diversity, comparing whole communities across treatments, and linking patterns to phylogenetic relationships. The sections that follow introduce the core ecological tools you’ll use—alpha and beta diversity metrics, phylogeny-based distances, and statistical tests that reveal how environmental or experimental factors shape the microbiome.
+
+By George Kalogiannis & Balig Panossian, Designed from the official [QIIME2 tutorials](https://docs.qiime2.org/2024.2/tutorials/)
 {% include toc %}
+
+You’ve reached the point in the workflow where you can confidently inspect amplicon reads, clean them up, and generate reliable ASV tables and taxonomic summaries. In other words, you now know what sequences are present and how many of each occur in every sample. The next step is to turn those counts into ecological insight: measuring within-sample diversity, comparing whole communities across treatments, and linking patterns to phylogenetic relationships. The sections that follow introduce the core ecological tools you’ll use—alpha and beta diversity metrics, phylogeny-based distances, and statistical tests that reveal how environmental or experimental factors shape the microbiome.
 
 # Learning Outcomes
 By the end of this session you will be able to:
 - Compute alpha- and beta-diversity metrics and visualise them in interactive .qzv files
 - Construct a phylogenetic tree and run UniFrac-based ordination and PERMANOVA tests
-- Export QIIME artifacts to R with qiime2R and produce custom ggplot figures
+- Export QIIME artifacts to R with and run statistical analyses on 
+
+# Directories
+Yesterday you worked in the directory called ```wednesday_outputs```. We will be using the files you created for today's ecological analysis and will output files to a directory called ```thursday_outputs```.
+
+>```bash
+>mkdir thursday_outputs
+>```
 
 # Phylogenetics
 
@@ -26,11 +36,11 @@ We begin by using Mafft, which aligns all representative ASV sequences so that h
 
 >```bash
 >qiime alignment mafft \
->  --i-sequences rep-seqs-dada2-filtered.qza \
->  --o-alignment aligned-rep-seqs.qza
+>  --i-sequences wednesday_outputs/rep-seqs-dada2-filtered.qza \
+>  --o-alignment thursday_outputs/aligned-rep-seqs.qza
 >```
 >
->Output: ```aligned-rep-seqs.qza``` [View](https://view.qiime2.org/?src=) \| [Download]()
+>Output: ```aligned-rep-seqs.qza``` 
 
 ## Masking sites
 Masking is the process of removing highly variable, gappy, or uninformative positions from a multiple sequence alignment. These positions often arise from sequencing noise, misalignments, or non-homologous regions, and can distort phylogenetic inference by introducing noise into the tree-building process.
@@ -39,11 +49,11 @@ Masking is the process of removing highly variable, gappy, or uninformative posi
 >
 >```bash
 >qiime alignment mask \
->  --i-alignment aligned-rep-seqs.qza \
->  --o-masked-alignment masked-aligned-rep-seqs.qza
+>  --i-alignment thursday_outputs/aligned-rep-seqs.qza \
+>  --o-masked-alignment thursday_outputs/masked-aligned-rep-seqs.qza
 >```
 >
->Output: ```masked-aligned-rep-seqs.qza``` [View](https://view.qiime2.org/?src=) \| [Download]()
+>Output: ```masked-aligned-rep-seqs.qza```
 
 ## Creating a tree
 FastTree builds a phylogenetic tree from the masked, aligned ASV sequences using an approximate maximum-likelihood method. This tree reflects the evolutionary relationships among ASVs and is essential for phylogeny-based diversity metrics like UniFrac.
@@ -52,22 +62,22 @@ FastTree builds a phylogenetic tree from the masked, aligned ASV sequences using
 >
 >```bash
 > qiime phylogeny fasttree \
->  --i-alignment masked-aligned-rep-seqs.qza \
->  --o-tree unrooted-tree.qza
+>  --i-alignment thursday_outputs/masked-aligned-rep-seqs.qza \
+>  --o-tree thursday_outputs/unrooted-tree.qza
 >```
 >
->Output: ```unrooted-tree.qza``` [View](https://view.qiime2.org/?src=) \| [Download]()
+>Output: ```unrooted-tree.qza```
 
 ## Midpoint rooting
 Rooting the tree defines a starting point for evolutionary comparisons. Since our tree is initially unrooted (no known ancestor), we use midpoint rooting, which places the root at the midpoint of the longest distance between any two tips—giving a balanced view of divergence.
 
 >```bash
 >qiime phylogeny midpoint-root \
->  --i-tree unrooted-tree.qza \
->  --o-rooted-tree rooted-tree.qza
+>  --i-tree thursday_outputs/unrooted-tree.qza \
+>  --o-rooted-tree thursday_outputs/rooted-tree.qza
 > ```
 >
->Output: ```rooted-tree.qza``` [View](https://view.qiime2.org/?src=) \| [Download]()
+>Output: ```rooted-tree.qza``` 
 
 ## Visualisation
 Once you’ve generated a rooted phylogenetic tree and cleaned, filtered abundance data, it’s time to visualise these relationships in an interactive, intuitive way. QIIME 2’s Empress plugin allows you to explore phylogenetic trees alongside sample metadata and taxonomic annotations. This is particularly powerful for understanding not only which taxa are present, but how community shifts map onto the evolutionary history of your organisms.
@@ -80,7 +90,7 @@ Once you’ve generated a rooted phylogenetic tree and cleaned, filtered abundan
 >  --o-visualization thursday_outputs/empress-tree-tax.qzv
 >```
 >
->Output: ```empress-tree-tax.qzv``` [View]() \| [Download]()
+>Output: ```empress-tree-tax.qzv```
 
 >The community-plot command takes things further by integrating the phylogenetic tree, ASV abundance table, sample metadata, and taxonomy. This interactive plot lets you explore which lineages dominate particular samples or treatments, trace shifts in community composition, and highlight specific branches or taxa across groups.
 >```bash
@@ -92,8 +102,7 @@ Once you’ve generated a rooted phylogenetic tree and cleaned, filtered abundan
 >  --o-visualization thursday_outputs/community-empress-tree-tax.qzv
 >```
 >
->>Output: ```community-empress-tree-tax.qzv``` [View]() \| [Download]()
-
+>>Output: ```community-empress-tree-tax.qzv```
 
 
 # Diversity
@@ -113,7 +122,7 @@ Alpha diversity refers to the number and evenness of microbial species in a sing
 >  --o-alpha-diversity thursday_outputs/alpha-observed-features.qza
 >```
 >
->Output: ```alpha-observed-features.qza``` [View]() \| [Download]()
+>Output: ```alpha-observed-features.qza```
 
  
 >**Shannon Diversity Index**: Takes into account both richness and evenness; higher values indicate more diverse communities.
@@ -125,7 +134,7 @@ Alpha diversity refers to the number and evenness of microbial species in a sing
 >  --o-alpha-diversity thursday_outputs/alpha-shannon.qza
 >```
 >
->Output: ```alpha-shannon.qza``` [View]() \| [Download]()
+>Output: ```alpha-shannon.qza```
 
 >**Faith’s Phylogenetic Diversity**: Considers how evolutionarily diverse a community is, using a phylogenetic tree.
 >
@@ -137,7 +146,7 @@ Alpha diversity refers to the number and evenness of microbial species in a sing
 >  --o-alpha-diversity thursday_outputs/alpha-faith-pd.qza
 >```
 >
->Output: ```alpha-faith-pqd.qza``` [View]() \| [Download]()
+>Output: ```alpha-faith-pqd.qza```
 
 
 As we have seen throughout the day, Qiime ```.qza``` files don't contain data in an interpretable format. We thus want to export the alpha diversity metrics into three separate tables, using the ```export``` function.
@@ -158,9 +167,51 @@ Beta diversity compares microbial composition across samples. It helps you answe
 
 Common metrics include:
 
-- **Bray-Curtis Dissimilarity**: Based on differences in counts.
-- **Jaccard Distance**: Based on shared presence/absence of species.
-- **UniFrac (weighted/unweighted)**: Measures how phylogenetically different two communities are.
+### **Bray-Curtis Dissimilarity**: Based on differences in counts.
+>This abundance-based metric calculates dissimilarity between two communities based on the counts of shared features.
+>```bash
+>qiime diversity beta \
+>  --i-table thursday_outputs/table-dada2-filtered.qza \
+>  --p-metric braycurtis \
+>  --o-distance-matrix thursday_outputs/beta-braycurtis.qza
+>```
+>
+>Output: ```beta-braycurtis.qza```
+
+### **Jaccard Distance**: Based on shared presence/absence of species.
+>This metric compares samples based only on presence or absence of features, ignoring their abundance.
+>```bash
+>qiime diversity beta \
+>  --i-table thursday_outputs/table-dada2-filtered.qza \
+>  --p-metric jaccard \
+>  --o-distance-matrix thursday_outputs/beta-jaccard.qza
+>```
+>
+>Output: ```beta-jaccard.qza```
+
+### **UniFrac (weighted/unweighted)**: Measures how phylogenetically different two communities are.
+>a. Unweighted UniFrac
+>```bash
+>qiime diversity beta-phylogenetic \
+>  --i-table thursday_outputs/table-dada2-filtered.qza \
+>  --i-phylogeny thursday_outputs/rooted-tree.qza \
+>  --p-metric unweighted_unifrac \
+>  --o-distance-matrix thursday_outputs/beta-unweighted-unifrac.qza
+>```
+>
+>Output: ```beta-unweighted-unifrac.qza```
+
+>b. Weighted UniFrac
+>```bash
+>qiime diversity beta-phylogenetic \
+>  --i-table thursday_outputs/table-dada2-filtered.qza \
+>  --i-phylogeny thursday_outputs/rooted-tree.qza \
+>  --p-metric weighted_unifrac \
+>  --o-distance-matrix thursday_outputs/beta-weighted-unifrac.qza
+>```
+>
+>Output: ```beta-weighted-unifrac.qza```
+
 
 QIIME 2 calculates these distances and uses techniques like Principal Coordinates Analysis (PCoA) to visualize differences.
 
@@ -173,13 +224,13 @@ Ordination is a statistical method that reduces complex distance matrices into 2
 
 Ordination is a dimensionality reduction technique that enables the visualization of sample differences. QIIME has a plugin called emperor that calculates a Bray-Curtis dissimilarity matrix and uses principal coordinates analysis (PCoA). you could also export the pcoa data and plot it yourself in the package of your choice.
 
- ```bash
- qiime emperor plot --i-pcoa core-diversity/bray_curtis_pcoa_results.qza --m-metadata-file /project/microbiome_workshop/amplicon/data/mapping.txt --o-visualization pcoa-visualization.qzv
- ```
- Time to run: 15 seconds
-
- Output:
- * ```pcoa-visualization.qzv``` [View](https://view.qiime2.org/?src=) \| [Download]()
+> ```bash
+>qiime emperor plot \
+>  --i-pcoa core-diversity/bray_curtis_pcoa_results.qza \
+>  --m-metadata-file /project/microbiome_workshop/amplicon/data/mapping.txt \
+>  --o-visualization pcoa-visualization.qzv
+>```
+>Output:```pcoa-visualization.qzv```
 
 
 # Differential Abundance Analysis
@@ -203,103 +254,6 @@ The problem is challenging for several reasons:
 
 
 
-## Gneiss analysis (deprecated)
-Gneiss applies a method for compositional data borrowed from geology to "sidestep" the question of the absolute changes of sequences and "instead look at the balance between particular subsets of the microbial community," [(Morton et al. 2017)](https://doi.org/10.1128/mSystems.00162-16). For more on the concept of balances see this [post](https://github.com/biocore/gneiss/blob/master/ipynb/balance_trees.ipynb). Sequence variants are hierarchically clustered based on environmental gradients or co-occurrence. Then the isometric log ratios are calculated and compared for subsets of taxa. While individual taxa cannot be compared, groups of taxa responding to environmental effects can be compared. Statistical tests of for differences can also be applied.
-
-Since we don't have a particular environmental gradient that is structuring lets start by doing a hierarchical clustering based on co-occurrence patterns.
-
-First add pseudocounts to each cell in the matrix. This is done so that log transformations can be taken across the table.
-
-```bash
-time qiime gneiss add-pseudocount \
-    --i-table table-dada2-filtered.qza \
-    --p-pseudocount 1 \
-    --o-composition-table composition.qza
-```
-Time to run: 6 seconds
-
-Output:
-* ```composition.qza``` [View](https://view.qiime2.org/?src=) \| [Download]()
-
-
-Perform [Ward's agglomerative clustering](https://arxiv.org/abs/1111.6285)
-```bash    
-time qiime gneiss correlation-clustering \
-    --i-table composition.qza\
-    --o-clustering hierarchy.qza
-```
-Time to run: 5 minutes
-
-Output:
-* ```hierarchy.qza``` [View](https://view.qiime2.org/?src=) \| [Download]()
-
-A tree has now been generated that can be used for making comparisons of sample groups.
-
-Calculate the isometric log transforms on each internal node of the tree
-
-```bash
-time qiime gneiss ilr-transform \
-    --i-table composition.qza \
-    --i-tree hierarchy.qza \
-    --o-balances balances.qza
-```
-Time to run: 15 seconds
-
-Output:
-* ```balances.qza``` [View](https://view.qiime2.org/?src=) \| [Download]()
-
-The balances are normally distributed an can now be analyzed using mixed linear
-models  We can perform a regression on the three categorical data types, Genotype, Fraction (soil or endophytic compartment) or Soil).  Themodel explains about 10% of the total variation at all nodes of the trees. This is typical for these complex experiments.  The amount that can be explained increases as we move up the covariance tree. Overall the most predictive factor is Genotype which is encouraging.
-
-```bash
-time qiime gneiss ols-regression \
-    --p-formula "Genotype+Soil+Fraction" \
-    --i-table balances.qza \
-    --i-tree hierarchy.qza \
-    --m-metadata-file /project/microbiome_workshop/amplicon/data/mapping3.txt \
-    --o-visualization regression_summary.qzv
-```
-
-Output:
-* ```regression_summary.qzv``` [View](https://view.qiime2.org/?src=) \| [Download]()
-
-
-One of the assumptions if the ordinary least squares model is that the fixed factors are random, in other words the authors randomly arrived at the genotypes they knocked out. Of course that's not true, the genotypes were selected because they had an impact on the phosphorus stress response.  They are Fixed factors. A mixed linear model can account for fixed and random factors and effects. Gneiss offerers a linear mixed model regression too but the interface seems to be in development  so there is not much I can say about it but we can try it now. Statistical modeling is done by the [statsmodels](http://www.statsmodels.org/stable/mixed_linear.html) python package.
-
-```bash
-qiime gneiss lme-regression \
-  --p-formula "Genotype" \
-  --i-table balances.qza \
-  --i-tree hierarchy.qza \
-  --m-metadata-file /project/microbiome_workshop/amplicon/data/mapping3.txt \
-  --p-groups Soil \
-  --o-visualization linear_mixed_effects_model.qzv \
-```
-
-Output:
-* ```linear_mixed_effects_model.qzv``` [View](https://view.qiime2.org/?src=) \| [Download]()
-
-
-We can look at the most statistically significant balances and examine what taxa make up those partitions.
-
-```bash
-qiime gneiss balance-taxonomy \
-    --i-balances balances.qza \
-    --i-tree hierarchy.qza \
-    --i-taxonomy taxonomy.qza \
-    --p-taxa-level 2 \
-    --p-balance-name 'y0' \
-    --m-metadata-file /project/microbiome_workshop/amplicon/data/mapping3.txt  \
-    --m-metadata-category Genotype \
-    --o-visualization y0_taxa_summary.qzv
-```
-
-
-Output:
-* ```y0_taxa_summary.qzv``` [View](https://view.qiime2.org/?src=) \| [Download]()
-
-
-In this case the y0 balance is a split between samples that have plants in them and raw soil. It makes sense that this is the largest effect.  What happens if you run balance y2 or decrease the taxonomic level?
 
 # Other analyses
 
