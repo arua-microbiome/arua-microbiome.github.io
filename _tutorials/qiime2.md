@@ -358,7 +358,7 @@ Looking at the the ```taxonomy.qzv``` file using https://view/qiime2.org We can 
 >Since we have altered the qza file we can create a new bar plots:
 >```bash
 >qiime taxa barplot \
->  --i-table thursday_outputs/table-dada2-filtered.qza \
+>  --i-table wednesday_outputs/table-dada2-filtered.qza \
 >  --i-taxonomy wednesday_outputs/taxonomy.qza \
 >  --m-metadata-file /mnt/lustre/groups/WCHPC/wednesday_data/wednesday_metadata.tsv \
 >  --o-visualization wednesday_outputs/taxa-bar-plots-filtered.qzv
