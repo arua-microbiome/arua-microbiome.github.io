@@ -309,7 +309,7 @@ Once your ASV table has been generated, it needs to be connected to your sample 
 > ```bash
 > qiime feature-table summarize \
 >  --i-table wednesday_outputs/table-dada2.qza \
->  --m-sample-metadata-file /mnt/lustre/groups/WCHPC/wednesday_data/wednesday_metadata.csv \
+>  --m-sample-metadata-file /mnt/lustre/groups/WCHPC/wednesday_data/wednesday_metadata.tsv \
 >  --o-visualization wednesday_outputs/table-dada2.qzv
 > ```
 > 
