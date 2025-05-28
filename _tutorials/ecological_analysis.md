@@ -167,7 +167,7 @@ Beta diversity compares microbial composition across samples. It helps you answe
 
 Common metrics include:
 
-### **Bray-Curtis Dissimilarity**: Based on differences in counts.
+>**Bray-Curtis Dissimilarity**: Based on differences in counts.
 >This abundance-based metric calculates dissimilarity between two communities based on the counts of shared features.
 >```bash
 >qiime diversity beta \
@@ -178,7 +178,7 @@ Common metrics include:
 >
 >Output: ```beta-braycurtis.qza```
 
-### **Jaccard Distance**: Based on shared presence/absence of species.
+>**Jaccard Distance**: Based on shared presence/absence of species.
 >This metric compares samples based only on presence or absence of features, ignoring their abundance.
 >```bash
 >qiime diversity beta \
@@ -189,7 +189,7 @@ Common metrics include:
 >
 >Output: ```beta-jaccard.qza```
 
-### **UniFrac (weighted/unweighted)**: Measures how phylogenetically different two communities are.
+>**UniFrac (weighted/unweighted)**: Measures how phylogenetically different two communities are.
 >a. Unweighted UniFrac
 >```bash
 >qiime diversity beta-phylogenetic \
@@ -200,7 +200,7 @@ Common metrics include:
 >```
 >
 >Output: ```beta-unweighted-unifrac.qza```
-
+>
 >b. Weighted UniFrac
 >```bash
 >qiime diversity beta-phylogenetic \
