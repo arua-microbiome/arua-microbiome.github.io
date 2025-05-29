@@ -37,6 +37,6 @@ Your mission, **by 12:30 on Friday**, is to transform these raw reads into an ec
 
 All files can be found at ```/mnt/lustre/groups/WCHPC/friday_data``` on the CHPC.
 
->**Hint:** Even though the QC plots _may_ look good, denoising with too high of a length can remove samples that don't meet certain length requirements. Think about setting the truncation length to near 150-175.
+>**Hints:** Even though the QC plots _may_ look good, denoising with too high of a length can remove samples that don't meet certain length requirements. Think about setting the truncation length to near 150-175. When denoising, use ```100000``` reads to learn the errors from.
 
 
