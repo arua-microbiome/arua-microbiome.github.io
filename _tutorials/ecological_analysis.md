@@ -117,7 +117,7 @@ Alpha diversity refers to the number and evenness of microbial species in a sing
 >
 >```bash
 >qiime diversity alpha \
->  --i-table thursday_outputs/table-dada2-filtered.qza \
+>  --i-table wednesday_outputs/table-dada2-filtered.qza \
 >  --p-metric observed_features \
 >  --o-alpha-diversity thursday_outputs/alpha-observed-features.qza
 >```
@@ -129,7 +129,7 @@ Alpha diversity refers to the number and evenness of microbial species in a sing
 >
 >```bash
 >qiime diversity alpha \
->  --i-table thursday_outputs/table-dada2-filtered.qza \
+>  --i-table wednesday_outputs/table-dada2-filtered.qza \
 >  --p-metric shannon \
 >  --o-alpha-diversity thursday_outputs/alpha-shannon.qza
 >```
@@ -140,7 +140,7 @@ Alpha diversity refers to the number and evenness of microbial species in a sing
 >
 >```bash
 >qiime diversity alpha-phylogenetic \
->  --i-table thursday_outputs/table-dada2-filtered.qza \
+>  --i-table wednesday_outputs/table-dada2-filtered.qza \
 >  --i-phylogeny thursday_outputs/rooted-tree.qza \
 >  --p-metric faith_pd \
 >  --o-alpha-diversity thursday_outputs/alpha-faith-pd.qza
@@ -169,7 +169,7 @@ Beta diversity compares microbial composition across samples. It helps you answe
 >This abundance-based metric calculates dissimilarity between two communities based on the counts of shared features.
 >```bash
 >qiime diversity beta \
->  --i-table thursday_outputs/table-dada2-filtered.qza \
+>  --i-table wednesday_outputs/table-dada2-filtered.qza \
 >  --p-metric braycurtis \
 >  --o-distance-matrix thursday_outputs/beta-braycurtis.qza
 >```
@@ -180,7 +180,7 @@ Beta diversity compares microbial composition across samples. It helps you answe
 >This metric compares samples based only on presence or absence of features, ignoring their abundance.
 >```bash
 >qiime diversity beta \
->  --i-table thursday_outputs/table-dada2-filtered.qza \
+>  --i-table wednesday_outputs/table-dada2-filtered.qza \
 >  --p-metric jaccard \
 >  --o-distance-matrix thursday_outputs/beta-jaccard.qza
 >```
@@ -192,7 +192,7 @@ Beta diversity compares microbial composition across samples. It helps you answe
 >a. Unweighted UniFrac
 >```bash
 >qiime diversity beta-phylogenetic \
->  --i-table thursday_outputs/table-dada2-filtered.qza \
+>  --i-table wednesday_outputs/table-dada2-filtered.qza \
 >  --i-phylogeny thursday_outputs/rooted-tree.qza \
 >  --p-metric unweighted_unifrac \
 >  --o-distance-matrix thursday_outputs/beta-unweighted-unifrac.qza
@@ -203,7 +203,7 @@ Beta diversity compares microbial composition across samples. It helps you answe
 >b. Weighted UniFrac
 >```bash
 >qiime diversity beta-phylogenetic \
->  --i-table thursday_outputs/table-dada2-filtered.qza \
+>  --i-table wednesday_outputs/table-dada2-filtered.qza \
 >  --i-phylogeny thursday_outputs/rooted-tree.qza \
 >  --p-metric weighted_unifrac \
 >  --o-distance-matrix thursday_outputs/beta-weighted-unifrac.qza
