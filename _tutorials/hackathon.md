@@ -30,8 +30,6 @@ Your mission, **by 12:30 on Friday**, is to transform these raw reads into an ec
 - **Biological connection**  
   *Do your stats and graphics convincingly relate microbiome shifts to agricultural practice?*  
 
-- **Provenance awareness**  
-  *Reference file names/paths or show the provenance stamp to prove reproducibility.*  
 
 ## The Files
 
