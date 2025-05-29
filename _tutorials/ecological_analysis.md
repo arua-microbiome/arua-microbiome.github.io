@@ -286,7 +286,7 @@ It's time to move the data outputs into the ARUA directory we were working in on
 >```
 
 
-## Extra Step
+## PCoA Ordination (_Optional_)
 
 As an extra step, you can plot a Principal Coordinate Analysis (PCoA) of the Weighted UniFrac distance matrix:
 
