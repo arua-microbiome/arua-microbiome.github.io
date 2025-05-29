@@ -211,8 +211,15 @@ Beta diversity compares microbial composition across samples. It helps you answe
 >
 >Output: ```beta-weighted-unifrac.qza```
 
+>Lets export the Bray-Curtis diversity so we can then use it in R
+>```bash
+>qiime tools export \
+>  --input-path friday_outputs/beta-braycurtis.qza \
+>  --output-path friday_outputs/beta-braycurtis
+>```
+>
+>Output: ```beta-braycurtis/distance-matrix.tsv```
 
-QIIME 2 calculates these distances and uses techniques like Principal Coordinates Analysis (PCoA) to visualize differences.
 
 # Statistical Analysis of Diversity
 
