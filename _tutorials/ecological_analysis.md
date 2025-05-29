@@ -211,11 +211,11 @@ Beta diversity compares microbial composition across samples. It helps you answe
 >
 >Output: ```beta-weighted-unifrac.qza```
 
->Lets export the Bray-Curtis diversity so we can then use it in R
+>Lets export the Weighted UniFrac beta-diversity so we can then use it in R
 >```bash
 >qiime tools export \
->  --input-path friday_outputs/beta-braycurtis.qza \
->  --output-path friday_outputs/beta-braycurtis
+>  --input-path friday_outputs/beta-weighted-unifrac.qza \
+>  --output-path friday_outputs/beta-weighted-unifrac
 >```
 >
 >Output: ```beta-braycurtis/distance-matrix.tsv```
