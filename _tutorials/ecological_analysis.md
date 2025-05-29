@@ -240,6 +240,12 @@ It's time to move the data outputs into the ARUA directory we were working in on
 >
 ># Prepare and merge metadata
 >colnames(alpha)[1] <- "sample.id"
+>colnames(distance_matrix)[1] <- "sample.id"
+>colnames(alpha)[1] <- "sample.id"
+>
+># Change row names <<<< R expects a true matrix (you need to remove any text columns)
+>rownames(distance_matrix) <- distance_matrix[,1]
+>distance_matrix$sample.id <- NULL
 >
 >metadata <- metadata %>%
 >  filter(Genotype != "Soil") %>%
@@ -280,10 +286,46 @@ It's time to move the data outputs into the ARUA directory we were working in on
 >```
 
 
+## Extra Step
 
+As an extra step, you can plot a Principal Coordinate Analysis (PCoA) of the Weighted UniFrac distance matrix:
 
+>You must first convert the distance matrix (e.g., beta-weighted-unifrac.qza) into a PCoA object:
+>```bash
+>qiime diversity pcoa \
+>  --i-distance-matrix friday_outputs/beta-weighted-unifrac.qza \
+>  --o-pcoa friday_outputs/beta-weighted-unifrac-pcoa.qza
+>```
 
+> Make the plot in Qiime:
+>```bash
+>qiime emperor plot \
+>  --i-pcoa wednesday_outputs/beta-weighted-unifrac-pcoa.qza \
+>  --m-metadata-file /mnt/lustre/groups/WCHPC/wednesday_data/wednesday_metadata.tsv \
+>  --o-visualization wednesday_outputs/unifrac-emperor.qzv
+>```
 
+> Then you can export it and bring the output file into R to visualise:
+> ```bash
+> qiime tools export \
+>   --input-path friday_outputs/beta-weighted-unifrac-pcoa.qza  \
+>   --output-path friday_outputs/unifrac-pcoa
+> ```
+
+Now, in R (with the other files you had before):
+
+>```r
+>pcoa <- read_delim("../ordination.txt", delim = "\t", skip = 9, col_names = FALSE)
+>
+>colnames(pcoa) <- c("sample.id", paste0("PC", 1:ncol(pcoa)))
+>
+>pcoa <- pcoa[-((nrow(pcoa)-1):nrow(pcoa)), ]
+>plot_data <- left_join(pcoa, metadata, by = "sample.id")
+>ggplot(plot_data, aes(x = PC1, y = PC2, color = Genotype)) +
+>  geom_point(size = 4, alpha = 0.8) +
+>  theme_minimal() +
+>  labs(x = "PC1", y = "PC2", color = "Lifestyle")
+```
 
 # Other analyses
 
