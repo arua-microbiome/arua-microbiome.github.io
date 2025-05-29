@@ -97,7 +97,7 @@ Once you’ve generated a rooted phylogenetic tree and cleaned, filtered abundan
 > qiime empress community-plot \
 >  --i-tree thursday_outputs/rooted-tree.qza \
 >  --i-feature-table thursday_outputs/table-dada2-filtered.qza \
->  --m-sample-metadata-file wednesday_data/wednesday_metadata.tsv \
+>  --m-sample-metadata-file /mnt/lustre/groups/WCHPC/wednesday_data/wednesday_metadata.tsv \
 >  --m-feature-metadata-file wednesday_outputs/taxonomy.qza \
 >  --o-visualization thursday_outputs/community-empress-tree-tax.qzv
 >```
