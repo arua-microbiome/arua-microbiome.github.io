@@ -293,8 +293,8 @@ As an extra step, you can plot a Principal Coordinate Analysis (PCoA) of the Wei
 >You must first convert the distance matrix (e.g., beta-weighted-unifrac.qza) into a PCoA object:
 >```bash
 >qiime diversity pcoa \
->  --i-distance-matrix friday_outputs/beta-weighted-unifrac.qza \
->  --o-pcoa friday_outputs/beta-weighted-unifrac-pcoa.qza
+>  --i-distance-matrix wednesday_outputs/beta-weighted-unifrac.qza \
+>  --o-pcoa wednesday_outputs/beta-weighted-unifrac-pcoa.qza
 >```
 
 > Make the plot in Qiime:
@@ -308,14 +308,14 @@ As an extra step, you can plot a Principal Coordinate Analysis (PCoA) of the Wei
 > Then you can export it and bring the output file into R to visualise:
 > ```bash
 > qiime tools export \
->   --input-path friday_outputs/beta-weighted-unifrac-pcoa.qza  \
->   --output-path friday_outputs/unifrac-pcoa
+>   --input-path wednesday_outputs/beta-weighted-unifrac-pcoa.qza  \
+>   --output-path wednesday_outputs/unifrac-pcoa
 > ```
 
 Now, in R (with the other files you had before):
 
 >```r
->pcoa <- read_delim("../ordination.txt", delim = "\t", skip = 9, col_names = FALSE)
+>pcoa <- read_delim("../data/unifrac-pcoa/ordination.txt", delim = "\t", skip = 9, col_names = FALSE)
 >
 >colnames(pcoa) <- c("sample.id", paste0("PC", 1:ncol(pcoa)))
 >
@@ -325,7 +325,7 @@ Now, in R (with the other files you had before):
 >  geom_point(size = 4, alpha = 0.8) +
 >  theme_minimal() +
 >  labs(x = "PC1", y = "PC2", color = "Lifestyle")
-```
+>```
 
 # Other analyses
 
